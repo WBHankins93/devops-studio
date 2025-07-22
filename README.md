@@ -1,4 +1,4 @@
-# DevOps Lab – Portfolio Projects
+# DevOps Studio – Portfolio Projects
 
 This repository is a curated collection of DevOps and cloud infrastructure projects. Each project demonstrates practical, real-world skills across areas like infrastructure as code, CI/CD pipelines, Kubernetes, automation, and observability.
 
