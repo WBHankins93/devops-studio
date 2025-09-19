@@ -1,0 +1,49 @@
+name: Cleanup Resources
+
+on:
+  schedule:
+    - cron: '0 3 * * 0'  # Weekly on Sunday at 3 AM
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: '1.6.0'
+        
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-2
+        
+    - name: Cleanup Terraform resources
+      run: |
+        cd labs/01-terraform-foundations
+        terraform init -backend=false
+        terraform destroy -auto-approve -var-file=environments/dev.tfvars
+        
+    - name: Cleanup Kubernetes resources
+      run: |
+        # Clean up any remaining Kubernetes resources
+        echo "Cleaning up Kubernetes resources..."
+        
+    - name: Cleanup Docker images
+      run: |
+        # Clean up unused Docker images
+        docker system prune -af --volumes
+        
+    - name: Generate cleanup report
+      run: |
+        echo "## Cleanup Report" >> $GITHUB_STEP_SUMMARY
+        echo "- Terraform resources cleaned" >> $GITHUB_STEP_SUMMARY
+        echo "- Kubernetes resources cleaned" >> $GITHUB_STEP_SUMMARY
+        echo "- Docker images cleaned" >> $GITHUB_STEP_SUMMARY

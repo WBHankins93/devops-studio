@@ -1,0 +1,67 @@
+name: Documentation Build
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'docs/**'
+      - '*.md'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - '*.md'
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm install -g @vuepress/cli
+        npm install -g vuepress
+        
+    - name: Build documentation
+      run: |
+        # Create a simple documentation site
+        mkdir -p docs-site
+        cp -r docs/* docs-site/
+        
+        # Generate index page
+        cat > docs-site/README.md << 'EOF'
+        # DevOps Studio Documentation
+        
+        Welcome to the DevOps Studio learning platform!
+        
+        ## Available Labs
+        - [Terraform Foundations](01-terraform-foundations/)
+        - [Kubernetes Platform](02-kubernetes-platform/)
+        - [CI/CD Pipelines](03-cicd-pipelines/)
+        - [Observability Stack](04-observability-stack/)
+        - [Security Automation](05-security-automation/)
+        - [GitOps Workflows](06-gitops-workflows/)
+        - [Serverless Operations](07-serverless-ops/)
+        - [Platform Engineering](08-platform-engineering/)
+        
+        ## Architecture Decisions
+        - [Terraform Structure](architecture-decisions/001-terraform-structure.md)
+        - [Kubernetes Platform](architecture-decisions/002-kubernetes-platform.md)
+        - [Monitoring Strategy](architecture-decisions/003-monitoring-strategy.md)
+        EOF
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs-site
+        cname: devops-studio.example.com  # Replace with your domain

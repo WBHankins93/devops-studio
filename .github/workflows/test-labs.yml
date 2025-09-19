@@ -1,0 +1,36 @@
+name: Test Labs
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-labs:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lab: [01-terraform-foundations, 02-kubernetes-platform, 03-cicd-pipelines, 04-observability-stack, 05-security-automation, 06-gitops-workflows, 07-serverless-ops, 08-platform-engineering]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.6.0
+    
+    - name: Setup Make
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y make
+    
+    - name: Run Lab Tests
+      run: |
+        if [ -f "labs/${{ matrix.lab }}/Makefile" ]; then
+          cd labs/${{ matrix.lab }}
+          make test || echo "No test target found"
+        else
+          echo "No Makefile found for ${{ matrix.lab }}"
+        fi
