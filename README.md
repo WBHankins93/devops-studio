@@ -10,6 +10,34 @@
 
 ---
 
+## ⚠️ **IMPORTANT: Read Before Starting**
+
+**Before you begin any lab, please read these essential guides:**
+
+1. **[📋 Prerequisites Guide](./docs/prerequisites.md)** - **REQUIRED READING**
+   - System requirements and tool installation
+   - AWS account setup and IAM configuration
+   - Required permissions and service quotas
+   - Knowledge prerequisites
+
+2. **[🗺️ Learning Paths Guide](./docs/learning-paths.md)** - **HIGHLY RECOMMENDED**
+   - Choose the right learning path for your career goals
+   - Understand skill progression and time investment
+   - Map labs to specific career roles
+
+**Why this matters:**
+- Ensures you have all required tools installed and configured
+- Helps you choose the right learning path for your goals
+- Prevents common setup issues and wasted time
+- Maximizes your learning experience
+
+**Quick Links:**
+- [Getting Started Guide](./docs/getting-started.md) - Step-by-step setup instructions
+- [Troubleshooting Guide](./docs/troubleshooting.md) - Common issues and solutions
+- [Cost Management Guide](./docs/cost-management.md) - Cost optimization strategies
+
+---
+
 ## 📑 Table of Contents
 
 - [What Makes This Different](#what-makes-this-different)
@@ -121,6 +149,14 @@ By completing all labs, you'll have hands-on experience with:
 
 ## Learning Paths
 
+> **📖 For detailed learning paths with time estimates, skill progression, and career mapping, see the [Learning Paths Guide](./docs/learning-paths.md)**
+
+This section provides a quick overview. The full guide includes:
+- Detailed path descriptions with time investments
+- Skill progression milestones
+- Career role mapping
+- Learning tips for different experience levels
+
 Choose your path based on your career goals and current experience level:
 
 ### 🚀 **Cloud-Native DevOps Engineer**
@@ -200,35 +236,52 @@ Choose your path based on your career goals and current experience level:
 
 ## Getting Started
 
-### Quick Environment Check
+> **📌 First Time Here?** Make sure you've read the [Prerequisites Guide](./docs/prerequisites.md) and [Learning Paths Guide](./docs/learning-paths.md) before proceeding!
+
+### Step 1: Review Prerequisites
+
+**Before doing anything else**, ensure you have:
+
+1. ✅ Read the [Prerequisites Guide](./docs/prerequisites.md)
+2. ✅ Installed all required tools (AWS CLI, Terraform, Git, etc.)
+3. ✅ Configured AWS CLI with valid credentials
+4. ✅ Reviewed the [Learning Paths Guide](./docs/learning-paths.md) to choose your path
+
+### Step 2: Quick Environment Check
 
 ```bash
 # Clone the repository
 git clone https://github.com/WBHankins93/devops-studio.git
 cd devops-studio
 
-# Check if you have required tools
+# Validate your system meets requirements
 ./tools/validate.sh
 
-# Set up your environment
+# If validation passes, proceed to setup
 ./tools/setup.sh
 ```
 
-### Choose Your First Lab
+### Step 3: Choose Your First Lab
 
-**New to DevOps?** → Start with [Lab 01 - Terraform Foundations](./labs/01-terraform-foundations/)
+**Not sure which lab to start with?** → Review the [Learning Paths Guide](./docs/learning-paths.md) to find the path that matches your career goals.
 
-**Have Terraform experience?** → Jump to [Lab 02 - Kubernetes Platform](./labs/02-kubernetes-platform/)
+**Quick recommendations:**
+- **New to DevOps?** → Start with [Lab 01 - Terraform Foundations](./labs/01-terraform-foundations/)
+- **Have Terraform experience?** → Jump to [Lab 02 - Kubernetes Platform](./labs/02-kubernetes-platform/)
+- **Want CI/CD focus?** → Begin with [Lab 03 - CI/CD Pipelines](./labs/03-cicd-pipelines/)
+- **Security focused?** → Start [Lab 01](./labs/01-terraform-foundations/) then [Lab 05](./labs/05-security-automation/)
 
-**Want CI/CD focus?** → Begin with [Lab 03 - CI/CD Pipelines](./labs/03-cicd-pipelines/)
-
-**Security focused?** → Start [Lab 01](./labs/01-terraform-foundations/) then [Lab 05](./labs/05-security-automation/)
+> **💡 Tip**: The [Learning Paths Guide](./docs/learning-paths.md) provides detailed career-focused paths with time estimates and skill progression.
 
 Each lab includes detailed setup instructions and prerequisites specific to that technology stack.
 
 ---
 
 ## Prerequisites
+
+> **📖 For complete prerequisites information, see the [Prerequisites Guide](./docs/prerequisites.md)**
+
+This section provides a quick overview. The full guide includes detailed installation instructions, AWS setup, IAM permissions, and troubleshooting.
 
 ### Required Tools
 
@@ -523,9 +576,16 @@ When contributing new labs:
 
 ### Documentation
 
-- **[Getting Started Guide](./docs/getting-started.md)** - Detailed setup instructions
-- **[Prerequisites Guide](./docs/prerequisites.md)** - System requirements breakdown  
+**Essential Reading (Read First):**
+- **[Prerequisites Guide](./docs/prerequisites.md)** ⚠️ **REQUIRED** - System requirements, tool installation, AWS setup
+- **[Learning Paths Guide](./docs/learning-paths.md)** ⭐ **HIGHLY RECOMMENDED** - Choose your career-focused learning path
+
+**Getting Started:**
+- **[Getting Started Guide](./docs/getting-started.md)** - Detailed step-by-step setup instructions
 - **[Troubleshooting Guide](./docs/troubleshooting.md)** - Common issues and solutions
+- **[Cost Management Guide](./docs/cost-management.md)** - Cost optimization strategies
+
+**Reference:**
 - **[Architecture Decisions](./docs/architecture-decisions/)** - Why we made certain design choices
 
 ### Learning Resources
@@ -589,9 +649,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **🚀 Ready to start your DevOps journey?**
 
-Begin with [Lab 01 - Terraform Foundations](./labs/01-terraform-foundations/) and build production-ready infrastructure in under an hour!
+**Before you begin:**
+1. ✅ Read the [Prerequisites Guide](./docs/prerequisites.md) - Ensure you have everything set up
+2. ✅ Review the [Learning Paths Guide](./docs/learning-paths.md) - Choose your career-focused path
+3. ✅ Follow the [Getting Started Guide](./docs/getting-started.md) - Step-by-step setup
 
-**Questions?** Check our [FAQ](./docs/troubleshooting.md#frequently-asked-questions) or [start a discussion](https://github.com/WBHankins93/devops-studio/discussions).
+**Then start with:** [Lab 01 - Terraform Foundations](./labs/01-terraform-foundations/) and build production-ready infrastructure in under an hour!
+
+**Questions?** Check our [Troubleshooting Guide](./docs/troubleshooting.md) or [start a discussion](https://github.com/WBHankins93/devops-studio/discussions).
 
 ---
 
