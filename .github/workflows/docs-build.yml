@@ -1,16 +1,26 @@
 name: Documentation Build
 
+# DISABLED: Not needed currently - documentation is readable as markdown on GitHub
+# To re-enable: Uncomment the 'on' section below and fix the build process
+# on:
+#   push:
+#     branches: [ main, develop ]
+#     paths:
+#       - 'docs/**'
+#       - '*.md'
+#   pull_request:
+#     branches: [ main ]
+#     paths:
+#       - 'docs/**'
+#       - '*.md'
+
+# Disable workflow by using a condition that never runs
 on:
-  push:
-    branches: [ main, develop ]
-    paths:
-      - 'docs/**'
-      - '*.md'
-  pull_request:
-    branches: [ main ]
-    paths:
-      - 'docs/**'
-      - '*.md'
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Workflow is disabled'
+        required: false
 
 jobs:
   build-docs:
