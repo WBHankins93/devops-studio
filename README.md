@@ -416,29 +416,70 @@ make apply
 
 ## Cost Considerations
 
+> **💰 Important Cost Note**: The costs below are **monthly estimates** if you keep infrastructure running continuously. **Actual costs to complete a lab and delete it are significantly less** - typically 5-10% of monthly costs depending on how long you keep resources running. For example, completing Lab 01 in 2-4 hours and then destroying it would cost approximately **$2-5** instead of $50-80/month.
+
 ### Estimated Monthly Costs by Lab
 
-| Lab | Resources | Est. Cost (USD) | Free Tier Eligible |
-|-----|-----------|-----------------|-------------------|
-| **Lab 01** | VPC, ASG, RDS, ALB | $50-80 | Partially |
-| **Lab 02** | + EKS cluster | $120-180 | No |
-| **Lab 04** | + Monitoring stack | $140-200 | No |
-| **All Labs** | Complete platform | $200-300 | No |
+*These are monthly estimates if resources run continuously. See "Expected Cost to Complete" below for actual lab completion costs.*
+
+| Lab | Resources | Monthly Est. Cost (USD) | Expected Cost to Complete* | Free Tier Eligible |
+|-----|-----------|------------------------|---------------------------|-------------------|
+| **Lab 01** | VPC, ASG, RDS, ALB | $50-80 | $2-5 (2-4 hours) | Partially |
+| **Lab 02** | + EKS cluster | $120-180 | $5-10 (3-5 hours) | No |
+| **Lab 03** | + CI/CD resources | $20-40 | $1-2 (1-2 hours) | Partially |
+| **Lab 04** | + Monitoring stack | $140-200 | $5-8 (4-6 hours) | No |
+| **Lab 05** | + Security tools | $30-50 | $2-3 (2-3 hours) | Partially |
+| **Lab 06** | + GitOps tools | $20-30 | $1-2 (1-2 hours) | No |
+| **Lab 07** | + Serverless | $25-45 | $1-2 (1-2 hours) | Partially |
+| **Lab 08** | + Platform tools | $80-120 | $3-5 (3-4 hours) | No |
+
+\* *Expected cost to complete assumes you run the lab for the typical completion time (shown in parentheses) and then destroy all resources. Actual costs may vary based on your completion time and AWS pricing.*
+
+### Cost Breakdown Example (Lab 01)
+
+**Monthly Cost** (if running continuously): ~$50-80
+- EC2 instances: $16/month
+- Application Load Balancer: $22/month
+- RDS database: $25/month
+- NAT Gateways: $45/month
+- Other services: $5-10/month
+
+**Cost to Complete** (run for 3 hours then destroy): ~$2-4
+- Pro-rated hourly costs for 3 hours
+- Most expensive components (NAT Gateway, ALB) are charged hourly
+- Database and instances charged per hour of runtime
+
+**💡 Tip**: Complete labs during focused learning sessions and destroy resources immediately after to minimize costs!
 
 ### Cost Optimization Strategies
 
-#### For Learning/Development
+#### For Learning/Development (Minimize Costs)
+
+**Best Practice**: Complete labs in focused sessions and destroy resources immediately after.
+
 ```bash
-# Scale resources to minimum
+# 1. Complete the lab (typically 1-4 hours)
+make apply
+# ... work through the lab ...
+
+# 2. Destroy resources immediately when done
+make destroy  # Per lab
+# or
+./tools/cleanup.sh  # All labs
+
+# 3. Scale resources to minimum if keeping running
 terraform apply -var="desired_capacity=1" -var="instance_type=t3.micro"
 
-# Use single AZ for non-HA scenarios  
+# 4. Use single AZ for non-HA scenarios (dev only)
 terraform apply -var="availability_zones=[\"us-west-2a\"]"
-
-# Clean up when not in use
-make destroy  # Per lab
-./tools/cleanup.sh  # All labs
 ```
+
+**Cost Savings Tips**:
+- ✅ **Destroy immediately after completion** - Biggest cost saver
+- ✅ **Use dev environment** - Smaller instance sizes
+- ✅ **Single NAT Gateway** - Saves ~$22/month (dev only)
+- ✅ **Scale to zero** - When not actively learning: `terraform apply -var="desired_capacity=0"`
+- ✅ **Complete labs in batches** - Deploy, learn, destroy, repeat
 
 #### For Production Reference
 - Use Reserved Instances for predictable workloads
