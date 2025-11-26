@@ -1,0 +1,44 @@
+# terraform.tfvars.example
+# Example configuration file - copy to terraform.tfvars and customize
+
+# Basic Configuration
+environment = "dev"
+project_name = "devops-studio"
+region = "us-west-2"
+
+# EKS Configuration
+cluster_name = ""  # Leave empty to auto-generate: {project_name}-{environment}-eks
+cluster_version = "1.28"
+cluster_endpoint_public_access = true
+cluster_endpoint_private_access = true
+
+# Node Group Configuration
+node_instance_type = "t3.medium"
+node_min_size = 1
+node_max_size = 3
+node_desired_size = 2
+node_disk_size = 20
+
+# Networking
+# Option 1: Create new VPC (leave vpc_id empty)
+vpc_id = ""
+vpc_cidr = "10.1.0.0/16"
+availability_zones = ["us-west-2a", "us-west-2b"]
+
+# Option 2: Use existing VPC from Lab 01
+# vpc_id = "vpc-xxxxxxxxx"  # Get from Lab 01 outputs
+# availability_zones = ["us-west-2a", "us-west-2b"]
+
+# Add-ons
+enable_cluster_autoscaler = false
+enable_aws_load_balancer_controller = true
+
+# Tagging
+tags = {
+  Project = "DevOps Studio"
+  Owner = "Your Name"
+  Environment = "Development"
+  ManagedBy = "Terraform"
+  CostCenter = "Engineering"
+}
+

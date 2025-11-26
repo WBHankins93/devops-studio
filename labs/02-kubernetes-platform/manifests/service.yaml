@@ -1,0 +1,38 @@
+# manifests/service.yaml
+# Kubernetes services for exposing applications
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-app
+  namespace: devops-studio
+  labels:
+    app: sample-app
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: sample-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-app-nodeport
+  namespace: devops-studio
+  labels:
+    app: sample-app
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+    nodePort: 30080
+  selector:
+    app: sample-app
+

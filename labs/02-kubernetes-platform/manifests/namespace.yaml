@@ -1,0 +1,27 @@
+# manifests/namespace.yaml
+# Kubernetes namespaces for organizing resources
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops-studio
+  labels:
+    name: devops-studio
+    project: devops-studio
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
+  labels:
+    name: production
+    environment: production
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: development
+  labels:
+    name: development
+    environment: development
+

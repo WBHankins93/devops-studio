@@ -1,0 +1,54 @@
+# manifests/deployment.yaml
+# Sample application deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-app
+  namespace: devops-studio
+  labels:
+    app: sample-app
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+        version: v1
+    spec:
+      containers:
+      - name: app
+        image: nginx:1.25-alpine
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        - name: ENVIRONMENT
+          value: "development"
+        - name: APP_NAME
+          value: "sample-app"
+
