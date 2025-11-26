@@ -1,0 +1,151 @@
+stages:
+  - test
+  - build
+  - security
+  - deploy
+
+variables:
+  NODE_VERSION: "18"
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+  IMAGE_NAME: devops-studio-app
+  AWS_REGION: us-west-2
+
+# Test stage
+test:unit:
+  stage: test
+  image: node:${NODE_VERSION}-alpine
+  before_script:
+    - cd labs/03-cicd-pipelines/app
+    - npm ci
+  script:
+    - npm run test:unit
+  coverage: '/Lines\s*:\s*(\d+\.\d+)%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: labs/03-cicd-pipelines/app/coverage/cobertura-coverage.xml
+    paths:
+      - labs/03-cicd-pipelines/app/coverage/
+    expire_in: 1 week
+
+test:integration:
+  stage: test
+  image: node:${NODE_VERSION}-alpine
+  before_script:
+    - cd labs/03-cicd-pipelines/app
+    - npm ci
+  script:
+    - npm run test:integration
+  artifacts:
+    paths:
+      - labs/03-cicd-pipelines/app/coverage/
+    expire_in: 1 week
+
+# Build stage
+build:
+  stage: build
+  image: docker:24
+  services:
+    - docker:24-dind
+  before_script:
+    - apk add --no-cache aws-cli
+    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+    - aws configure set default.region $AWS_REGION
+    - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+  script:
+    - cd labs/03-cicd-pipelines/app
+    - |
+      docker build -t ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}:${CI_COMMIT_SHA} .
+      docker build -t ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}:latest .
+      docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}:${CI_COMMIT_SHA}
+      docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}:latest
+  only:
+    - main
+    - develop
+
+# Security stage
+security:trivy:
+  stage: security
+  image: aquasec/trivy:latest
+  script:
+    - |
+      trivy image --exit-code 0 --severity HIGH,CRITICAL \
+        ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}:${CI_COMMIT_SHA}
+  allow_failure: true
+  only:
+    - main
+    - develop
+
+# Deploy stage
+deploy:staging:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  before_script:
+    - apk add --no-cache curl
+    - echo "$KUBECONFIG" | base64 -d > kubeconfig
+    - export KUBECONFIG=$(pwd)/kubeconfig
+  script:
+    - cd labs/03-cicd-pipelines
+    - |
+      # Update image tag
+      sed -i "s|IMAGE_TAG|${CI_COMMIT_SHA}|g" k8s/deployment.yaml
+      sed -i "s|ENVIRONMENT|staging|g" k8s/deployment.yaml
+      
+      # Deploy
+      kubectl apply -f k8s/namespace.yaml
+      kubectl apply -f k8s/deployment.yaml
+      kubectl apply -f k8s/service.yaml
+      kubectl apply -f k8s/ingress.yaml
+      
+      # Wait for rollout
+      kubectl rollout status deployment/${IMAGE_NAME} -n devops-studio --timeout=5m
+      
+      # Verify
+      kubectl get pods -n devops-studio
+      kubectl get svc -n devops-studio
+  environment:
+    name: staging
+    url: https://staging.example.com
+  only:
+    - main
+
+deploy:production:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  before_script:
+    - apk add --no-cache curl
+    - echo "$KUBECONFIG" | base64 -d > kubeconfig
+    - export KUBECONFIG=$(pwd)/kubeconfig
+  script:
+    - cd labs/03-cicd-pipelines
+    - |
+      # Update image tag
+      sed -i "s|IMAGE_TAG|${CI_COMMIT_SHA}|g" k8s/deployment.yaml
+      sed -i "s|ENVIRONMENT|production|g" k8s/deployment.yaml
+      
+      # Deploy
+      kubectl apply -f k8s/namespace.yaml
+      kubectl apply -f k8s/deployment.yaml
+      kubectl apply -f k8s/service.yaml
+      kubectl apply -f k8s/ingress.yaml
+      
+      # Wait for rollout
+      kubectl rollout status deployment/${IMAGE_NAME} -n devops-studio --timeout=5m
+      
+      # Verify
+      kubectl get pods -n devops-studio
+      kubectl get svc -n devops-studio
+      
+      # Smoke test
+      SERVICE_URL=$(kubectl get svc ${IMAGE_NAME} -n devops-studio -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+      curl -f http://$SERVICE_URL/health || exit 1
+  environment:
+    name: production
+    url: https://example.com
+  when: manual
+  only:
+    - main
+

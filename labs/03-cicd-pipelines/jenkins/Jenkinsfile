@@ -1,0 +1,209 @@
+pipeline {
+    agent any
+    
+    environment {
+        NODE_VERSION = '18'
+        AWS_REGION = 'us-west-2'
+        IMAGE_NAME = 'devops-studio-app'
+        EKS_CLUSTER_NAME = 'devops-studio-cluster'
+        DOCKER_REGISTRY = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+    }
+    
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timeout(time: 30, unit: 'MINUTES')
+        timestamps()
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Test') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        dir('labs/03-cicd-pipelines/app') {
+                            sh '''
+                                npm ci
+                                npm run test:unit
+                            '''
+                        }
+                    }
+                    post {
+                        always {
+                            publishTestResults testResultsPattern: 'labs/03-cicd-pipelines/app/coverage/*.xml'
+                        }
+                    }
+                }
+                
+                stage('Integration Tests') {
+                    steps {
+                        dir('labs/03-cicd-pipelines/app') {
+                            sh '''
+                                npm ci
+                                npm run test:integration
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage('Build') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                }
+            }
+            steps {
+                script {
+                    dir('labs/03-cicd-pipelines/app') {
+                        // Login to ECR
+                        sh """
+                            aws ecr get-login-password --region ${AWS_REGION} | \
+                            docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
+                        """
+                        
+                        // Build and push image
+                        def imageTag = env.GIT_COMMIT.take(7)
+                        sh """
+                            docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${imageTag} .
+                            docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest .
+                            docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${imageTag}
+                            docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest
+                        """
+                    }
+                }
+            }
+        }
+        
+        stage('Security Scan') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                }
+            }
+            steps {
+                script {
+                    def imageTag = env.GIT_COMMIT.take(7)
+                    sh """
+                        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+                            aquasec/trivy:latest image \
+                            --exit-code 0 --severity HIGH,CRITICAL \
+                            ${DOCKER_REGISTRY}/${IMAGE_NAME}:${imageTag}
+                    """
+                }
+            }
+        }
+        
+        stage('Deploy to Staging') {
+            when {
+                branch 'main'
+            }
+            steps {
+                script {
+                    def imageTag = env.GIT_COMMIT.take(7)
+                    dir('labs/03-cicd-pipelines') {
+                        // Configure kubectl
+                        sh """
+                            aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
+                        """
+                        
+                        // Update manifests
+                        sh """
+                            sed -i.bak 's|IMAGE_TAG|${imageTag}|g' k8s/deployment.yaml
+                            sed -i.bak 's|ENVIRONMENT|staging|g' k8s/deployment.yaml
+                        """
+                        
+                        // Deploy
+                        sh """
+                            kubectl apply -f k8s/namespace.yaml
+                            kubectl apply -f k8s/deployment.yaml
+                            kubectl apply -f k8s/service.yaml
+                            kubectl apply -f k8s/ingress.yaml
+                        """
+                        
+                        // Wait for rollout
+                        sh """
+                            kubectl rollout status deployment/${IMAGE_NAME} -n devops-studio --timeout=5m
+                        """
+                        
+                        // Verify
+                        sh """
+                            kubectl get pods -n devops-studio
+                            kubectl get svc -n devops-studio
+                        """
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy to Production') {
+            when {
+                branch 'main'
+            }
+            input {
+                message "Deploy to production?"
+                ok "Deploy"
+            }
+            steps {
+                script {
+                    def imageTag = env.GIT_COMMIT.take(7)
+                    dir('labs/03-cicd-pipelines') {
+                        // Configure kubectl
+                        sh """
+                            aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
+                        """
+                        
+                        // Update manifests
+                        sh """
+                            sed -i.bak 's|IMAGE_TAG|${imageTag}|g' k8s/deployment.yaml
+                            sed -i.bak 's|ENVIRONMENT|production|g' k8s/deployment.yaml
+                        """
+                        
+                        // Deploy
+                        sh """
+                            kubectl apply -f k8s/namespace.yaml
+                            kubectl apply -f k8s/deployment.yaml
+                            kubectl apply -f k8s/service.yaml
+                            kubectl apply -f k8s/ingress.yaml
+                        """
+                        
+                        // Wait for rollout
+                        sh """
+                            kubectl rollout status deployment/${IMAGE_NAME} -n devops-studio --timeout=5m
+                        """
+                        
+                        // Verify and smoke test
+                        sh """
+                            kubectl get pods -n devops-studio
+                            kubectl get svc -n devops-studio
+                            
+                            SERVICE_URL=\$(kubectl get svc ${IMAGE_NAME} -n devops-studio -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+                            curl -f http://\$SERVICE_URL/health || exit 1
+                        """
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
+

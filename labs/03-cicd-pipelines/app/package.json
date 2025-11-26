@@ -1,0 +1,27 @@
+{
+  "name": "devops-studio-app",
+  "version": "1.0.0",
+  "description": "Sample application for CI/CD lab",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest",
+    "test:unit": "jest --testPathPattern=unit",
+    "test:integration": "jest --testPathPattern=integration"
+  },
+  "keywords": [
+    "devops",
+    "cicd",
+    "kubernetes"
+  ],
+  "author": "DevOps Studio",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  }
+}
+
