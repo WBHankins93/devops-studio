@@ -3,6 +3,7 @@
 *.tfstate.*
 *.tfvars
 !*.tfvars.example
+!**/environments/*.tfvars  # Allow environment template files
 .terraform/
 .terraform.lock.hcl
 *.tfplan
