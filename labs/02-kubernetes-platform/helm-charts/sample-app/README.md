@@ -140,6 +140,24 @@ helm upgrade sample-app ./helm-charts/sample-app \
 helm uninstall sample-app
 ```
 
+## Validation
+
+Before deploying, validate your Helm chart:
+
+```bash
+# Lint the chart (checks for errors and best practices)
+helm lint ./helm-charts/sample-app
+
+# Or use the Makefile
+make lint-helm
+
+# Validate template rendering (ensures templates are valid)
+helm template sample-app ./helm-charts/sample-app --dry-run
+
+# Or use the Makefile
+make validate-helm
+```
+
 ## Verifying
 
 ```bash

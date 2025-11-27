@@ -1,7 +1,7 @@
 # labs/02-kubernetes-platform/Makefile
 # Automation commands for EKS cluster management
 
-.PHONY: help init plan apply destroy test validate configure-kubectl deploy-app cluster-info verify-cluster install-helm-charts deploy-helm-chart
+.PHONY: help init plan apply destroy test validate configure-kubectl deploy-app cluster-info verify-cluster install-helm-charts deploy-helm-chart lint-helm validate-helm
 
 # Default environment
 ENV ?= dev
@@ -83,7 +83,26 @@ install-helm-charts: configure-kubectl ## Install Helm charts (NGINX Ingress, Me
 		--wait || echo "$(YELLOW)⚠️  Metrics server installation may take a few minutes$(NC)"
 	@echo "$(GREEN)✅ Helm charts installed$(NC)"
 
-deploy-helm-chart: configure-kubectl ## Deploy sample application using Helm chart
+lint-helm: ## Lint Helm charts
+	@echo "$(BLUE)Linting Helm charts...$(NC)"
+	@if command -v helm &> /dev/null; then \
+		helm lint ./helm-charts/sample-app; \
+		echo "$(GREEN)✅ Helm chart linting complete$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠️  Helm not installed. Install Helm to validate charts.$(NC)"; \
+	fi
+
+validate-helm: lint-helm ## Validate Helm charts (lint + template render)
+	@echo "$(BLUE)Validating Helm chart templates...$(NC)"
+	@if command -v helm &> /dev/null; then \
+		helm template sample-app ./helm-charts/sample-app --dry-run > /dev/null && \
+		echo "$(GREEN)✅ Helm templates render successfully$(NC)" || \
+		echo "$(RED)❌ Helm template validation failed$(NC)"; \
+	else \
+		echo "$(YELLOW)⚠️  Helm not installed. Install Helm to validate charts.$(NC)"; \
+	fi
+
+deploy-helm-chart: configure-kubectl validate-helm ## Deploy sample application using Helm chart
 	@echo "$(BLUE)Deploying sample application with Helm...$(NC)"
 	@helm upgrade --install sample-app ./helm-charts/sample-app \
 		--namespace devops-studio \
