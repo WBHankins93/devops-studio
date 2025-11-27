@@ -603,6 +603,9 @@ You should master:
 - [CI/CD Best Practices](https://www.redhat.com/en/topics/devops/what-is-ci-cd)
 - [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
 
+### Understanding the Tools
+- **[CI/CD Tools Comparison](CI-CD-COMPARISON.md)** - Detailed comparison of GitHub Actions, GitLab CI, and Jenkins
+
 ---
 
 **🎉 Congratulations!** You've completed Lab 03 and built automated CI/CD pipelines. Your code changes now automatically build, test, and deploy!
