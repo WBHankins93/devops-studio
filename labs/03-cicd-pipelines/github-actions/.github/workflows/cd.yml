@@ -40,10 +40,8 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Configure kubectl
-        uses: aws-actions/configure-kubectl@v4
-        with:
-          cluster-name: ${{ env.EKS_CLUSTER_NAME }}
-          region: ${{ env.AWS_REGION }}
+        run: |
+          aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
 
       - name: Deploy to Kubernetes
         working-directory: labs/03-cicd-pipelines
@@ -90,10 +88,8 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Configure kubectl
-        uses: aws-actions/configure-kubectl@v4
-        with:
-          cluster-name: ${{ env.EKS_CLUSTER_NAME }}
-          region: ${{ env.AWS_REGION }}
+        run: |
+          aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
 
       - name: Deploy to Kubernetes
         working-directory: labs/03-cicd-pipelines
