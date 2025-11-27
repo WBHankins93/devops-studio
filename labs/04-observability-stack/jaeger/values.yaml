@@ -1,0 +1,59 @@
+# Jaeger Helm Chart Values
+# Customize these values for your environment
+
+# All-in-one configuration (for development)
+# For production, use separate components
+allInOne:
+  enabled: true
+  image:
+    tag: "1.47"
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 200m
+    limits:
+      memory: 1Gi
+      cpu: 500m
+
+# Storage configuration
+storage:
+  type: memory  # Options: memory, elasticsearch, cassandra
+  
+  # For production, use Elasticsearch/OpenSearch
+  # elasticsearch:
+  #   host: opensearch:9200
+  #   scheme: http
+  #   indexPrefix: jaeger
+
+# Query service (UI)
+query:
+  enabled: true
+  service:
+    type: ClusterIP
+    port: 16686
+
+# Agent (sidecar or daemonset)
+agent:
+  enabled: true
+  strategy: DaemonSet  # Options: DaemonSet, Sidecar, Deployment
+  
+# Collector
+collector:
+  enabled: true
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+
+# Sampling configuration
+sampling:
+  type: probabilistic
+  param: 0.1  # Sample 10% of traces
+
+# Ingester (for Kafka-based architecture)
+ingester:
+  enabled: false
+

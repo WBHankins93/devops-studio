@@ -1,0 +1,98 @@
+# Prometheus Helm Chart Values
+# Customize these values for your environment
+
+prometheus:
+  prometheusSpec:
+    # Retention period for metrics
+    retention: 30d
+    
+    # Storage configuration
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: gp3
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+    
+    # Resource limits
+    resources:
+      requests:
+        memory: 2Gi
+        cpu: 1
+      limits:
+        memory: 4Gi
+        cpu: 2
+    
+    # Scrape configuration
+    scrapeInterval: 30s
+    evaluationInterval: 30s
+    
+    # Service monitor selector
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector: {}
+    serviceMonitorNamespaceSelector: {}
+    
+    # Pod monitor selector
+    podMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelector: {}
+    podMonitorNamespaceSelector: {}
+    
+    # Rule selector
+    ruleSelectorNilUsesHelmValues: false
+    ruleSelector: {}
+    ruleNamespaceSelector: {}
+    
+    # Additional scrape configs
+    additionalScrapeConfigs: []
+    
+    # Alerting configuration
+    alerting:
+      alertmanagers:
+        - namespace: observability
+          name: prometheus-kube-prometheus-alertmanager
+          port: web
+
+# AlertManager configuration
+alertmanager:
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: gp3
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 100m
+      limits:
+        memory: 512Mi
+        cpu: 500m
+
+# Node Exporter (for node metrics)
+nodeExporter:
+  enabled: true
+
+# Kube State Metrics (for Kubernetes object metrics)
+kubeStateMetrics:
+  enabled: true
+
+# Grafana (included in kube-prometheus-stack)
+grafana:
+  enabled: true
+  adminPassword: admin
+  persistence:
+    enabled: true
+    size: 10Gi
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+

@@ -1,0 +1,105 @@
+# Grafana Helm Chart Values
+# Customize these values for your environment
+
+# Admin credentials
+adminUser: admin
+adminPassword: admin
+
+# Persistence
+persistence:
+  enabled: true
+  type: pvc
+  storageClassName: gp3
+  accessModes:
+    - ReadWriteOnce
+  size: 10Gi
+
+# Resources
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 100m
+  limits:
+    memory: 512Mi
+    cpu: 500m
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 80
+
+# Data sources configuration
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      # Prometheus
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-kube-prometheus-prometheus:9090
+        access: proxy
+        isDefault: true
+        editable: true
+      
+      # OpenSearch
+      - name: OpenSearch
+        type: opensearch
+        url: http://opensearch:9200
+        access: proxy
+        database: "kubernetes-logs-*"
+        timeField: "@timestamp"
+        jsonData:
+          timeField: "@timestamp"
+          esVersion: "2.11.0"
+          logMessageField: "message"
+          logLevelField: "level"
+        editable: true
+      
+      # Jaeger
+      - name: Jaeger
+        type: jaeger
+        url: http://jaeger-query:16686
+        access: proxy
+        editable: true
+
+# Dashboard providers
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+
+# Dashboards
+dashboards:
+  default:
+    kubernetes-cluster:
+      gnetId: 315
+      revision: 1
+      datasource: Prometheus
+    node-exporter:
+      gnetId: 1860
+      revision: 27
+      datasource: Prometheus
+
+# Plugins (optional)
+plugins:
+  - grafana-piechart-panel
+  - grafana-clock-panel
+
+# Security
+security:
+  adminUser: admin
+  adminPassword: admin
+
+# Server configuration
+server:
+  root_url: "%(protocol)s://%(domain)s:%(http_port)s/"
+  serve_from_sub_path: false
+
