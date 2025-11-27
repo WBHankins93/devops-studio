@@ -1,0 +1,13 @@
+# Helm Template Files - YAML Linter Ignore
+#
+# These files contain Helm template syntax (Go templates) that YAML linters
+# cannot parse. This is expected behavior - Helm templates are not valid YAML
+# until processed by Helm.
+#
+# The files in templates/ directory are valid Helm templates and will work
+# correctly when deployed with Helm.
+#
+# To validate these files, use:
+#   helm lint ./helm-charts/sample-app
+#   helm template ./helm-charts/sample-app | kubectl apply --dry-run=client -f -
+
