@@ -1,0 +1,21 @@
+# terraform.tfvars.example
+# Example Terraform variables file
+# Copy this file to terraform.tfvars and update with your values
+
+project_name = "devops-studio"
+environment  = "dev"
+aws_region   = "us-west-2"
+
+# EKS cluster name (from Lab 02, if applicable)
+eks_cluster_name = ""
+
+# CloudWatch log retention (days)
+log_retention_days = 7
+
+# Additional tags
+tags = {
+  Owner       = "DevOps Team"
+  Project     = "DevOps Studio"
+  CostCenter  = "Training"
+}
+
