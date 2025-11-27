@@ -11,6 +11,7 @@ These are the primary guides that users should read:
 - **[prerequisites.md](./prerequisites.md)** ⚠️ **REQUIRED** - System requirements, tool installation, AWS setup
 - **[learning-paths.md](./learning-paths.md)** ⭐ **HIGHLY RECOMMENDED** - Career-focused learning paths
 - **[getting-started.md](./getting-started.md)** - Step-by-step setup instructions
+- **[makefile-guide.md](./makefile-guide.md)** - Understanding and using Makefiles in labs
 - **[troubleshooting.md](./troubleshooting.md)** - Common issues and solutions
 - **[cost-management.md](./cost-management.md)** - Cost optimization strategies
 

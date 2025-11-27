@@ -433,6 +433,7 @@ The deployment creates resources in this order:
 5. **Helm Charts** (2-3 minutes)
    - NGINX Ingress installation
    - Metrics Server installation
+   - Chart validation (lint + template rendering)
 
 **Total deployment time**: 20-25 minutes
 
@@ -450,6 +451,27 @@ make test
 ./scripts/validate.sh
 ```
 
+### Helm Chart Validation
+
+Before deploying Helm charts, validate them:
+
+```bash
+# Lint Helm charts (checks for errors and best practices)
+make lint-helm
+
+# Validate template rendering (ensures templates are valid)
+make validate-helm
+
+# Both validations run automatically before deployment
+make deploy-helm-chart
+```
+
+**Validation checks**:
+- Chart structure and metadata
+- Template syntax correctness
+- Values file validation
+- Kubernetes manifest rendering
+
 ### Test Coverage
 
 | Test | Description | Success Criteria |
@@ -459,6 +481,7 @@ make test
 | **CoreDNS** | DNS resolution works | CoreDNS pods running |
 | **Ingress** | Ingress controller ready | Ingress controller pods running |
 | **Sample App** | Application deploys | Deployment shows available replicas |
+| **Helm Charts** | Charts are valid | `helm lint` passes, templates render |
 
 ### Manual Testing
 
