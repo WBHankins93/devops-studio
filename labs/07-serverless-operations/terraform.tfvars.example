@@ -1,0 +1,37 @@
+# terraform.tfvars.example
+# Example Terraform variables file
+# Copy this file to terraform.tfvars and update with your values
+
+project_name = "devops-studio"
+environment  = "dev"
+aws_region   = "us-west-2"
+
+# CloudWatch log retention (days)
+log_retention_days = 7
+
+# Lambda memory sizes (MB)
+lambda_memory_sizes = {
+  hello_world     = 128
+  api_handler     = 256
+  event_processor = 256
+}
+
+# Lambda timeouts (seconds)
+lambda_timeouts = {
+  hello_world     = 30
+  api_handler     = 30
+  event_processor = 60
+}
+
+# Feature flags
+enable_api_gateway   = true
+enable_eventbridge   = true
+enable_step_functions = true
+
+# Additional tags
+tags = {
+  Owner       = "DevOps Team"
+  Project     = "DevOps Studio"
+  CostCenter  = "Training"
+}
+
