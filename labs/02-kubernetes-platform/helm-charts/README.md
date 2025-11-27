@@ -57,11 +57,47 @@ kubectl top pods --all-namespaces
 
 You can add custom Helm charts to this directory for your applications.
 
+### Sample App Chart
+
+A complete example Helm chart is provided in `sample-app/` directory. This demonstrates:
+
+- Chart structure and organization
+- Template helpers and functions
+- Values customization
+- Optional resources (Ingress, HPA, ConfigMap, Secret)
+- Best practices for Helm chart development
+
+**Install the sample chart**:
+```bash
+# Using Makefile
+make deploy-helm-chart
+
+# Or manually
+helm install sample-app ./helm-charts/sample-app \
+  --namespace devops-studio \
+  --create-namespace
+```
+
+See `sample-app/README.md` for detailed usage and examples.
+
 ### Chart Structure
 
 ```
 helm-charts/
-└── your-app/
+├── sample-app/          # Example Helm chart
+│   ├── Chart.yaml
+│   ├── values.yaml
+│   ├── README.md
+│   └── templates/
+│       ├── _helpers.tpl
+│       ├── deployment.yaml
+│       ├── service.yaml
+│       ├── ingress.yaml
+│       ├── serviceaccount.yaml
+│       ├── configmap.yaml
+│       ├── secret.yaml
+│       └── hpa.yaml
+└── your-app/            # Your custom chart
     ├── Chart.yaml
     ├── values.yaml
     └── templates/

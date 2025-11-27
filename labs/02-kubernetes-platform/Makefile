@@ -1,7 +1,7 @@
 # labs/02-kubernetes-platform/Makefile
 # Automation commands for EKS cluster management
 
-.PHONY: help init plan apply destroy test validate configure-kubectl deploy-app cluster-info verify-cluster install-helm-charts
+.PHONY: help init plan apply destroy test validate configure-kubectl deploy-app cluster-info verify-cluster install-helm-charts deploy-helm-chart
 
 # Default environment
 ENV ?= dev
@@ -82,6 +82,16 @@ install-helm-charts: configure-kubectl ## Install Helm charts (NGINX Ingress, Me
 		--set args="{--kubelet-insecure-tls}" \
 		--wait || echo "$(YELLOW)⚠️  Metrics server installation may take a few minutes$(NC)"
 	@echo "$(GREEN)✅ Helm charts installed$(NC)"
+
+deploy-helm-chart: configure-kubectl ## Deploy sample application using Helm chart
+	@echo "$(BLUE)Deploying sample application with Helm...$(NC)"
+	@helm upgrade --install sample-app ./helm-charts/sample-app \
+		--namespace devops-studio \
+		--create-namespace \
+		--wait || echo "$(YELLOW)⚠️  Deployment may take a few minutes$(NC)"
+	@echo "$(GREEN)✅ Sample application deployed with Helm$(NC)"
+	@kubectl get pods -n devops-studio
+	@echo "$(YELLOW)To enable Ingress, run: helm upgrade sample-app ./helm-charts/sample-app --set ingress.enabled=true$(NC)"
 
 deploy-app: configure-kubectl ## Deploy sample application
 	@echo "$(BLUE)Deploying sample application...$(NC)"

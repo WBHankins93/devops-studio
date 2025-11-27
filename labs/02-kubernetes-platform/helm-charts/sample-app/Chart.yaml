@@ -1,0 +1,14 @@
+apiVersion: v2
+name: sample-app
+description: A Helm chart for a sample application demonstrating Helm chart structure
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - sample
+  - application
+  - demo
+maintainers:
+  - name: DevOps Studio
+home: https://github.com/your-org/devops-studio
+
