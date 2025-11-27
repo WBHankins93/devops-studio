@@ -285,7 +285,9 @@ Monitoring → Dashboard → Track Usage
 
 ## Quick Start
 
-For experienced users who want to deploy immediately:
+### Option 1: Deploy Platform Infrastructure (Foundation)
+
+This sets up the platform foundation (S3, DynamoDB, IAM roles):
 
 ```bash
 # 1. Navigate to lab directory
@@ -299,12 +301,56 @@ cp terraform.tfvars.example terraform.tfvars
 make init
 make deploy
 
-# 4. Access portal
-make portal-url
+# 4. Verify deployment
+make validate
 ```
 
-**Setup time**: ~45-60 minutes  
-**Estimated cost**: $5-10 to complete (vs $80-120/month if kept running)
+**Setup time**: ~10-15 minutes  
+**Estimated cost**: $1-2/month (minimal resources)
+
+### Option 2: Use Service Catalog Templates (Immediate Value)
+
+Skip platform setup and use the templates directly:
+
+```bash
+# Deploy a web application
+cd service-catalog/web-app
+terraform init
+terraform apply
+
+# Deploy an API service
+cd ../api-service
+terraform init
+terraform apply
+```
+
+**Setup time**: ~15-20 minutes per template  
+**Estimated cost**: Varies by template (see template READMEs)
+
+### Option 3: Use Automation Tools (Programmatic)
+
+Use the Python scripts for automation:
+
+```bash
+# Install dependencies
+pip install -r automation/terraform-runner/requirements.txt
+
+# Run Terraform automation
+python automation/terraform-runner/terraform_runner.py plan \
+  --workspace my-app \
+  --template service-catalog/web-app \
+  --state-bucket YOUR_BUCKET \
+  --state-table YOUR_TABLE
+
+# Generate CI/CD pipeline
+python automation/ci-cd-generator/generate_pipeline.py \
+  --service my-app \
+  --repository github.com/org/repo \
+  --template standard-web-app
+```
+
+**Setup time**: ~5 minutes  
+**Estimated cost**: No additional cost (uses existing infrastructure)
 
 ---
 
@@ -354,173 +400,442 @@ terraform apply
 
 ```
 labs/08-platform-engineering/
-├── README.md                    # This file
+├── README.md                    # This file - Start here!
+├── PLATFORM-ARCHITECTURE.md     # Detailed architecture explanation
 ├── Makefile                     # Automation commands
 ├── main.tf                      # Main Terraform configuration
 ├── variables.tf                 # Variable definitions
 ├── outputs.tf                   # Output values
-├── portal/                      # Developer portal
-│   ├── README.md
-│   ├── docker-compose.yml
-│   └── config/
-├── service-catalog/             # Service catalog templates
-│   ├── README.md
-│   ├── web-app/                # Web application template
-│   ├── api-service/            # API service template
-│   └── data-pipeline/          # Data pipeline template
-├── platform-api/                # Platform APIs
-│   ├── README.md
+├── terraform.tfvars.example     # Example configuration
+│
+├── service-catalog/             # Service Catalog - Ready-to-use templates
+│   ├── README.md               # How to use the service catalog
+│   ├── web-app/                # Web Application Template
+│   │   ├── README.md           # Template documentation
+│   │   └── main.tf             # ✅ WORKING Terraform template
+│   ├── api-service/            # API Service Template
+│   │   ├── README.md           # Template documentation
+│   │   └── main.tf             # ✅ WORKING Terraform template
+│   └── data-pipeline/          # Data Pipeline Template
+│       ├── README.md           # Template documentation
+│       └── main.tf             # ✅ WORKING Terraform template
+│
+├── platform-api/                # Platform APIs - Lambda functions
+│   ├── README.md               # API documentation
 │   ├── provisioning/           # Provisioning API
+│   │   ├── README.md           # API endpoint docs
+│   │   └── lambda_function.py  # ✅ WORKING Lambda function
 │   └── monitoring/             # Monitoring API
-├── automation/                  # Automation scripts
-│   ├── terraform-runner/       # Terraform automation
+│       ├── README.md           # API endpoint docs
+│       └── lambda_function.py  # ✅ WORKING Lambda function
+│
+├── automation/                  # Automation Tools - Working scripts
+│   ├── README.md               # Automation overview
+│   ├── terraform-runner/       # Terraform execution automation
+│   │   ├── README.md           # How to use the runner
+│   │   ├── terraform_runner.py # ✅ WORKING Python script
+│   │   └── requirements.txt    # Python dependencies
 │   └── ci-cd-generator/        # CI/CD pipeline generator
-├── monitoring/                  # Platform monitoring
-│   ├── dashboards/
-│   └── metrics/
-└── scripts/                     # Utility scripts
-    ├── validate.sh
-    └── setup-portal.sh
+│       ├── README.md           # How to use the generator
+│       └── generate_pipeline.py # ✅ WORKING Python script
+│
+├── monitoring/                  # Platform Monitoring - Dashboards & Metrics
+│   ├── README.md               # Monitoring overview
+│   ├── dashboards/             # CloudWatch dashboards
+│   │   ├── README.md           # Dashboard documentation
+│   │   ├── platform-health.json # ✅ WORKING dashboard config
+│   │   └── cost-tracking.json  # ✅ WORKING dashboard config
+│   └── metrics/                # Custom metrics
+│       ├── README.md           # Metrics documentation
+│       └── publish_metrics.py  # ✅ WORKING metrics script
+│
+├── portal/                      # Developer Portal (Optional)
+│   ├── README.md               # Portal setup guide
+│   └── config/                 # Portal configuration
+│       └── app-config.yaml     # ✅ Example portal config
+│
+├── backstage/                   # Backstage Portal (Optional)
+│   └── README.md               # Backstage setup guide
+│
+└── scripts/                     # Utility Scripts
+    └── validate.sh             # ✅ WORKING validation script
 ```
+
+**Legend**:
+- ✅ = Working implementation (actual code you can run)
+- 📄 = Documentation only
 
 ---
 
-## Core Components
+## What's Included (Working Implementations)
 
-### Developer Portal
+This lab includes **actual working code** you can use immediately:
 
-The developer portal is the central hub where developers:
-- Browse service catalog
-- Provision infrastructure
-- Monitor resources
-- Access documentation
-- View metrics and costs
+### ✅ Service Catalog Templates (3 Ready-to-Use Templates)
 
-**Technologies**: Backstage, Port, or custom portal
+**Location**: `service-catalog/`
 
-See [portal/README.md](portal/README.md) for detailed setup.
+1. **Web Application** (`web-app/main.tf`)
+   - Complete Terraform template
+   - Provisions: ALB, Auto Scaling Group, RDS database
+   - Ready to deploy with `terraform apply`
+   - See [web-app/README.md](service-catalog/web-app/README.md) for usage
+
+2. **API Service** (`api-service/main.tf`)
+   - Complete Terraform template
+   - Provisions: API Gateway, Lambda functions, DynamoDB
+   - Serverless API ready to use
+   - See [api-service/README.md](service-catalog/api-service/README.md) for usage
+
+3. **Data Pipeline** (`data-pipeline/main.tf`)
+   - Complete Terraform template
+   - Provisions: AWS Glue jobs, S3 buckets, EventBridge schedules
+   - ETL pipeline ready to configure
+   - See [data-pipeline/README.md](service-catalog/data-pipeline/README.md) for usage
+
+**How to Use**:
+```bash
+# Example: Deploy web application template
+cd service-catalog/web-app
+terraform init
+terraform plan
+terraform apply
+```
+
+### ✅ Platform APIs (2 Working Lambda Functions)
+
+**Location**: `platform-api/`
+
+1. **Provisioning API** (`provisioning/lambda_function.py`)
+   - Lambda function for infrastructure provisioning
+   - Handles POST `/api/v1/provision` requests
+   - Returns provisioning status
+   - Ready to deploy to AWS Lambda
+   - See [provisioning/README.md](platform-api/provisioning/README.md) for API docs
+
+2. **Monitoring API** (`monitoring/lambda_function.py`)
+   - Lambda function for metrics and monitoring
+   - Handles GET `/api/v1/metrics` requests
+   - Queries CloudWatch metrics
+   - Ready to deploy to AWS Lambda
+   - See [monitoring/README.md](platform-api/monitoring/README.md) for API docs
+
+**How to Use**:
+```bash
+# Deploy Lambda functions (via Terraform or manually)
+# Then call via API Gateway or directly
+aws lambda invoke --function-name provisioning-api --payload '{"template":"web-app"}'
+```
+
+### ✅ Automation Tools (2 Working Python Scripts)
+
+**Location**: `automation/`
+
+1. **Terraform Runner** (`terraform-runner/terraform_runner.py`)
+   - Python script that executes Terraform in isolated workspaces
+   - Manages state in S3 with DynamoDB locking
+   - Supports: plan, apply, destroy operations
+   - **Ready to run**: `python terraform_runner.py plan --workspace my-app --template ../service-catalog/web-app`
+   - See [terraform-runner/README.md](automation/terraform-runner/README.md) for usage
+
+2. **CI/CD Generator** (`ci-cd-generator/generate_pipeline.py`)
+   - Python script that generates GitHub Actions workflows
+   - Creates deploy pipelines for multiple environments
+   - **Ready to run**: `python generate_pipeline.py --service my-app --repository github.com/org/repo --template standard-web-app`
+   - See [ci-cd-generator/README.md](automation/ci-cd-generator/README.md) for usage
+
+**How to Use**:
+```bash
+# Install dependencies
+pip install -r automation/terraform-runner/requirements.txt
+
+# Run Terraform runner
+python automation/terraform-runner/terraform_runner.py plan \
+  --workspace my-app-dev \
+  --template service-catalog/web-app \
+  --state-bucket my-state-bucket \
+  --state-table my-state-table
+
+# Generate CI/CD pipeline
+python automation/ci-cd-generator/generate_pipeline.py \
+  --service my-app \
+  --repository github.com/myorg/my-app \
+  --template standard-web-app
+```
+
+### ✅ Monitoring Tools (Dashboards & Metrics Scripts)
+
+**Location**: `monitoring/`
+
+1. **CloudWatch Dashboards** (`dashboards/`)
+   - `platform-health.json` - Platform health metrics dashboard
+   - `cost-tracking.json` - Cost monitoring dashboard
+   - **Ready to import**: `aws cloudwatch put-dashboard --dashboard-name platform-health --dashboard-body file://dashboards/platform-health.json`
+   - See [dashboards/README.md](monitoring/dashboards/README.md) for usage
+
+2. **Metrics Publisher** (`metrics/publish_metrics.py`)
+   - Python script to publish custom metrics to CloudWatch
+   - Supports: provisioning, API, and resource metrics
+   - **Ready to run**: `python publish_metrics.py provisioning true 120`
+   - See [metrics/README.md](monitoring/metrics/README.md) for usage
+
+**How to Use**:
+```bash
+# Import dashboards
+aws cloudwatch put-dashboard \
+  --dashboard-name platform-health \
+  --dashboard-body file://monitoring/dashboards/platform-health.json
+
+# Publish metrics
+python monitoring/metrics/publish_metrics.py provisioning true 120
+```
+
+### 📄 Documentation & Configuration
+
+- **Portal Configuration** (`portal/config/app-config.yaml`) - Example portal config
+- **Backstage Setup** (`backstage/README.md`) - Optional Backstage portal guide
+- **Architecture Docs** (`PLATFORM-ARCHITECTURE.md`) - Detailed architecture explanation
+
+---
+
+## Core Components Explained
 
 ### Service Catalog
 
-The service catalog contains pre-configured infrastructure templates:
+**What it is**: Pre-built Terraform templates for common infrastructure patterns.
 
-- **Web Application** - Standard web app (ALB, ASG, RDS)
-- **API Service** - REST API (API Gateway, Lambda)
-- **Container Service** - Kubernetes service (EKS)
-- **Data Pipeline** - ETL pipeline (Glue, S3)
+**What you get**:
+- 3 complete Terraform templates (web-app, api-service, data-pipeline)
+- Each template is production-ready with security, monitoring, and best practices
+- Documentation for each template
+- Parameter examples
 
-Each template includes:
-- Terraform code
-- Parameter definitions
-- Documentation
-- Best practices
-
-See [service-catalog/README.md](service-catalog/README.md) for details.
+**How to use**: Navigate to a template directory, configure variables, run `terraform apply`.
 
 ### Platform APIs
 
-RESTful APIs that enable:
-- Infrastructure provisioning
-- Resource management
-- CI/CD pipeline creation
-- Monitoring and metrics
+**What it is**: Lambda functions that provide REST API endpoints for platform operations.
 
-See [platform-api/README.md](platform-api/README.md) for details.
+**What you get**:
+- Provisioning API Lambda function (provision infrastructure via API)
+- Monitoring API Lambda function (query metrics via API)
+- API documentation with request/response examples
 
-### Automation Layer
+**How to use**: Deploy Lambda functions, set up API Gateway, call endpoints via HTTP.
 
-Automated workflows that:
-- Execute Terraform plans
-- Create CI/CD pipelines
-- Validate configurations
-- Enforce guardrails
+### Automation Tools
 
-See [automation/README.md](automation/README.md) for details.
+**What it is**: Python scripts that automate common platform operations.
+
+**What you get**:
+- Terraform Runner: Automates Terraform execution with workspace isolation
+- CI/CD Generator: Creates GitHub Actions workflows automatically
+
+**How to use**: Run Python scripts with appropriate parameters.
+
+### Monitoring
+
+**What it is**: CloudWatch dashboards and metrics publishing tools.
+
+**What you get**:
+- 2 CloudWatch dashboard configurations (health, cost)
+- Python script to publish custom metrics
+
+**How to use**: Import dashboards to CloudWatch, run metrics script to publish data.
 
 ---
 
 ## Step-by-Step Tutorials
 
-### Tutorial 1: Provision Your First Service
+### Tutorial 1: Deploy Your First Service Template
 
-**Objective**: Use the service catalog to provision a web application.
+**Objective**: Use the web application template to provision infrastructure.
+
+**What you'll do**: Deploy a complete web application stack (ALB, ASG, RDS) using the provided Terraform template.
 
 **Steps**:
 
-1. **Access Portal**
+1. **Navigate to Template**
    ```bash
-   # Get portal URL
-   terraform output portal_url
+   cd labs/08-platform-engineering/service-catalog/web-app
    ```
 
-2. **Browse Catalog**
-   - Navigate to Service Catalog
-   - Select "Web Application" template
+2. **Review the Template**
+   ```bash
+   # Look at what will be created
+   cat main.tf
+   cat README.md
+   ```
 
-3. **Configure Parameters**
-   - Application name
-   - Environment (dev/staging/prod)
-   - Instance type
-   - Database size
+3. **Configure Variables**
+   ```bash
+   # Create terraform.tfvars
+   cat > terraform.tfvars <<EOF
+   app_name = "my-first-app"
+   environment = "dev"
+   instance_type = "t3.medium"
+   min_size = 2
+   max_size = 5
+   EOF
+   ```
 
-4. **Provision**
-   - Click "Provision"
-   - Monitor progress
-   - Access application URL
+4. **Initialize and Deploy**
+   ```bash
+   # Initialize Terraform
+   terraform init
+   
+   # Review what will be created
+   terraform plan
+   
+   # Deploy (when ready)
+   terraform apply
+   ```
+
+5. **Access Your Application**
+   ```bash
+   # Get the ALB DNS name
+   terraform output alb_dns_name
+   
+   # Visit in browser or curl
+   curl http://$(terraform output -raw alb_dns_name)
+   ```
 
 **What you learned**:
-- Self-service provisioning
-- Service catalog usage
-- Parameter configuration
+- How to use service catalog templates
+- Terraform variable configuration
+- Infrastructure provisioning
 
-### Tutorial 2: Create CI/CD Pipeline
+**Cleanup**:
+```bash
+terraform destroy
+```
 
-**Objective**: Automatically create a CI/CD pipeline for your service.
+---
+
+### Tutorial 2: Use the Terraform Runner
+
+**Objective**: Use the automation script to provision infrastructure programmatically.
+
+**What you'll do**: Use the Python Terraform Runner script to execute Terraform in an isolated workspace.
 
 **Steps**:
 
-1. **Select Service**
-   - Choose provisioned service
-   - Navigate to CI/CD section
+1. **Set Up Prerequisites**
+   ```bash
+   # Install Python dependencies
+   pip install -r automation/terraform-runner/requirements.txt
+   
+   # Get platform state bucket and table (from main.tf outputs)
+   cd labs/08-platform-engineering
+   terraform output platform_state_bucket
+   terraform output platform_state_lock_table
+   ```
 
-2. **Configure Pipeline**
-   - Source repository
-   - Build commands
-   - Deployment targets
+2. **Run Terraform Plan**
+   ```bash
+   python automation/terraform-runner/terraform_runner.py plan \
+     --workspace my-app-dev \
+     --template service-catalog/web-app \
+     --state-bucket $(terraform output -raw platform_state_bucket) \
+     --state-table $(terraform output -raw platform_state_lock_table) \
+     --variables '{"app_name":"my-app","environment":"dev"}'
+   ```
 
-3. **Generate Pipeline**
-   - Click "Generate Pipeline"
-   - Review generated pipeline
-   - Commit to repository
+3. **Apply the Plan**
+   ```bash
+   python automation/terraform-runner/terraform_runner.py apply \
+     --workspace my-app-dev \
+     --template service-catalog/web-app \
+     --state-bucket $(terraform output -raw platform_state_bucket) \
+     --state-table $(terraform output -raw platform_state_lock_table)
+   ```
 
 **What you learned**:
-- Automated pipeline creation
-- CI/CD integration
-- Multi-environment support
+- Automated Terraform execution
+- Workspace isolation
+- State management
 
-### Tutorial 3: Monitor Platform Usage
+---
 
-**Objective**: View platform metrics and usage.
+### Tutorial 3: Generate a CI/CD Pipeline
+
+**Objective**: Automatically create a GitHub Actions workflow for your service.
+
+**What you'll do**: Use the CI/CD generator script to create a deployment pipeline.
 
 **Steps**:
 
-1. **Access Dashboard**
-   - Navigate to Monitoring
-   - View platform metrics
+1. **Generate Pipeline**
+   ```bash
+   python automation/ci-cd-generator/generate_pipeline.py \
+     --service my-web-app \
+     --repository github.com/myorg/my-web-app \
+     --template standard-web-app \
+     --environments dev staging prod \
+     --output .github/workflows/deploy.yml
+   ```
 
-2. **Analyze Usage**
-   - Services provisioned
-   - Resource utilization
-   - Cost tracking
+2. **Review Generated Pipeline**
+   ```bash
+   cat .github/workflows/deploy.yml
+   ```
 
-3. **Set Alerts**
-   - Configure budget alerts
-   - Set usage thresholds
+3. **Commit to Repository**
+   ```bash
+   git add .github/workflows/deploy.yml
+   git commit -m "Add CI/CD pipeline"
+   git push
+   ```
 
 **What you learned**:
+- Automated pipeline generation
+- Multi-environment deployments
+- GitHub Actions workflow creation
+
+---
+
+### Tutorial 4: Set Up Monitoring Dashboards
+
+**Objective**: Import CloudWatch dashboards to monitor your platform.
+
+**What you'll do**: Import the provided dashboard configurations into CloudWatch.
+
+**Steps**:
+
+1. **Import Platform Health Dashboard**
+   ```bash
+   aws cloudwatch put-dashboard \
+     --dashboard-name platform-health \
+     --dashboard-body file://monitoring/dashboards/platform-health.json
+   ```
+
+2. **Import Cost Tracking Dashboard**
+   ```bash
+   aws cloudwatch put-dashboard \
+     --dashboard-name platform-cost \
+     --dashboard-body file://monitoring/dashboards/cost-tracking.json
+   ```
+
+3. **View Dashboards**
+   ```bash
+   # Open AWS Console and navigate to CloudWatch > Dashboards
+   # Or get dashboard URL
+   aws cloudwatch get-dashboard --dashboard-name platform-health
+   ```
+
+4. **Publish Custom Metrics**
+   ```bash
+   # Publish a provisioning success metric
+   python monitoring/metrics/publish_metrics.py provisioning true 120
+   
+   # Publish API metrics
+   python monitoring/metrics/publish_metrics.py api 1000 5 250
+   ```
+
+**What you learned**:
+- CloudWatch dashboard setup
+- Custom metrics publishing
 - Platform observability
-- Usage analytics
-- Cost management
 
 ---
 

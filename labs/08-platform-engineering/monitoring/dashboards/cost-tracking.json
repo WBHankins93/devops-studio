@@ -1,0 +1,41 @@
+{
+  "widgets": [
+    {
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          ["Platform", "Resources.Cost", {"stat": "Sum", "period": 86400}]
+        ],
+        "period": 86400,
+        "stat": "Sum",
+        "region": "us-west-2",
+        "title": "Daily Platform Cost"
+      }
+    },
+    {
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          ["Platform", "Resources.Cost", {"stat": "Sum", "period": 2592000}]
+        ],
+        "period": 2592000,
+        "stat": "Sum",
+        "region": "us-west-2",
+        "title": "Monthly Platform Cost"
+      }
+    },
+    {
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          ["Platform", "CostPerService", {"stat": "Average", "period": 86400}]
+        ],
+        "period": 86400,
+        "stat": "Average",
+        "region": "us-west-2",
+        "title": "Average Cost per Service"
+      }
+    }
+  ]
+}
+

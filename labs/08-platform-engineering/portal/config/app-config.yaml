@@ -1,0 +1,28 @@
+# Portal Application Configuration
+# This is an example configuration for a developer portal
+
+app:
+  title: "DevOps Studio Platform"
+  baseUrl: "https://platform.example.com"
+  
+backend:
+  baseUrl: "https://platform-api.example.com"
+  listen:
+    port: 7007
+    host: "0.0.0.0"
+  
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+  
+catalog:
+  locations:
+    - type: url
+      target: https://github.com/org/catalog-info/blob/main/catalog-info.yaml
+
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: 'local'
+

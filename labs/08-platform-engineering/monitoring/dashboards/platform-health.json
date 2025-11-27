@@ -1,0 +1,55 @@
+{
+  "widgets": [
+    {
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          ["Platform", "Provisioning.Success", {"stat": "Sum", "period": 3600}],
+          [".", "Provisioning.Failure", {"stat": "Sum", "period": 3600}]
+        ],
+        "period": 300,
+        "stat": "Sum",
+        "region": "us-west-2",
+        "title": "Provisioning Success Rate"
+      }
+    },
+    {
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          ["Platform", "API.Requests", {"stat": "Sum", "period": 300}],
+          [".", "API.Errors", {"stat": "Sum", "period": 300}]
+        ],
+        "period": 300,
+        "stat": "Sum",
+        "region": "us-west-2",
+        "title": "API Requests and Errors"
+      }
+    },
+    {
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          ["Platform", "API.Latency", {"stat": "Average", "period": 300}]
+        ],
+        "period": 300,
+        "stat": "Average",
+        "region": "us-west-2",
+        "title": "API Latency"
+      }
+    },
+    {
+      "type": "metric",
+      "properties": {
+        "metrics": [
+          ["Platform", "Resources.Count", {"stat": "Average", "period": 3600}]
+        ],
+        "period": 3600,
+        "stat": "Average",
+        "region": "us-west-2",
+        "title": "Total Resources"
+      }
+    }
+  ]
+}
+
