@@ -92,11 +92,6 @@ devops-studio/
 │   ├── 06-gitops-workflows/            🔮 ArgoCD, Flux, declarative deployments
 │   ├── 07-serverless-ops/              🔮 Lambda, API Gateway, event-driven
 │   └── 08-platform-engineering/        🔮 Crossplane, Backstage, IDP
-├── shared/                             # Reusable components
-│   ├── terraform-modules/              # Common Terraform modules
-│   ├── helm-charts/                    # Custom Helm charts
-│   ├── scripts/                        # Shared automation scripts
-│   └── configs/                        # Configuration templates
 ├── docs/                               # Platform documentation
 │   ├── getting-started.md              # Quick start guide
 │   ├── prerequisites.md                # System requirements
