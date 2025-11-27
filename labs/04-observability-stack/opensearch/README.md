@@ -70,26 +70,14 @@ kubectl wait --for=condition=ready pod -l app=opensearch -n observability --time
 
 ### Basic Configuration
 
-Edit `config/opensearch-config.yaml`:
+The OpenSearch cluster is configured via the Kubernetes manifests in `manifests/opensearch-cluster.yaml`. Key configuration options are set via environment variables:
 
-```yaml
-cluster:
-  name: opensearch-cluster
-  initial_master_nodes:
-    - opensearch-0
-    - opensearch-1
-    - opensearch-2
+- **Cluster name**: `opensearch-cluster`
+- **Initial master nodes**: `opensearch-0`, `opensearch-1`, `opensearch-2`
+- **Node roles**: Master, Data, and Ingest (all-in-one nodes)
+- **Heap size**: 2GB (adjustable via `OPENSEARCH_JAVA_OPTS`)
 
-node:
-  roles:
-    - master
-    - data
-    - ingest
-
-plugins:
-  - repository-s3  # For S3 backup
-  - analysis-icu
-```
+To customize, edit the StatefulSet in `manifests/opensearch-cluster.yaml`.
 
 ### Resource Requirements
 
