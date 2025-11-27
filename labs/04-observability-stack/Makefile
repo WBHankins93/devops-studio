@@ -27,7 +27,10 @@ install-prometheus: configure-kubectl ## Install Prometheus for metrics
 	@helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
 		--namespace observability \
 		--create-namespace \
+		--values prometheus/values.yaml \
 		--wait || echo "$(YELLOW)⚠️  Prometheus installation may take a few minutes$(NC)"
+	@echo "$(BLUE)Applying alert rules...$(NC)"
+	@kubectl apply -f prometheus/alert-rules.yaml || echo "$(YELLOW)⚠️  Alert rules may need to be applied after Prometheus is ready$(NC)"
 	@echo "$(GREEN)✅ Prometheus installed$(NC)"
 	@echo "$(YELLOW)Access Prometheus UI: kubectl port-forward -n observability svc/prometheus-kube-prometheus-prometheus 9090:9090$(NC)"
 
@@ -37,13 +40,12 @@ install-grafana: configure-kubectl ## Install Grafana for visualization
 	@helm repo update
 	@helm upgrade --install grafana grafana/grafana \
 		--namespace observability \
-		--set persistence.enabled=true \
-		--set persistence.size=10Gi \
-		--set adminPassword=admin \
+		--values grafana/values.yaml \
 		--wait || echo "$(YELLOW)⚠️  Grafana installation may take a few minutes$(NC)"
 	@echo "$(GREEN)✅ Grafana installed$(NC)"
 	@echo "$(YELLOW)Access Grafana UI: kubectl port-forward -n observability svc/grafana 3000:80$(NC)"
 	@echo "$(YELLOW)Default credentials: admin / admin$(NC)"
+	@echo "$(YELLOW)Data sources (Prometheus, OpenSearch, Jaeger) are pre-configured$(NC)"
 
 install-jaeger: configure-kubectl ## Install Jaeger for distributed tracing
 	@echo "$(BLUE)Installing Jaeger...$(NC)"
@@ -51,11 +53,11 @@ install-jaeger: configure-kubectl ## Install Jaeger for distributed tracing
 	@helm repo update
 	@helm upgrade --install jaeger jaegertracing/jaeger \
 		--namespace observability \
-		--set storage.type=memory \
-		--set provisionDataStore.cassandra=false \
+		--values jaeger/values.yaml \
 		--wait || echo "$(YELLOW)⚠️  Jaeger installation may take a few minutes$(NC)"
 	@echo "$(GREEN)✅ Jaeger installed$(NC)"
 	@echo "$(YELLOW)Access Jaeger UI: kubectl port-forward -n observability svc/jaeger-query 16686:16686$(NC)"
+	@echo "$(YELLOW)Note: Using memory storage (development). For production, configure Elasticsearch/Cassandra in jaeger/values.yaml$(NC)"
 
 install-opensearch: configure-kubectl ## Install OpenSearch for log aggregation
 	@echo "$(BLUE)Installing OpenSearch...$(NC)"
@@ -101,6 +103,10 @@ status: configure-kubectl ## Show status of all observability components
 	@echo ""
 	@echo "$(YELLOW)Fluent Bit:$(NC)"
 	@kubectl get pods -n observability -l app=fluent-bit 2>/dev/null || echo "  Not installed"
+
+validate: configure-kubectl ## Validate all observability components
+	@echo "$(BLUE)Validating observability stack...$(NC)"
+	@./scripts/validate.sh
 
 uninstall-all: configure-kubectl ## Uninstall all observability components
 	@echo "$(RED)⚠️  This will remove all observability components$(NC)"
