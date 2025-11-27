@@ -1,0 +1,48 @@
+# Trivy Configuration
+# Customize scanning behavior
+
+# Output format
+format: table
+
+# Severity levels to report
+severity:
+  - UNKNOWN
+  - LOW
+  - MEDIUM
+  - HIGH
+  - CRITICAL
+
+# Exit code behavior
+# 0: Always exit with 0 (success)
+# 1: Exit with 1 if vulnerabilities found
+exit-code: 1
+
+# Exit on severity levels
+exit-on-eol: false
+exit-on-severity: CRITICAL
+
+# Skip checks
+skip:
+  # - os-pkgs
+  # - lang-pkgs
+
+# Ignore specific vulnerabilities
+# Add CVE IDs here
+ignore:
+  # - CVE-2021-12345
+
+# Timeout settings
+timeout: 5m
+
+# Cache settings
+cache-dir: .trivy-cache
+
+# Vulnerability database
+db-repository: ghcr.io/aquasecurity/trivy-db
+
+# Security checks
+security-checks:
+  - vuln
+  - config
+  - secret
+

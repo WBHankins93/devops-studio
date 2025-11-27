@@ -1,0 +1,19 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: developer-binding
+  namespace: devops-studio
+subjects:
+# Example: Bind to a user
+# - kind: User
+#   name: developer@example.com
+#   apiGroup: rbac.authorization.k8s.io
+# Example: Bind to a service account
+- kind: ServiceAccount
+  name: app-service-account
+  namespace: devops-studio
+roleRef:
+  kind: Role
+  name: developer
+  apiGroup: rbac.authorization.k8s.io
+

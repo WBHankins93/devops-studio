@@ -1,0 +1,36 @@
+# Falco Configuration
+# Customize Falco behavior
+
+# Rules files
+rules_file:
+  - /etc/falco/falco_rules.yaml
+  - /etc/falco/falco_rules.local.yaml
+  - /etc/falco/rules.d
+
+# JSON output
+json_output: true
+json_include_output_property: true
+json_include_tags_property: true
+
+# Logging
+log_stderr: true
+log_syslog: false
+log_level: info
+
+# Outputs
+syscall_event_drops:
+  actions:
+    - log
+    - alert
+
+# Metrics
+metrics:
+  enabled: true
+  interval: 1m
+  output_rule: true
+
+# Webhook (optional)
+# webhook:
+#   enabled: false
+#   url: ""
+

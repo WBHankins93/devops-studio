@@ -1,0 +1,40 @@
+# Custom Falco Rules
+# Add your custom security rules here
+
+- rule: Detect Shell in Container
+  desc: Detect shell execution in containers (security best practice)
+  condition: >
+    spawned_process and container and
+    shell_procs and proc.tty != 0 and
+    not container_entrypoint
+  output: >
+    Shell spawned in container (user=%user.name %container.info
+    shell=%proc.name parent=%proc.pname cmdline=%proc.cmdline
+    container_id=%container.id image=%container.image.repository)
+  priority: WARNING
+  tags: [container, shell, mitre_execution]
+
+- rule: Unexpected Outbound Network Connection
+  desc: Detect unexpected outbound network connections from containers
+  condition: >
+    evt.type = connect and evt.dir = < and
+    container and not trusted_containers
+  output: >
+    Unexpected outbound network connection (user=%user.name
+    connection=%fd.name direction=%evt.type %container.info)
+  priority: NOTICE
+  tags: [network, container]
+
+- rule: Read Sensitive File
+  desc: Detect access to sensitive files
+  condition: >
+    open_read and
+    (fd.name startswith /etc/shadow or
+     fd.name startswith /etc/passwd or
+     fd.name startswith /root/.ssh)
+  output: >
+    Sensitive file accessed (user=%user.name file=%fd.name
+    %container.info)
+  priority: WARNING
+  tags: [file, sensitive]
+

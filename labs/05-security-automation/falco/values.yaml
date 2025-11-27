@@ -1,0 +1,44 @@
+# Falco Helm Chart Values
+# Customize Falco deployment
+
+# Driver configuration
+driver:
+  enabled: true
+  # Use eBPF (recommended) or kernel module
+  type: modern_ebpf
+
+# Falco configuration
+falco:
+  rules_file:
+    - /etc/falco/falco_rules.yaml
+    - /etc/falco/falco_rules.local.yaml
+    - /etc/falco/rules.d
+
+  json_output: true
+  log_stderr: true
+  log_level: info
+
+# Resources
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "100m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+# Metrics
+metrics:
+  enabled: true
+  interval: 1m
+
+# Webhook (optional)
+# webhook:
+#   enabled: false
+#   url: ""
+
+# Custom rules
+customRules:
+  custom-rules.yaml: |-
+    # Custom rules loaded from rules/custom-rules.yaml
+
