@@ -1,0 +1,47 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: sample-app-staging
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: ./labs/06-gitops-workflows/kustomize/overlays/staging
+  prune: true
+  wait: true
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: sample-app
+  targetNamespace: staging
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: sample-app
+      namespace: staging
+  dependsOn:
+    - name: sample-app
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: sample-app-production
+  namespace: flux-system
+spec:
+  interval: 15m
+  path: ./labs/06-gitops-workflows/kustomize/overlays/production
+  prune: true
+  wait: true
+  timeout: 10m
+  sourceRef:
+    kind: GitRepository
+    name: sample-app-production
+  targetNamespace: production
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: sample-app
+      namespace: production
+  dependsOn:
+    - name: sample-app-production
+

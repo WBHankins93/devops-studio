@@ -1,0 +1,29 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: sample-app
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/your-org/your-repo
+  ref:
+    branch: main
+  # Uncomment if using private repository
+  # secretRef:
+  #   name: git-credentials
+
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: sample-app-production
+  namespace: flux-system
+spec:
+  interval: 5m
+  url: https://github.com/your-org/your-repo
+  ref:
+    branch: main
+  # Uncomment if using private repository
+  # secretRef:
+  #   name: git-credentials
+

@@ -1,0 +1,56 @@
+# Argo CD Helm Chart Values
+# Customize Argo CD deployment
+
+# Server configuration
+server:
+  service:
+    type: LoadBalancer
+  ingress:
+    enabled: false
+    # Uncomment to enable ingress
+    # ingressClassName: nginx
+    # hosts:
+    #   - argocd.example.com
+    # tls:
+    #   - secretName: argocd-tls
+    #     hosts:
+    #       - argocd.example.com
+
+# Controller configuration
+controller:
+  replicas: 1
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+# Repo server configuration
+repoServer:
+  replicas: 1
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+# Application set controller
+applicationSet:
+  enabled: true
+  replicas: 1
+
+# Redis (for caching)
+redis:
+  enabled: true
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "50m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+
