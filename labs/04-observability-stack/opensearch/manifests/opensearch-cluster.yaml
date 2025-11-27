@@ -1,0 +1,109 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opensearch
+  namespace: observability
+  labels:
+    app: opensearch
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9200
+      name: http
+      targetPort: 9200
+    - port: 9300
+      name: transport
+      targetPort: 9300
+  selector:
+    app: opensearch
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: opensearch
+  namespace: observability
+spec:
+  serviceName: opensearch
+  replicas: 3
+  selector:
+    matchLabels:
+      app: opensearch
+  template:
+    metadata:
+      labels:
+        app: opensearch
+    spec:
+      containers:
+      - name: opensearch
+        image: opensearchproject/opensearch:2.11.0
+        ports:
+        - containerPort: 9200
+          name: http
+        - containerPort: 9300
+          name: transport
+        env:
+        - name: cluster.name
+          value: opensearch-cluster
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: discovery.seed_hosts
+          value: "opensearch-0.opensearch,opensearch-1.opensearch,opensearch-2.opensearch"
+        - name: cluster.initial_master_nodes
+          value: "opensearch-0,opensearch-1,opensearch-2"
+        - name: bootstrap.memory_lock
+          value: "true"
+        - name: "OPENSEARCH_JAVA_OPTS"
+          value: "-Xms2g -Xmx2g"
+        - name: "DISABLE_INSTALL_DEMO_CONFIG"
+          value: "true"
+        - name: "DISABLE_SECURITY_PLUGIN"
+          value: "true"
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "2"
+          limits:
+            memory: "4Gi"
+            cpu: "2"
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/opensearch/data
+        livenessProbe:
+          httpGet:
+            path: /_cluster/health
+            port: 9200
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /_cluster/health
+            port: 9200
+          initialDelaySeconds: 30
+          periodSeconds: 10
+      initContainers:
+      - name: sysctl
+        image: busybox:1.35
+        securityContext:
+          privileged: true
+        command:
+        - sh
+        - -c
+        - |
+          sysctl -w vm.max_map_count=262144
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: gp3
+      resources:
+        requests:
+          storage: 20Gi
+
