@@ -5,8 +5,8 @@
 > **Previous Lab**: [Lab 01 - Terraform Foundations](../01-terraform-foundations/README.md)  
 > **Next Lab**: [Lab 03 - CI/CD Pipelines](../03-cicd-pipelines/README.md)
 
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-1.28+-326CE5?logo=kubernetes)](https://kubernetes.io)
-[![Terraform](https://img.shields.io/badge/Terraform-1.5+-7B68EE?logo=terraform)](https://terraform.io)
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-1.32+-326CE5?logo=kubernetes)](https://kubernetes.io)
+[![Terraform](https://img.shields.io/badge/Terraform-1.9+-7B68EE?logo=terraform)](https://terraform.io)
 [![AWS](https://img.shields.io/badge/AWS-EKS-FF9900?logo=amazon-aws)](https://aws.amazon.com/eks)
 [![Helm](https://img.shields.io/badge/Helm-3.10+-0F1689?logo=helm)](https://helm.sh)
 
@@ -161,8 +161,8 @@ This lab deploys a complete, production-ready EKS cluster that demonstrates ente
 | Tool | Version | Purpose |
 |------|---------|---------|
 | **AWS CLI** | 2.0+ | AWS resource management |
-| **Terraform** | 1.5+ | Infrastructure provisioning |
-| **kubectl** | 1.28+ | Kubernetes cluster management |
+| **Terraform** | 1.9+ | Infrastructure provisioning |
+| **kubectl** | 1.32+ | Kubernetes cluster management |
 | **Helm** | 3.10+ | Kubernetes package management |
 | **Git** | 2.0+ | Version control |
 
@@ -278,7 +278,7 @@ environment = "dev"
 region = "us-west-2"
 
 # EKS Configuration
-cluster_version = "1.28"
+cluster_version = "1.32"
 cluster_name = "devops-studio-eks"
 
 # Node Group Configuration
@@ -352,7 +352,7 @@ All variables include validation rules:
 variable "cluster_version" {
   description = "Kubernetes version for EKS cluster"
   type        = string
-  default     = "1.28"
+  default     = "1.32"
   
   validation {
     condition     = can(regex("^1\\.(2[0-9]|3[0-9])$", var.cluster_version))

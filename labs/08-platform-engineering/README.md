@@ -255,9 +255,9 @@ Monitoring → Dashboard → Track Usage
 | Tool | Version | Purpose |
 |------|---------|---------|
 | **AWS CLI** | 2.0+ | AWS service management |
-| **Terraform** | 1.5+ | Infrastructure as Code |
+| **Terraform** | 1.9+ | Infrastructure as Code |
 | **Docker** | 20.10+ | Container runtime |
-| **kubectl** | 1.28+ | Kubernetes management |
+| **kubectl** | 1.32+ | Kubernetes management |
 | **Node.js** | 18+ | Portal development |
 | **Python** | 3.9+ | Automation scripts |
 

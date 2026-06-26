@@ -4,7 +4,7 @@
 > **Navigation**: [DevOps Studio](../../README.md) > [Labs](../README.md) > Lab 01  
 > **Next Lab**: [Lab 02 - Kubernetes Platform](../02-kubernetes-platform/README.md)
 
-[![Terraform](https://img.shields.io/badge/Terraform-1.5+-7B68EE?logo=terraform)](https://terraform.io)
+[![Terraform](https://img.shields.io/badge/Terraform-1.9+-7B68EE?logo=terraform)](https://terraform.io)
 [![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?logo=amazon-aws)](https://aws.amazon.com)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -153,7 +153,7 @@ This lab creates a complete, production-ready infrastructure stack that demonstr
 | Tool | Version | Purpose |
 |------|---------|---------|
 | **AWS CLI** | 2.0+ | AWS resource management |
-| **Terraform** | 1.5+ | Infrastructure provisioning |
+| **Terraform** | 1.9+ | Infrastructure provisioning |
 | **Git** | 2.0+ | Version control |
 | **curl** | Any | Testing and validation |
 | **jq** | 1.6+ | JSON processing (optional) |

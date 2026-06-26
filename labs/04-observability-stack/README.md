@@ -141,7 +141,7 @@ This lab deploys a production-ready observability stack that provides complete v
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| **kubectl** | 1.28+ | Kubernetes cluster management |
+| **kubectl** | 1.32+ | Kubernetes cluster management |
 | **Helm** | 3.10+ | Package management |
 | **curl** | Latest | API testing |
 

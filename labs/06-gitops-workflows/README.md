@@ -212,7 +212,7 @@ You **combine** Kustomize with Argo CD or Flux:
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| **kubectl** | 1.28+ | Kubernetes cluster management |
+| **kubectl** | 1.32+ | Kubernetes cluster management |
 | **kustomize** | 4.5+ | Configuration management |
 | **Helm** | 3.10+ | Package management |
 | **Git** | 2.30+ | Version control |

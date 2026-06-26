@@ -180,7 +180,7 @@ This lab provides complete CI/CD pipeline implementations using three popular to
 |------|---------|---------|
 | **Docker** | 20.0+ | Container image building |
 | **Git** | 2.0+ | Version control |
-| **kubectl** | 1.28+ | Kubernetes deployment |
+| **kubectl** | 1.32+ | Kubernetes deployment |
 | **Helm** | 3.10+ | Kubernetes package management |
 
 ### AWS Requirements

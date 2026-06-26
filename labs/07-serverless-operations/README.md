@@ -261,7 +261,7 @@ Lambda functions are **stateless**:
 | **AWS CLI** | 2.0+ | AWS service management |
 | **Python** | 3.9+ | Lambda runtime |
 | **Node.js** | 18+ | Lambda runtime |
-| **Terraform** | 1.5+ | Infrastructure as Code |
+| **Terraform** | 1.9+ | Infrastructure as Code |
 | **Docker** | 20.10+ | Local testing (optional) |
 
 ### AWS Requirements

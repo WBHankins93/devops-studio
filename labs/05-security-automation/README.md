@@ -144,7 +144,7 @@ This lab implements a complete DevSecOps security stack that automates security 
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| **kubectl** | 1.28+ | Kubernetes cluster management |
+| **kubectl** | 1.32+ | Kubernetes cluster management |
 | **Helm** | 3.10+ | Package management |
 | **Trivy** | 0.45+ | Vulnerability scanning |
 

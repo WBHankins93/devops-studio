@@ -2,7 +2,7 @@
 # Serverless Operations Lab - Main Infrastructure Configuration
 
 terraform {
-  required_version = ">= 1.5"
+  required_version = ">= 1.9"
   
   required_providers {
     aws = {
@@ -160,7 +160,7 @@ resource "aws_lambda_function" "hello_world" {
   function_name = "${var.project_name}-${var.environment}-hello-world"
   role          = aws_iam_role.lambda_execution.arn
   handler       = "lambda_function.lambda_handler"
-  runtime       = "python3.11"
+  runtime       = "python3.13"
   timeout       = 30
   memory_size   = 128
   
@@ -184,7 +184,7 @@ resource "aws_lambda_function" "api_handler" {
   function_name = "${var.project_name}-${var.environment}-api-handler"
   role          = aws_iam_role.lambda_execution.arn
   handler       = "lambda_function.lambda_handler"
-  runtime       = "python3.11"
+  runtime       = "python3.13"
   timeout       = 30
   memory_size   = 256
   
@@ -208,7 +208,7 @@ resource "aws_lambda_function" "event_processor" {
   function_name = "${var.project_name}-${var.environment}-event-processor"
   role          = aws_iam_role.lambda_execution.arn
   handler       = "lambda_function.lambda_handler"
-  runtime       = "python3.11"
+  runtime       = "python3.13"
   timeout       = 60
   memory_size   = 256
   
