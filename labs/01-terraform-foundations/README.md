@@ -853,7 +853,7 @@ terraform apply -var="desired_capacity=0" -var="min_size=0"
 - **[Lab 04: Observability Stack](../04-observability-stack/README.md)** - Advanced monitoring with Prometheus/Grafana
 - **[Lab 05: Security Automation](../05-security-automation/README.md)** - Implement DevSecOps practices
 - **[Lab 06: GitOps Workflows](../06-gitops-workflows/README.md)** - Deploy applications with ArgoCD
-- **[Lab 07: Serverless Operations](../07-serverless-ops/README.md)** - Event-driven architectures
+- **[Lab 07: Serverless Operations](../07-serverless-operations/README.md)** - Event-driven architectures
 - **[Lab 08: Platform Engineering](../08-platform-engineering/README.md)** - Build internal developer platforms
 
 #### Learning Paths

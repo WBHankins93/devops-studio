@@ -735,7 +735,7 @@ See [monitoring/README.md](monitoring/README.md) for detailed setup.
 - Verify resource permissions
 - Check VPC configuration (if applicable)
 
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for detailed solutions.
+See the [Troubleshooting guide](../../docs/troubleshooting.md) for detailed solutions.
 
 ---
 

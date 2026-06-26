@@ -54,7 +54,7 @@ When adding new documentation:
 
 **Having Issues?** Check [troubleshooting.md](./troubleshooting.md)
 
-**Want to Understand Design?** Browse [architecture-decisions/](./architecture-decisions/)
+**Want to Understand Design?** Browse [architecture-decisions/](./architecture-decisions/001-terraform-structure.md)
 
 ## Why This Structure?
 
