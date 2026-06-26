@@ -921,7 +921,7 @@ See [monitoring/README.md](monitoring/README.md) for detailed setup.
 - Verify repository access
 - Review pipeline configuration
 
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for detailed solutions.
+See the [Troubleshooting guide](../../docs/troubleshooting.md) for detailed solutions.
 
 ---
 
