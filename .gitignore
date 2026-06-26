@@ -54,6 +54,10 @@ tests/
 docs/_build/
 site/
 
+# VitePress
+.vitepress/cache/
+.vitepress/dist/
+
 # Python
 __pycache__/
 *.py[cod]
