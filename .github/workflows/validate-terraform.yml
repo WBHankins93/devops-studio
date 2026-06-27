@@ -1,39 +1,46 @@
 name: Validate Terraform
 
+# Format-check, init, and validate the Terraform in every lab that has it.
+# Runs on the real Terraform roots only — labs 03-06 have no Terraform.
+
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'labs/**/*.tf'
-      - 'shared/terraform-modules/**/*.tf'
+      - '.github/workflows/validate-terraform.yml'
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'labs/**/*.tf'
-      - 'shared/terraform-modules/**/*.tf'
+      - '.github/workflows/validate-terraform.yml'
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        lab: [01-terraform-foundations, 02-kubernetes-platform, 03-cicd-pipelines, 04-observability-stack, 05-security-automation, 06-gitops-workflows, 07-serverless-ops, 08-platform-engineering]
-    
+        lab:
+          - 01-terraform-foundations
+          - 02-kubernetes-platform
+          - 07-serverless-operations
+          - 08-platform-engineering
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-        terraform_version: latest
-    
-    - name: Terraform Format Check
-      run: terraform fmt -check -recursive labs/${{ matrix.lab }}/
-    
-    - name: Terraform Init
-      run: terraform init -backend=false
-      working-directory: labs/${{ matrix.lab }}
-    
-    - name: Terraform Validate
-      run: terraform validate
-      working-directory: labs/${{ matrix.lab }}
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: latest
+
+      - name: Format check
+        run: terraform fmt -check -recursive labs/${{ matrix.lab }}/
+
+      - name: Init (no backend)
+        run: terraform init -backend=false
+        working-directory: labs/${{ matrix.lab }}
+
+      - name: Validate
+        run: terraform validate
+        working-directory: labs/${{ matrix.lab }}
