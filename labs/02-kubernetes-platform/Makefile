@@ -177,13 +177,11 @@ format: ## Format Terraform code
 # Multi-environment commands
 plan-all: ## Plan for all environments
 	@for env in dev staging prod; do \
-		echo "$(BLUE)Planning for $env environment...$(NC)"; \
-		make plan ENV=$$env; \
+		echo "$(BLUE)Planning for $$env environment...$(NC)"; \
+		$(MAKE) plan ENV=$$env; \
 	done
 
-validate-all: ## Validate all environment configurations
-	@for env in dev staging prod; do \
-		echo "$(BLUE)Validating $env environment...$(NC)"; \
-		terraform validate -var-file="environments/$$env.tfvars"; \
-	done
+validate-all: ## Validate the Terraform configuration
+	@echo "$(BLUE)Validating Terraform configuration...$(NC)"
+	terraform validate
 

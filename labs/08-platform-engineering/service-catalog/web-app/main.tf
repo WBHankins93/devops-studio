@@ -3,7 +3,7 @@
 
 terraform {
   required_version = ">= 1.9"
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -16,7 +16,7 @@ terraform {
 data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["amazon"]
-  
+
   filter {
     name   = "name"
     values = ["amzn2-ami-hvm-*-x86_64-gp2"]
@@ -84,28 +84,28 @@ variable "db_allocated_storage" {
 resource "aws_security_group" "alb" {
   name        = "${var.app_name}-${var.environment}-alb-sg"
   description = "Security group for ALB"
-  
+
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  
+
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  
+
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  
+
   tags = {
     Name = "${var.app_name}-${var.environment}-alb-sg"
   }
@@ -115,21 +115,21 @@ resource "aws_security_group" "alb" {
 resource "aws_security_group" "ec2" {
   name        = "${var.app_name}-${var.environment}-ec2-sg"
   description = "Security group for EC2 instances"
-  
+
   ingress {
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
     security_groups = [aws_security_group.alb.id]
   }
-  
+
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  
+
   tags = {
     Name = "${var.app_name}-${var.environment}-ec2-sg"
   }
@@ -139,14 +139,14 @@ resource "aws_security_group" "ec2" {
 resource "aws_security_group" "rds" {
   name        = "${var.app_name}-${var.environment}-rds-sg"
   description = "Security group for RDS"
-  
+
   ingress {
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
     security_groups = [aws_security_group.ec2.id]
   }
-  
+
   tags = {
     Name = "${var.app_name}-${var.environment}-rds-sg"
   }
@@ -159,9 +159,9 @@ resource "aws_lb" "app" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
   subnets            = var.public_subnets
-  
+
   enable_deletion_protection = var.environment == "prod"
-  
+
   tags = {
     Name = "${var.app_name}-${var.environment}-alb"
   }
@@ -173,7 +173,7 @@ resource "aws_lb_target_group" "app" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
-  
+
   health_check {
     enabled             = true
     healthy_threshold   = 2
@@ -183,7 +183,7 @@ resource "aws_lb_target_group" "app" {
     path                = "/"
     protocol            = "HTTP"
   }
-  
+
   tags = {
     Name = "${var.app_name}-${var.environment}-tg"
   }
@@ -194,7 +194,7 @@ resource "aws_lb_listener" "app" {
   load_balancer_arn = aws_lb.app.arn
   port              = "80"
   protocol          = "HTTP"
-  
+
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.app.arn
@@ -206,9 +206,9 @@ resource "aws_launch_template" "app" {
   name_prefix   = "${var.app_name}-${var.environment}-"
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
-  
+
   vpc_security_group_ids = [aws_security_group.ec2.id]
-  
+
   user_data = base64encode(<<-EOF
     #!/bin/bash
     yum update -y
@@ -218,7 +218,7 @@ resource "aws_launch_template" "app" {
     echo "<h1>${var.app_name} - ${var.environment}</h1>" > /var/www/html/index.html
   EOF
   )
-  
+
   tag_specifications {
     resource_type = "instance"
     tags = {
@@ -233,16 +233,16 @@ resource "aws_autoscaling_group" "app" {
   vpc_zone_identifier = var.private_subnets
   target_group_arns   = [aws_lb_target_group.app.arn]
   health_check_type   = "ELB"
-  
+
   min_size         = var.min_size
   max_size         = var.max_size
   desired_capacity = var.desired_capacity
-  
+
   launch_template {
     id      = aws_launch_template.app.id
     version = "$Latest"
   }
-  
+
   tag {
     key                 = "Name"
     value               = "${var.app_name}-${var.environment}"
@@ -254,7 +254,7 @@ resource "aws_autoscaling_group" "app" {
 resource "aws_db_subnet_group" "app" {
   name       = "${var.app_name}-${var.environment}-db-subnet-group"
   subnet_ids = var.private_subnets
-  
+
   tags = {
     Name = "${var.app_name}-${var.environment}-db-subnet-group"
   }
@@ -273,13 +273,13 @@ resource "aws_db_instance" "app" {
   password               = random_password.db_password.result
   db_subnet_group_name   = aws_db_subnet_group.app.name
   vpc_security_group_ids = [aws_security_group.rds.id]
-  
+
   backup_retention_period = 7
-  backup_window          = "03:00-04:00"
-  maintenance_window     = "mon:04:00-mon:05:00"
-  
+  backup_window           = "03:00-04:00"
+  maintenance_window      = "mon:04:00-mon:05:00"
+
   skip_final_snapshot = var.environment != "prod"
-  
+
   tags = {
     Name = "${var.app_name}-${var.environment}-db"
   }

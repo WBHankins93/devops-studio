@@ -23,7 +23,7 @@ output "platform_config_parameter" {
 
 output "next_steps" {
   description = "Next steps for setting up the platform"
-  value = <<-EOT
+  value       = <<-EOT
     Platform infrastructure has been deployed!
     
     Next steps:
