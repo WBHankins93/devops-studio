@@ -287,10 +287,10 @@ resource "aws_launch_template" "web_app" {
 
 # Auto Scaling Group
 resource "aws_autoscaling_group" "web_app" {
-  name                = "${local.name_prefix}-asg"
-  vpc_zone_identifier = var.private_subnets
-  target_group_arns   = [aws_lb_target_group.web_app.arn]
-  health_check_type   = "ELB"
+  name                      = "${local.name_prefix}-asg"
+  vpc_zone_identifier       = var.private_subnets
+  target_group_arns         = [aws_lb_target_group.web_app.arn]
+  health_check_type         = "ELB"
   health_check_grace_period = 300
 
   min_size         = var.min_size
@@ -346,8 +346,6 @@ resource "aws_autoscaling_policy" "scale_up" {
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
   autoscaling_group_name = aws_autoscaling_group.web_app.name
-
-  tags = var.tags
 }
 
 resource "aws_autoscaling_policy" "scale_down" {
@@ -356,8 +354,6 @@ resource "aws_autoscaling_policy" "scale_down" {
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
   autoscaling_group_name = aws_autoscaling_group.web_app.name
-
-  tags = var.tags
 }
 
 # CloudWatch Alarms
@@ -476,6 +472,4 @@ resource "aws_cloudwatch_dashboard" "web_app" {
       }
     ]
   })
-
-  tags = var.tags
 }

@@ -107,15 +107,15 @@ output "dashboard_url" {
 output "infrastructure_summary" {
   description = "Summary of deployed infrastructure"
   value = {
-    project_name        = var.project_name
-    environment         = var.environment
-    region              = var.region
-    vpc_id              = module.vpc.vpc_id
-    application_url     = module.web_app.application_url
-    health_check_url    = module.web_app.health_check_url
-    autoscaling_group   = module.web_app.autoscaling_group_name
-    instance_count      = var.desired_capacity
-    database_endpoint   = module.database.db_endpoint
+    project_name      = var.project_name
+    environment       = var.environment
+    region            = var.region
+    vpc_id            = module.vpc.vpc_id
+    application_url   = module.web_app.application_url
+    health_check_url  = module.web_app.health_check_url
+    autoscaling_group = module.web_app.autoscaling_group_name
+    instance_count    = var.desired_capacity
+    database_endpoint = module.database.db_endpoint
   }
   sensitive = true
 }

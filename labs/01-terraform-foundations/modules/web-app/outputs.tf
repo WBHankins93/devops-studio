@@ -77,13 +77,13 @@ output "health_check_url" {
 output "web_app_config" {
   description = "Web application configuration summary"
   value = {
-    load_balancer_dns   = aws_lb.main.dns_name
-    autoscaling_group   = aws_autoscaling_group.web_app.name
-    instance_type       = var.instance_type
-    min_capacity        = var.min_size
-    max_capacity        = var.max_size
-    desired_capacity    = var.desired_capacity
-    health_check_path   = var.health_check_path
-    security_group_id   = aws_security_group.web_app.id
+    load_balancer_dns = aws_lb.main.dns_name
+    autoscaling_group = aws_autoscaling_group.web_app.name
+    instance_type     = var.instance_type
+    min_capacity      = var.min_size
+    max_capacity      = var.max_size
+    desired_capacity  = var.desired_capacity
+    health_check_path = var.health_check_path
+    security_group_id = aws_security_group.web_app.id
   }
 }

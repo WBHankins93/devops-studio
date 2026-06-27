@@ -82,39 +82,39 @@ output "nat_gateway_public_ips" {
 # Flow logs outputs
 output "vpc_flow_log_id" {
   description = "ID of the VPC Flow Log"
-  value       = var.enable_flow_logs ? aws_flow_log.vpc[0].id : null
+  value       = var.enable_flow_logs ? aws_flow_log.vpc.id : null
 }
 
 output "vpc_flow_log_cloudwatch_log_group" {
   description = "CloudWatch Log Group name for VPC Flow Logs"
-  value       = var.enable_flow_logs ? aws_cloudwatch_log_group.vpc_flow_logs[0].name : null
+  value       = var.enable_flow_logs ? aws_cloudwatch_log_group.vpc_flow_logs.name : null
 }
 
 # Network ACL outputs
 output "public_network_acl_id" {
   description = "ID of the public network ACL"
-  value       = var.enable_network_acls ? aws_network_acl.public[0].id : null
+  value       = var.enable_network_acls ? aws_network_acl.public.id : null
 }
 
 output "private_network_acl_id" {
   description = "ID of the private network ACL"
-  value       = var.enable_network_acls ? aws_network_acl.private[0].id : null
+  value       = var.enable_network_acls ? aws_network_acl.private.id : null
 }
 
 output "database_network_acl_id" {
   description = "ID of the database network ACL"
-  value       = var.enable_network_acls ? aws_network_acl.database[0].id : null
+  value       = var.enable_network_acls ? aws_network_acl.database.id : null
 }
 
 # VPC Endpoint outputs
 output "vpc_endpoint_s3_id" {
   description = "ID of the S3 VPC endpoint"
-  value       = var.enable_vpc_endpoints && contains(var.vpc_endpoints, "s3") ? aws_vpc_endpoint.s3[0].id : null
+  value       = var.enable_vpc_endpoints && contains(var.vpc_endpoints, "s3") ? aws_vpc_endpoint.s3.id : null
 }
 
 output "vpc_endpoint_dynamodb_id" {
   description = "ID of the DynamoDB VPC endpoint"
-  value       = var.enable_vpc_endpoints && contains(var.vpc_endpoints, "dynamodb") ? aws_vpc_endpoint.dynamodb[0].id : null
+  value       = var.enable_vpc_endpoints && contains(var.vpc_endpoints, "dynamodb") ? aws_vpc_endpoint.dynamodb.id : null
 }
 
 # Availability zone mapping
@@ -138,13 +138,13 @@ output "subnet_mapping" {
 output "vpc_config" {
   description = "VPC configuration summary for use by other modules"
   value = {
-    vpc_id                    = aws_vpc.main.id
-    vpc_cidr                  = aws_vpc.main.cidr_block
-    public_subnets           = aws_subnet.public[*].id
-    private_subnets          = aws_subnet.private[*].id
-    database_subnets         = aws_subnet.database[*].id
-    availability_zones       = var.availability_zones
-    internet_gateway_id      = aws_internet_gateway.main.id
+    vpc_id                  = aws_vpc.main.id
+    vpc_cidr                = aws_vpc.main.cidr_block
+    public_subnets          = aws_subnet.public[*].id
+    private_subnets         = aws_subnet.private[*].id
+    database_subnets        = aws_subnet.database[*].id
+    availability_zones      = var.availability_zones
+    internet_gateway_id     = aws_internet_gateway.main.id
     nat_gateway_ids         = var.enable_nat_gateway ? aws_nat_gateway.main[*].id : []
     public_route_table_id   = aws_route_table.public.id
     private_route_table_ids = aws_route_table.private[*].id
