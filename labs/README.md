@@ -2,6 +2,8 @@
 
 Eight self-contained, production-grade labs. Each includes working code, a detailed walkthrough, validation steps, cost notes, and cleanup automation.
 
+![DevOps Studio learning path map — how the eight labs build on each other](../assets/diagrams/00-curriculum-map.png)
+
 > **Navigation**: [DevOps Studio](../README.md) > Labs
 >
 > New here? Read the [Prerequisites](../docs/prerequisites.md) and [Getting Started](../docs/getting-started.md) guides first, then pick a [Learning Path](../docs/learning-paths.md).

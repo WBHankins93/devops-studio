@@ -94,38 +94,8 @@ This lab deploys a production-ready observability stack that provides complete v
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Application Services                      │
-│         (Pods, Containers, Microservices)                     │
-└──────────────┬──────────────────────────────┬──────────────┘
-               │                               │
-               ▼                               ▼
-    ┌──────────────────┐          ┌──────────────────┐
-    │   Prometheus      │          │   Fluent Bit      │
-    │   (Metrics)       │          │   (Log Collector) │
-    └─────────┬─────────┘          └─────────┬─────────┘
-              │                              │
-              │                              ▼
-              │                   ┌──────────────────┐
-              │                   │   OpenSearch     │
-              │                   │   (Log Storage)   │
-              │                   └─────────┬────────┘
-              │                             │
-              ▼                             │
-    ┌──────────────────┐                   │
-    │   Jaeger         │                   │
-    │   (Traces)       │                   │
-    └─────────┬────────┘                   │
-              │                            │
-              └────────────┬───────────────┘
-                           │
-                           ▼
-                  ┌──────────────────┐
-                  │   Grafana         │
-                  │   (Visualization) │
-                  └──────────────────┘
-```
+![Lab 04 — Metrics, logs, and traces flowing into Grafana](../../assets/diagrams/04-observability-stack.png)
+
 
 ### Data Flow
 

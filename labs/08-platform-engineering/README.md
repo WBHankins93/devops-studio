@@ -196,55 +196,8 @@ An **Internal Developer Platform (IDP)** is a set of tools, services, and workfl
 
 ## Architecture
 
-### High-Level Architecture
+![Lab 08 — Internal Developer Platform architecture](../../assets/diagrams/08-idp-platform.png)
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Developer Portal                          │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │   Service    │  │  Provision   │  │  Monitor    │      │
-│  │   Catalog    │  │  Infrastructure│ │  Resources  │      │
-│  └──────────────┘  └──────────────┘  └──────────────┘      │
-└──────────────────────────┬───────────────────────────────────┘
-                            │
-┌───────────────────────────▼───────────────────────────────────┐
-│                  Platform API Layer                           │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │ Provisioning│  │   CI/CD      │  │  Monitoring  │      │
-│  │    API      │  │    API       │  │     API      │      │
-│  └──────────────┘  └──────────────┘  └──────────────┘      │
-└──────────────────────────┬───────────────────────────────────┘
-                            │
-┌───────────────────────────▼───────────────────────────────────┐
-│              Infrastructure Automation Layer                   │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │  Terraform   │  │   GitHub    │  │  CloudWatch  │      │
-│  │  Automation  │  │   Actions   │  │   Metrics    │      │
-│  └──────────────┘  └──────────────┘  └──────────────┘      │
-└──────────────────────────┬───────────────────────────────────┘
-                            │
-┌───────────────────────────▼───────────────────────────────────┐
-│                    AWS Infrastructure                          │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │     VPC      │  │     EKS      │  │   Lambda     │      │
-│  │   EC2/ASG    │  │   RDS        │  │   S3/DynamoDB │      │
-│  └──────────────┘  └──────────────┘  └──────────────┘      │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Component Interaction Flow
-
-```
-Developer → Portal → Service Catalog → Select Template
-    ↓
-Portal → Platform API → Terraform Automation
-    ↓
-Terraform → AWS → Provision Infrastructure
-    ↓
-Platform API → CI/CD → Create Pipeline
-    ↓
-Monitoring → Dashboard → Track Usage
-```
 
 ---
 

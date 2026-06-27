@@ -121,45 +121,8 @@ This lab provides complete CI/CD pipeline implementations using three popular to
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        Source Code                               │
-│                    (Git Repository)                              │
-└─────────────────────────┬───────────────────────────────────────┘
-                          │
-        ┌─────────────────┼─────────────────┐
-        │                 │                 │
-        ▼                 ▼                 ▼
-┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│   GitHub     │  │   GitLab     │  │   Jenkins    │
-│   Actions    │  │     CI       │  │   Pipeline   │
-└──────┬───────┘  └──────┬───────┘  └──────┬───────┘
-       │                 │                 │
-       └─────────────────┼─────────────────┘
-                         │
-              ┌──────────┴──────────┐
-              │                    │
-              ▼                    ▼
-      ┌──────────────┐    ┌──────────────┐
-      │   Build &    │    │   Security   │
-      │    Test      │    │   Scanning   │
-      └──────┬───────┘    └──────┬───────┘
-             │                   │
-             └──────────┬─────────┘
-                        │
-                        ▼
-              ┌─────────────────┐
-              │  Docker Build   │
-              │  & Push to ECR  │
-              └────────┬────────┘
-                       │
-                       ▼
-              ┌─────────────────┐
-              │   Deploy to     │
-              │   Kubernetes    │
-              │   (Lab 02 EKS)  │
-              └─────────────────┘
-```
+![Lab 03 — CI/CD pipeline from commit to verified deploy](../../assets/diagrams/03-cicd-pipeline.png)
+
 
 ### Pipeline Stages
 

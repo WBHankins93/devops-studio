@@ -58,6 +58,9 @@ site/
 .vitepress/cache/
 .vitepress/dist/
 
+# Rejected/alternate diagram generations (kept locally, not committed)
+assets/diagrams/_unused/
+
 # Python
 __pycache__/
 *.py[cod]

@@ -160,41 +160,8 @@ You **combine** Kustomize with Argo CD or Flux:
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Git Repository                            │
-│                                                               │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │  Kustomize Base + Overlays                          │    │
-│  │  ├── base/                                          │    │
-│  │  ├── overlays/staging/                              │    │
-│  │  └── overlays/production/                           │    │
-│  └─────────────────────────────────────────────────────┘    │
-│                          │                                   │
-│                          │ Push                              │
-│                          ▼                                   │
-└─────────────────────────────────────────────────────────────┘
-                          │
-                          │ Watch
-                          ▼
-┌─────────────────────────────────────────────────────────────┐
-│              Kubernetes Cluster                              │
-│                                                               │
-│  ┌──────────────┐      ┌──────────────┐                     │
-│  │   Argo CD    │  OR  │    Flux      │                     │
-│  │  (Visual UI) │      │  (CLI-based) │                     │
-│  └──────┬───────┘      └──────┬───────┘                     │
-│         │                      │                              │
-│         └──────────┬───────────┘                              │
-│                    │                                          │
-│                    ▼                                          │
-│         ┌──────────────────────┐                              │
-│         │  Application Pods    │                              │
-│         │  (Deployed via       │                              │
-│         │   GitOps)            │                              │
-│         └──────────────────────┘                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![Lab 06 — GitOps reconciliation of desired and actual state](../../assets/diagrams/06-gitops-reconciliation.png)
+
 
 ### GitOps Workflow
 
