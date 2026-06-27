@@ -1,5 +1,7 @@
 # Cost Management Guide
 
+> [DevOps Studio](../README.md) › [Docs](./README.md) › Cost Management
+
 Strategies for managing and optimizing costs in DevOps Studio labs.
 
 ## Understanding Costs

@@ -1,103 +1,21 @@
-# Lab 01 - Terraform Foundations
-*Building Production-Ready Infrastructure with AWS*
+# Lab 01 · Terraform Foundations
 
-> **Navigation**: [DevOps Studio](../../README.md) > [Labs](../README.md) > Lab 01  
-> **Next Lab**: [Lab 02 - Kubernetes Platform](../02-kubernetes-platform/README.md)
+> [DevOps Studio](../../README.md) › [Labs](../README.md) › Lab 01 · ⏱ 1–2 hours · **Beginner**
 
-[![Terraform](https://img.shields.io/badge/Terraform-1.5+-7B68EE?logo=terraform)](https://terraform.io)
-[![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?logo=amazon-aws)](https://aws.amazon.com)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+**Build a production-style AWS network and web tier with Terraform — the foundation every later lab builds on. By the end you'll have a multi-AZ VPC, an auto-scaling web tier behind a load balancer, and an encrypted database, all created from code you can destroy in one command.**
 
-> **Objective**: Build a production-ready, scalable web application infrastructure on AWS using Terraform best practices. This lab establishes the foundation for all advanced DevOps scenarios in this learning platform.
+**On this page:** [Architecture](#architecture) · [Prerequisites](#prerequisites) · [Quick Start](#quick-start) · [Detailed Setup](#detailed-setup) · [Project Structure](#project-structure) · [Configuration](#configuration) · [Troubleshooting](#troubleshooting) · [Cleanup](#cleanup)
 
----
+## What you build
 
-## 📑 Table of Contents
+- **Multi-AZ VPC** — public, private, and database subnets across two availability zones
+- **Auto Scaling Group + Application Load Balancer** — a self-healing web tier
+- **RDS MySQL (Multi-AZ)** — encrypted, with automated backups
+- **CloudWatch** — dashboards and alerts
+- **IAM roles & security groups** — least-privilege access
+- **Remote state** — an S3 bucket with DynamoDB locking
 
-- [Overview](#overview)
-- [What You'll Learn](#what-youll-learn)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Detailed Setup](#detailed-setup)
-- [Project Structure](#project-structure)
-- [Configuration](#configuration)
-- [Deployment](#deployment)
-- [Testing & Validation](#testing--validation)
-- [Monitoring](#monitoring)
-- [Troubleshooting](#troubleshooting)
-- [Cleanup](#cleanup)
-- [Learning Objectives](#learning-objectives)
-- [Best Practices Demonstrated](#best-practices-demonstrated)
-- [Cost Considerations](#cost-considerations)
-- [Next Steps](#next-steps)
-- [Additional Resources](#additional-resources)
-
----
-
-## Overview
-
-This lab creates a complete, production-ready infrastructure stack that demonstrates enterprise-level AWS and Terraform patterns. Unlike typical tutorials, every component is designed with real-world considerations: security, scalability, monitoring, and maintainability.
-
-### What Gets Built
-
-- **Multi-AZ VPC** with 3-tier networking architecture
-- **Auto Scaling Group** with Application Load Balancer
-- **RDS MySQL Database** with encryption and automated backups
-- **CloudWatch Monitoring** with custom dashboards and alerts
-- **IAM Roles & Security Groups** following least privilege principles
-- **Remote State Management** with S3 and DynamoDB locking
-
-### Key Features
-
-- ✅ **Production Patterns**: Real enterprise-grade configurations
-- ✅ **Multi-Environment**: Dev, staging, and production ready
-- ✅ **Security First**: Encryption, network isolation, IAM best practices
-- ✅ **Automated Testing**: Infrastructure validation and health checks
-- ✅ **Cost Optimized**: Right-sized resources with auto-scaling
-- ✅ **Well Documented**: Clear explanations and troubleshooting guides
-
----
-
-## What You'll Learn
-
-### Infrastructure as Code
-- Terraform module design and composition
-- Remote state management with S3 and DynamoDB
-- Variable validation and type constraints
-- Output management and cross-module references
-
-### AWS Networking
-- VPC design with public, private, and database tiers
-- Auto-calculated CIDR blocks and subnet planning
-- NAT Gateways, Internet Gateways, and route tables
-- Network ACLs and security group strategies
-
-### Application Architecture
-- Auto Scaling Groups with health checks
-- Application Load Balancer configuration
-- Blue-green deployment readiness
-- Instance metadata and user data scripts
-
-### Database Management
-- RDS Multi-AZ deployments
-- Encryption at rest and in transit
-- Automated backup strategies
-- Secrets management with AWS Secrets Manager
-
-### Security & Compliance
-- IAM roles and instance profiles
-- Security group least privilege design
-- VPC Flow Logs for network monitoring
-- Encrypted storage and secure parameter handling
-
-### Monitoring & Observability
-- CloudWatch metrics and custom dashboards
-- Log aggregation and retention policies
-- Performance monitoring and alerting
-- Infrastructure health validation
-
----
+**Skills you'll practice:** Terraform modules and remote state · VPC and subnet design · auto scaling and load balancing · RDS Multi-AZ · IAM least privilege · CloudWatch monitoring.
 
 ## Architecture
 
@@ -124,7 +42,7 @@ This lab creates a complete, production-ready infrastructure stack that demonstr
 | Tool | Version | Purpose |
 |------|---------|---------|
 | **AWS CLI** | 2.0+ | AWS resource management |
-| **Terraform** | 1.5+ | Infrastructure provisioning |
+| **Terraform** | 1.9+ | Infrastructure provisioning |
 | **Git** | 2.0+ | Version control |
 | **curl** | Any | Testing and validation |
 | **jq** | 1.6+ | JSON processing (optional) |
@@ -674,80 +592,6 @@ terraform apply -var="desired_capacity=0" -var="min_size=0"
 
 ---
 
-## Learning Objectives
-
-### Beginner Level ✅
-After completing this lab, you should understand:
-- VPC networking fundamentals
-- Terraform module structure
-- AWS security group design
-- Basic auto scaling concepts
-- RDS database deployment
-
-### Intermediate Level ✅
-You should be able to:
-- Design multi-tier architectures
-- Implement infrastructure as code best practices
-- Configure load balancing and health checks
-- Set up automated monitoring and alerting
-- Manage Terraform state remotely
-
-### Advanced Level ✅
-You should master:
-- Enterprise infrastructure patterns
-- Security-first design principles
-- Multi-environment deployment strategies
-- Infrastructure testing and validation
-- Cost optimization techniques
-
-### Real-World Skills Gained
-- **Enterprise Patterns**: Architecture used in production environments
-- **Security Best Practices**: Least privilege, encryption, network isolation
-- **Operational Excellence**: Monitoring, logging, automated testing
-- **Cost Management**: Right-sizing, auto-scaling, resource optimization
-- **Documentation**: Clear communication of complex technical concepts
-
----
-
-## Best Practices Demonstrated
-
-### Infrastructure as Code
-- ✅ **Modular Design**: Reusable, composable modules
-- ✅ **Version Control**: All infrastructure in Git
-- ✅ **Remote State**: Shared state with locking
-- ✅ **Variable Validation**: Input validation and type safety
-- ✅ **Output Management**: Clear, documented outputs
-
-### Security
-- ✅ **Least Privilege IAM**: Minimal required permissions
-- ✅ **Network Isolation**: Private subnets for applications
-- ✅ **Encryption**: Data encrypted at rest and in transit
-- ✅ **Secrets Management**: No hardcoded credentials
-- ✅ **Security Groups**: Minimal required access
-
-### High Availability
-- ✅ **Multi-AZ Deployment**: Resources across availability zones
-- ✅ **Auto Scaling**: Automatic capacity management
-- ✅ **Load Balancing**: Traffic distribution
-- ✅ **Database Failover**: RDS Multi-AZ configuration
-- ✅ **Health Checks**: Automated failure detection
-
-### Monitoring & Operations
-- ✅ **CloudWatch Integration**: Comprehensive metrics
-- ✅ **Log Aggregation**: Centralized logging
-- ✅ **Automated Alerting**: Proactive issue detection
-- ✅ **Dashboard Creation**: Visual monitoring
-- ✅ **Performance Testing**: Automated validation
-
-### Cost Optimization
-- ✅ **Right-Sizing**: Appropriate instance types
-- ✅ **Auto Scaling**: Scale based on demand
-- ✅ **Reserved Capacity**: Long-term cost planning
-- ✅ **Resource Tagging**: Cost allocation tracking
-- ✅ **Cleanup Automation**: Prevent resource sprawl
-
----
-
 ## Cost Considerations
 
 ### Estimated Monthly Costs (us-west-2)
@@ -828,11 +672,11 @@ terraform apply -var="desired_capacity=0" -var="min_size=0"
 - **[Lab 08: Platform Engineering](../08-platform-engineering/README.md)** - Build internal developer platforms
 
 #### Learning Paths
-Choose your path based on your career goals - see the [complete DevOps Studio guide](../../README.md#learning-paths):
+Choose your path based on your career goals - see the [complete DevOps Studio guide](../../docs/learning-paths.md):
 
-- **🏗️ [Platform Engineering Track](../../README.md#platform-engineering-track)**: Labs 01 → 02 → 06 → 08
-- **🔒 [DevSecOps Track](../../README.md#devsecops-track)**: Labs 01 → 03 → 05 → 04  
-- **☁️ [Cloud Architecture Track](../../README.md#cloud-architecture-track)**: Labs 01 → 07 → 02 → 04
+- **🏗️ [Platform Engineering Track](../../docs/learning-paths.md)**: Labs 01 → 02 → 06 → 08
+- **🔒 [DevSecOps Track](../../docs/learning-paths.md)**: Labs 01 → 03 → 05 → 04  
+- **☁️ [Cloud Architecture Track](../../docs/learning-paths.md)**: Labs 01 → 07 → 02 → 04
 
 ---
 
@@ -866,3 +710,7 @@ Choose your path based on your career goals - see the [complete DevOps Studio gu
 **🎉 Congratulations!** You've completed Lab 01 and built production-ready infrastructure with Terraform. This foundation supports all advanced scenarios in the DevOps Studio learning platform.
 
 **Ready for the next challenge?** Continue to [Lab 02 - Kubernetes Platform](../02-kubernetes-platform/) to deploy a managed Kubernetes cluster on this infrastructure.
+
+---
+
+**Navigation:** [All labs](../README.md) · [Lab 02 · Kubernetes Platform ▶](../02-kubernetes-platform/README.md)

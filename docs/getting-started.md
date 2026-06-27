@@ -1,5 +1,7 @@
 # Getting Started Guide
 
+> [DevOps Studio](../README.md) › [Docs](./README.md) › Getting Started
+
 Welcome to DevOps Studio! This guide will help you get up and running quickly.
 
 ## Quick Start (5 minutes)
@@ -114,8 +116,8 @@ brew install terraform awscli kubernetes-cli helm docker
 
 ```bash
 # Terraform
-wget https://releases.hashicorp.com/terraform/1.5.0/terraform_1.5.0_linux_amd64.zip
-unzip terraform_1.5.0_linux_amd64.zip
+wget https://releases.hashicorp.com/terraform/1.9.8/terraform_1.9.8_linux_amd64.zip
+unzip terraform_1.9.8_linux_amd64.zip
 sudo mv terraform /usr/local/bin/
 
 # AWS CLI

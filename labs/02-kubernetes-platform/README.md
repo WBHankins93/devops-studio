@@ -1,109 +1,20 @@
-# Lab 02 - Kubernetes Platform
-*Deploying Production-Ready EKS Cluster with Helm and Ingress*
+# Lab 02 · Kubernetes Platform
 
-> **Navigation**: [DevOps Studio](../../README.md) > [Labs](../README.md) > Lab 02  
-> **Previous Lab**: [Lab 01 - Terraform Foundations](../01-terraform-foundations/README.md)  
-> **Next Lab**: [Lab 03 - CI/CD Pipelines](../03-cicd-pipelines/README.md)
+> [DevOps Studio](../../README.md) › [Labs](../README.md) › Lab 02 · ⏱ 2–3 hours · **Intermediate**
 
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-1.28+-326CE5?logo=kubernetes)](https://kubernetes.io)
-[![Terraform](https://img.shields.io/badge/Terraform-1.5+-7B68EE?logo=terraform)](https://terraform.io)
-[![AWS](https://img.shields.io/badge/AWS-EKS-FF9900?logo=amazon-aws)](https://aws.amazon.com/eks)
-[![Helm](https://img.shields.io/badge/Helm-3.10+-0F1689?logo=helm)](https://helm.sh)
+**Stand up a production Amazon EKS cluster and run an app on it. By the end you'll have a managed Kubernetes control plane, worker node groups across availability zones, and a sample app reachable through an ingress.**
 
-> **Objective**: Deploy a production-ready Amazon EKS (Elastic Kubernetes Service) cluster with managed node groups, configure Helm for package management, set up Ingress for external access, and deploy sample applications. This lab builds on Lab 01's VPC foundation and introduces container orchestration concepts.
+**On this page:** [Architecture](#architecture) · [Prerequisites](#prerequisites) · [Quick Start](#quick-start) · [Detailed Setup](#detailed-setup) · [Project Structure](#project-structure) · [Configuration](#configuration) · [Troubleshooting](#troubleshooting) · [Cleanup](#cleanup)
 
----
+## What you build
 
-## 📑 Table of Contents
+- **EKS cluster** — a managed, multi-AZ control plane
+- **Managed node groups** — auto-scaling worker nodes
+- **Helm-deployed sample app**
+- **Ingress controller** — external access to your services
+- **IRSA & security groups** — pod-level AWS permissions
 
-- [Overview](#overview)
-- [What You'll Learn](#what-youll-learn)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Detailed Setup](#detailed-setup)
-- [Project Structure](#project-structure)
-- [Configuration](#configuration)
-- [Deployment](#deployment)
-- [Testing & Validation](#testing--validation)
-- [Monitoring](#monitoring)
-- [Troubleshooting](#troubleshooting)
-- [Cleanup](#cleanup)
-- [Learning Objectives](#learning-objectives)
-- [Best Practices Demonstrated](#best-practices-demonstrated)
-- [Cost Considerations](#cost-considerations)
-- [Next Steps](#next-steps)
-- [Additional Resources](#additional-resources)
-
----
-
-## Overview
-
-This lab deploys a complete, production-ready EKS cluster that demonstrates enterprise-level Kubernetes and AWS patterns. You'll learn how to manage containerized applications at scale, configure networking, and use Helm for package management.
-
-### What Gets Built
-
-- **Amazon EKS Cluster** with managed control plane
-- **Managed Node Groups** with auto-scaling capabilities
-- **VPC CNI** for pod networking
-- **CoreDNS** for service discovery
-- **kube-proxy** for service networking
-- **Helm Charts** for common tools (NGINX Ingress, Metrics Server)
-- **Sample Applications** demonstrating deployments and services
-- **IAM Roles** for service accounts (IRSA)
-- **Security Groups** for cluster and node communication
-
-### Key Features
-
-- ✅ **Production Patterns**: Real enterprise-grade EKS configurations
-- ✅ **Multi-Environment**: Dev, staging, and production ready
-- ✅ **Security First**: IRSA, network policies, encryption
-- ✅ **Automated Setup**: Scripts for cluster configuration
-- ✅ **Cost Optimized**: Right-sized node groups with auto-scaling
-- ✅ **Well Documented**: Clear explanations and troubleshooting guides
-
----
-
-## What You'll Learn
-
-### Kubernetes Fundamentals
-- Cluster architecture and components
-- Pods, Deployments, Services, and Ingress
-- Namespaces and resource management
-- ConfigMaps and Secrets
-
-### Amazon EKS
-- EKS cluster creation and management
-- Managed node groups configuration
-- VPC CNI for pod networking
-- EKS add-ons (CoreDNS, kube-proxy, VPC CNI)
-- IAM Roles for Service Accounts (IRSA)
-
-### Helm Package Management
-- Helm chart installation and management
-- Custom Helm chart creation
-- Chart repositories and dependencies
-- Helm values customization
-
-### Networking & Ingress
-- Kubernetes Service types (ClusterIP, NodePort, LoadBalancer)
-- Ingress controller configuration
-- External access patterns
-- Network policies
-
-### Container Orchestration
-- Deployment strategies (rolling updates, blue-green)
-- Health checks and probes
-- Resource limits and requests
-- Horizontal Pod Autoscaling
-
-### Security & Compliance
-- IAM Roles for Service Accounts
-- Security group configuration
-- Network isolation
-- RBAC basics
-
----
+**Skills you'll practice:** EKS provisioning · node groups · Helm charts · Services and Ingress · kubectl basics · pod networking.
 
 ## Architecture
 
@@ -129,8 +40,8 @@ This lab deploys a complete, production-ready EKS cluster that demonstrates ente
 | Tool | Version | Purpose |
 |------|---------|---------|
 | **AWS CLI** | 2.0+ | AWS resource management |
-| **Terraform** | 1.5+ | Infrastructure provisioning |
-| **kubectl** | 1.28+ | Kubernetes cluster management |
+| **Terraform** | 1.9+ | Infrastructure provisioning |
+| **kubectl** | 1.32+ | Kubernetes cluster management |
 | **Helm** | 3.10+ | Kubernetes package management |
 | **Git** | 2.0+ | Version control |
 
@@ -246,7 +157,7 @@ environment = "dev"
 region = "us-west-2"
 
 # EKS Configuration
-cluster_version = "1.28"
+cluster_version = "1.32"
 cluster_name = "devops-studio-eks"
 
 # Node Group Configuration
@@ -320,7 +231,7 @@ All variables include validation rules:
 variable "cluster_version" {
   description = "Kubernetes version for EKS cluster"
   type        = string
-  default     = "1.28"
+  default     = "1.32"
   
   validation {
     condition     = can(regex("^1\\.(2[0-9]|3[0-9])$", var.cluster_version))
@@ -590,53 +501,6 @@ terraform destroy -target=module.eks
 
 ---
 
-## Learning Objectives
-
-### Beginner Level ✅
-After completing this lab, you should understand:
-- Kubernetes cluster architecture
-- Pods, Deployments, and Services
-- Basic kubectl commands
-- Helm package management
-
-### Intermediate Level ✅
-You should be able to:
-- Deploy and manage EKS clusters
-- Configure node groups and auto-scaling
-- Set up Ingress controllers
-- Manage applications with Helm
-
-### Advanced Level ✅
-You should master:
-- IAM Roles for Service Accounts (IRSA)
-- Network policies and security
-- Cluster autoscaling
-- Production deployment patterns
-
----
-
-## Best Practices Demonstrated
-
-### Kubernetes
-- ✅ **Resource Management**: Requests and limits
-- ✅ **Health Checks**: Liveness and readiness probes
-- ✅ **Deployment Strategies**: Rolling updates
-- ✅ **Namespace Isolation**: Multi-tenant patterns
-
-### EKS
-- ✅ **Managed Node Groups**: Simplified node management
-- ✅ **IRSA**: Secure pod-to-AWS service access
-- ✅ **Add-ons**: CoreDNS, kube-proxy, VPC CNI
-- ✅ **Multi-AZ**: High availability
-
-### Security
-- ✅ **IAM Integration**: Service account roles
-- ✅ **Network Isolation**: Security groups
-- ✅ **Encryption**: EBS volumes encrypted
-- ✅ **Least Privilege**: Minimal required permissions
-
----
-
 ## Cost Considerations
 
 ### Estimated Costs
@@ -705,3 +569,6 @@ make destroy
 
 **Ready for the next challenge?** Continue to [Lab 03 - CI/CD Pipelines](../03-cicd-pipelines/) to automate deployments to this cluster!
 
+---
+
+**Navigation:** [◀ Lab 01 · Terraform Foundations](../01-terraform-foundations/README.md) · [All labs](../README.md) · [Lab 03 · CI/CD Pipelines ▶](../03-cicd-pipelines/README.md)

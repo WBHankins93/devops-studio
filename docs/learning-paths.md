@@ -1,5 +1,7 @@
 # Learning Paths Guide
 
+> [DevOps Studio](../README.md) › [Docs](./README.md) › Learning Paths
+
 Choose your learning path based on your career goals and current experience level.
 
 ## Path Selection Guide

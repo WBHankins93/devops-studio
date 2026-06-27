@@ -1,190 +1,19 @@
-# Lab 07 - Serverless Operations
-*Building event-driven, serverless applications with AWS Lambda, API Gateway, and more*
+# Lab 07 · Serverless Operations
 
-> **Navigation**: [DevOps Studio](../../README.md) > [Labs](../README.md) > Lab 07  
-> **Previous Lab**: [Lab 06 - GitOps Workflows](../06-gitops-workflows/README.md)  
-> **Next Lab**: [Lab 08 - Platform Engineering](../08-platform-engineering/README.md)
+> [DevOps Studio](../../README.md) › [Labs](../README.md) › Lab 07 · ⏱ 1–2 hours · **Intermediate**
 
-[![AWS Lambda](https://img.shields.io/badge/AWS%20Lambda-FF9900?logo=awslambda)](https://aws.amazon.com/lambda/)
-[![API Gateway](https://img.shields.io/badge/API%20Gateway-FF9900?logo=amazonaws)](https://aws.amazon.com/api-gateway/)
-[![Serverless](https://img.shields.io/badge/Serverless-FD5750?logo=serverless)](https://www.serverless.com/)
+**Build event-driven apps with no servers to manage. By the end you'll have a REST API, an event processor, and a Step Functions workflow running on Lambda, API Gateway, DynamoDB, and EventBridge.**
 
-> **Objective**: Master serverless architecture by building event-driven applications using AWS Lambda, API Gateway, EventBridge, Step Functions, and DynamoDB. Learn to design, deploy, and monitor serverless applications with best practices for cost optimization and scalability.
+**On this page:** [Architecture](#architecture) · [Prerequisites](#prerequisites) · [Quick Start](#quick-start) · [Detailed Setup](#detailed-setup) · [Project Structure](#project-structure) · [Core Components](#core-components) · [Troubleshooting](#troubleshooting) · [Cleanup](#cleanup)
 
----
+## What you build
 
-## 📑 Table of Contents
+- **A REST API** — API Gateway → Lambda → DynamoDB
+- **Event processing** — S3 / EventBridge → Lambda
+- **A Step Functions workflow** orchestrating several Lambdas
+- **Monitoring** for serverless functions
 
-- [Overview](#overview)
-- [What is Serverless?](#what-is-serverless)
-- [Serverless Architecture Concepts](#serverless-architecture-concepts)
-- [What You'll Learn](#what-youll-learn)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Detailed Setup](#detailed-setup)
-- [Project Structure](#project-structure)
-- [Core Components](#core-components)
-- [Step-by-Step Tutorials](#step-by-step-tutorials)
-- [Advanced Patterns](#advanced-patterns)
-- [Monitoring and Observability](#monitoring-and-observability)
-- [Cost Optimization](#cost-optimization)
-- [Troubleshooting](#troubleshooting)
-- [Cleanup](#cleanup)
-- [Learning Objectives](#learning-objectives)
-- [Best Practices Demonstrated](#best-practices-demonstrated)
-- [Cost Considerations](#cost-considerations)
-- [Next Steps](#next-steps)
-- [Additional Resources](#additional-resources)
-
----
-
-## Overview
-
-This lab provides a comprehensive introduction to serverless computing on AWS. You'll build real-world serverless applications that demonstrate event-driven architecture, API integration, workflow orchestration, and data persistence.
-
-### What Gets Built
-
-- **Lambda Functions** - Serverless compute (Python and Node.js examples)
-- **API Gateway** - RESTful and HTTP APIs
-- **EventBridge** - Event-driven architecture
-- **Step Functions** - Workflow orchestration
-- **DynamoDB** - Serverless NoSQL database
-- **S3** - Serverless object storage
-- **CloudWatch** - Monitoring and logging
-- **IAM Roles** - Security and permissions
-
-### Key Features
-
-- ✅ **Event-Driven Architecture** - React to events automatically
-- ✅ **Auto-Scaling** - Handle traffic spikes automatically
-- ✅ **Pay-Per-Use** - Only pay for what you use
-- ✅ **No Server Management** - Focus on code, not infrastructure
-- ✅ **Production Ready** - Enterprise-grade patterns and practices
-
----
-
-## What is Serverless?
-
-### Definition
-
-**Serverless** is a cloud computing execution model where the cloud provider automatically manages the allocation and provisioning of servers. You write and deploy code, and the cloud provider handles everything else.
-
-### Key Characteristics
-
-1. **No Server Management** - You don't provision, manage, or scale servers
-2. **Automatic Scaling** - Scales automatically from zero to thousands of requests
-3. **Pay-Per-Use** - You pay only for the compute time you consume
-4. **Event-Driven** - Functions execute in response to events
-5. **Stateless** - Functions are stateless (use external storage for state)
-
-### Benefits
-
-- **Cost Efficiency** - No idle server costs
-- **Scalability** - Automatic scaling without configuration
-- **Faster Development** - Focus on business logic, not infrastructure
-- **High Availability** - Built-in redundancy and fault tolerance
-
-### Trade-offs
-
-- **Cold Starts** - First request may have latency
-- **Execution Time Limits** - Functions have maximum execution time
-- **Vendor Lock-in** - Tied to specific cloud provider
-- **Debugging Complexity** - Distributed systems can be harder to debug
-
----
-
-## Serverless Architecture Concepts
-
-### Function as a Service (FaaS)
-
-**Lambda** is AWS's FaaS offering. You write functions that:
-- Execute in response to events
-- Run in isolated containers
-- Scale automatically
-- Have configurable memory and timeout
-
-### Event-Driven Architecture
-
-Serverless applications are typically **event-driven**:
-
-```
-Event Source → Lambda Function → Downstream Service
-```
-
-**Common Event Sources:**
-- HTTP requests (API Gateway)
-- File uploads (S3)
-- Database changes (DynamoDB Streams)
-- Scheduled events (EventBridge)
-- Message queues (SQS)
-- Other services (SNS, Kinesis)
-
-### Stateless Design
-
-Lambda functions are **stateless**:
-- Each invocation is independent
-- No shared memory between invocations
-- Use external storage (DynamoDB, S3) for persistence
-- Use environment variables for configuration
-
-### Integration Patterns
-
-1. **Synchronous** - API Gateway → Lambda (request/response)
-2. **Asynchronous** - Event → Lambda (fire and forget)
-3. **Streaming** - Kinesis → Lambda (continuous processing)
-4. **Orchestration** - Step Functions → Multiple Lambdas (workflows)
-
----
-
-## What You'll Learn
-
-### Serverless Fundamentals
-- Understanding serverless architecture
-- Event-driven design patterns
-- Stateless function design
-- Integration patterns
-
-### AWS Lambda
-- Function creation and deployment
-- Runtime environments (Python, Node.js)
-- Environment variables and configuration
-- Memory and timeout configuration
-- Error handling and retries
-
-### API Gateway
-- RESTful API creation
-- HTTP API setup
-- Request/response transformation
-- Authentication and authorization
-- CORS configuration
-
-### EventBridge
-- Event bus configuration
-- Custom events
-- Scheduled rules
-- Event routing
-
-### Step Functions
-- Workflow definition
-- State machine design
-- Error handling in workflows
-- Parallel and sequential execution
-
-### DynamoDB
-- Table design
-- Partition keys and sort keys
-- Query patterns
-- Global secondary indexes
-- Best practices
-
-### Monitoring
-- CloudWatch Logs
-- CloudWatch Metrics
-- X-Ray tracing
-- Cost monitoring
-
----
+**Skills you'll practice:** Lambda functions · API Gateway · DynamoDB · EventBridge · Step Functions · event-driven design · the serverless cost model.
 
 ## Architecture
 
@@ -202,7 +31,7 @@ Lambda functions are **stateless**:
 | **AWS CLI** | 2.0+ | AWS service management |
 | **Python** | 3.9+ | Lambda runtime |
 | **Node.js** | 18+ | Lambda runtime |
-| **Terraform** | 1.5+ | Infrastructure as Code |
+| **Terraform** | 1.9+ | Infrastructure as Code |
 | **Docker** | 20.10+ | Local testing (optional) |
 
 ### AWS Requirements
@@ -696,54 +525,6 @@ make destroy
 
 ---
 
-## Learning Objectives
-
-### Beginner Level ✅
-After completing this lab, you should understand:
-- What serverless means
-- Lambda function basics
-- API Gateway basics
-- Event-driven concepts
-
-### Intermediate Level ✅
-You should be able to:
-- Create and deploy Lambda functions
-- Build REST APIs with API Gateway
-- Design event-driven architectures
-- Use DynamoDB for data storage
-
-### Advanced Level ✅
-You should master:
-- Complex serverless architectures
-- Step Functions workflows
-- Cost optimization
-- Monitoring and debugging
-- Production-ready patterns
-
----
-
-## Best Practices Demonstrated
-
-### Architecture
-- ✅ **Event-Driven** - React to events, not polling
-- ✅ **Stateless** - Use external storage for state
-- ✅ **Idempotent** - Functions can be safely retried
-- ✅ **Error Handling** - Proper error handling and retries
-
-### Security
-- ✅ **Least Privilege** - Minimal IAM permissions
-- ✅ **Encryption** - Encrypt data at rest and in transit
-- ✅ **VPC** - Use VPC for private resources (when needed)
-- ✅ **Secrets Management** - Use AWS Secrets Manager
-
-### Performance
-- ✅ **Right-Sizing** - Appropriate memory and timeout
-- ✅ **Connection Pooling** - Reuse connections
-- ✅ **Caching** - Cache frequently accessed data
-- ✅ **Async Processing** - Use async for non-critical paths
-
----
-
 ## Cost Considerations
 
 ### Estimated Costs
@@ -810,3 +591,6 @@ You should master:
 
 **Ready for the final challenge?** Continue to [Lab 08 - Platform Engineering](../08-platform-engineering/) to build internal developer platforms!
 
+---
+
+**Navigation:** [◀ Lab 06 · GitOps Workflows](../06-gitops-workflows/README.md) · [All labs](../README.md) · [Lab 08 · Platform Engineering ▶](../08-platform-engineering/README.md)
