@@ -262,8 +262,9 @@ resource "aws_dynamodb_table" "events" {
   
   # Global Secondary Index for querying by timestamp
   global_secondary_index {
-    name     = "timestamp-index"
-    hash_key = "timestamp"
+    name            = "timestamp-index"
+    hash_key        = "timestamp"
+    projection_type = "ALL"
   }
   
   point_in_time_recovery {

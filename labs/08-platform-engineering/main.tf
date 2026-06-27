@@ -153,24 +153,5 @@ resource "aws_ssm_parameter" "platform_config" {
   })
 }
 
-# Outputs
-output "platform_state_bucket" {
-  description = "S3 bucket for platform Terraform state"
-  value       = aws_s3_bucket.platform_state.id
-}
-
-output "platform_state_lock_table" {
-  description = "DynamoDB table for state locking"
-  value       = aws_dynamodb_table.platform_state_lock.name
-}
-
-output "platform_automation_role_arn" {
-  description = "IAM role ARN for platform automation"
-  value       = aws_iam_role.platform_automation.arn
-}
-
-output "platform_config_parameter" {
-  description = "SSM parameter for platform configuration"
-  value       = aws_ssm_parameter.platform_config.name
-}
+# Outputs are defined in outputs.tf
 
