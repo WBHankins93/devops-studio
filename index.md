@@ -37,6 +37,12 @@ features:
     link: /labs/08-platform-engineering/
 ---
 
+## How it all connects
+
+The eight labs aren't isolated exercises — they compose into one cloud-native platform: a Terraform foundation beneath everything, EKS at the center, CI/CD and GitOps delivering into it, observability and security wrapped around it, serverless alongside, and a self-service platform layer on top.
+
+![How the eight labs connect into one platform](./assets/diagrams/overview-platform.png)
+
 ## What makes this different
 
 Every lab here is **deployable, tested, and built on real production patterns** — not a toy. Each one is self-contained, with setup, execution, validation, and cleanup, plus the cost considerations to run it on a learning budget.
