@@ -100,32 +100,8 @@ This lab implements a complete DevSecOps security stack that automates security 
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Development & CI/CD                        │
-│                                                               │
-│  ┌──────────────┐      ┌──────────────┐                     │
-│  │   Trivy       │      │   OPA         │                     │
-│  │   (Scanning)  │      │   (Policies)  │                     │
-│  └──────┬───────┘      └──────┬───────┘                     │
-│         │                      │                              │
-│         └──────────┬───────────┘                              │
-│                    │                                          │
-│                    ▼                                          │
-│         ┌──────────────────────┐                              │
-│         │  Kubernetes Cluster   │                              │
-│         │  (Deployment)         │                              │
-│         └──────────┬────────────┘                              │
-│                    │                                          │
-│        ┌───────────┼───────────┐                               │
-│        │           │           │                               │
-│        ▼           ▼           ▼                               │
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐                         │
-│  │  RBAC   │ │  Falco   │ │  OPA    │                         │
-│  │ (Access)│ │(Runtime) │ │(Policy) │                         │
-│  └─────────┘ └─────────┘ └─────────┘                         │
-└─────────────────────────────────────────────────────────────┘
-```
+![Lab 05 — Defense-in-depth security controls across the lifecycle](../../assets/diagrams/05-security-layers.png)
+
 
 ### Security Layers
 

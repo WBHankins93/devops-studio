@@ -20,6 +20,7 @@ then drop the PNGs here using the filenames below and embed them in each lab's
 | `06-gitops-reconciliation.png` | `labs/06-gitops-workflows/README.md` |
 | `07-serverless-architecture.png` | `labs/07-serverless-operations/README.md` |
 | `08-idp-platform.png` | `labs/08-platform-engineering/README.md` |
+| `overview-platform.png` | optional hero for `index.md` / `labs/README.md` (dense all-labs map) |
 
 Keep images flat-vector, white background, and on the shared palette so the set
 stays visually consistent (see the prompt file's style block).

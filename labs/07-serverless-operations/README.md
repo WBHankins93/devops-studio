@@ -188,67 +188,8 @@ Lambda functions are **stateless**:
 
 ## Architecture
 
-### Simple API Architecture
+![Lab 07 — Three serverless patterns: request API, event processing, orchestration](../../assets/diagrams/07-serverless-architecture.png)
 
-```
-┌──────────────┐
-│   Client     │
-│  (Browser)   │
-└──────┬───────┘
-       │ HTTP Request
-       ▼
-┌──────────────────┐
-│   API Gateway    │
-│  (REST/HTTP API) │
-└──────┬───────────┘
-       │ Invoke
-       ▼
-┌──────────────┐
-│   Lambda     │
-│   Function   │
-└──────┬───────┘
-       │ Query/Write
-       ▼
-┌──────────────┐
-│   DynamoDB   │
-│    Table     │
-└──────────────┘
-```
-
-### Event-Driven Architecture
-
-```
-┌──────────────┐
-│   S3 Bucket  │
-│ (File Upload)│
-└──────┬───────┘
-       │ Event
-       ▼
-┌──────────────┐
-│   Lambda     │
-│  (Processor) │
-└──────┬───────┘
-       │ Store Result
-       ▼
-┌──────────────┐
-│   DynamoDB   │
-└──────────────┘
-```
-
-### Workflow Orchestration
-
-```
-┌──────────────────┐
-│  Step Functions   │
-│  (State Machine)  │
-└──────┬───────────┘
-       │
-       ├──► Lambda 1 (Validate)
-       │
-       ├──► Lambda 2 (Process)
-       │
-       └──► Lambda 3 (Notify)
-```
 
 ---
 
