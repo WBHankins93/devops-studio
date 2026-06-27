@@ -18,7 +18,7 @@ curl -fsSL https://rpm.nodesource.com/setup_18.x | bash -
 yum install -y nodejs
 
 # Configure CloudWatch agent
-cat > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json << 'EOF'
+cat > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json << EOF
 {
     "agent": {
         "metrics_collection_interval": 60,
@@ -30,19 +30,19 @@ cat > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json << 'EOF'
                 "collect_list": [
                     {
                         "file_path": "/var/log/httpd/access_log",
-                        "log_group_name": "/aws/ec2/${PROJECT_NAME}-${ENVIRONMENT}",
+                        "log_group_name": "/aws/ec2/$${PROJECT_NAME}-$${ENVIRONMENT}",
                         "log_stream_name": "{instance_id}/httpd/access.log",
                         "timezone": "UTC"
                     },
                     {
                         "file_path": "/var/log/httpd/error_log",
-                        "log_group_name": "/aws/ec2/${PROJECT_NAME}-${ENVIRONMENT}",
+                        "log_group_name": "/aws/ec2/$${PROJECT_NAME}-$${ENVIRONMENT}",
                         "log_stream_name": "{instance_id}/httpd/error.log",
                         "timezone": "UTC"
                     },
                     {
                         "file_path": "/var/log/messages",
-                        "log_group_name": "/aws/ec2/${PROJECT_NAME}-${ENVIRONMENT}",
+                        "log_group_name": "/aws/ec2/$${PROJECT_NAME}-$${ENVIRONMENT}",
                         "log_stream_name": "{instance_id}/system/messages",
                         "timezone": "UTC"
                     }
@@ -139,7 +139,7 @@ const app = express();
 const port = 3000;
 
 // Configure AWS SDK
-AWS.config.update({ region: '${REGION}' });
+AWS.config.update({ region: '$${REGION}' });
 const ssm = new AWS.SSM();
 
 // Middleware
@@ -151,7 +151,7 @@ app.get('/health', (req, res) => {
     res.status(200).json({
         status: 'healthy',
         timestamp: new Date().toISOString(),
-        instance: '${INSTANCE_ID}',
+        instance: '$${INSTANCE_ID}',
         uptime: process.uptime()
     });
 });
@@ -163,7 +163,7 @@ app.get('/', async (req, res) => {
         let config = {};
         try {
             const params = {
-                Path: '/${PROJECT_NAME}/${ENVIRONMENT}/',
+                Path: '/$${PROJECT_NAME}/$${ENVIRONMENT}/',
                 Recursive: true
             };
             const result = await ssm.getParametersByPath(params).promise();
@@ -181,7 +181,7 @@ app.get('/', async (req, res) => {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>DevOps Studio - \${config.app_name || 'Web Application'}</title>
+            <title>DevOps Studio - \$${config.app_name || 'Web Application'}</title>
             <style>
                 body {
                     font-family: 'Arial', sans-serif;
@@ -250,18 +250,18 @@ app.get('/', async (req, res) => {
                 <div class="info-grid">
                     <div class="info-card">
                         <h3>🏗️ Infrastructure</h3>
-                        <p><strong>Project:</strong> ${PROJECT_NAME}</p>
-                        <p><strong>Environment:</strong> ${ENVIRONMENT}</p>
-                        <p><strong>Region:</strong> ${REGION}</p>
-                        <p><strong>AZ:</strong> ${AZ}</p>
+                        <p><strong>Project:</strong> $${PROJECT_NAME}</p>
+                        <p><strong>Environment:</strong> $${ENVIRONMENT}</p>
+                        <p><strong>Region:</strong> $${REGION}</p>
+                        <p><strong>AZ:</strong> $${AZ}</p>
                     </div>
                     
                     <div class="info-card">
                         <h3>💻 Instance Details</h3>
-                        <p><strong>Instance ID:</strong> ${INSTANCE_ID}</p>
-                        <p><strong>Private IP:</strong> ${PRIVATE_IP}</p>
-                        <p><strong>Hostname:</strong> \${os.hostname()}</p>
-                        <p><strong>Uptime:</strong> \${Math.floor(process.uptime())}s</p>
+                        <p><strong>Instance ID:</strong> $${INSTANCE_ID}</p>
+                        <p><strong>Private IP:</strong> $${PRIVATE_IP}</p>
+                        <p><strong>Hostname:</strong> \$${os.hostname()}</p>
+                        <p><strong>Uptime:</strong> \$${Math.floor(process.uptime())}s</p>
                     </div>
                     
                     <div class="info-card">
@@ -285,7 +285,7 @@ app.get('/', async (req, res) => {
                 
                 <div class="footer">
                     <p>Built with ❤️ using Terraform, AWS, and DevOps best practices</p>
-                    <p>Request ID: \${req.ip}-\${Date.now()}</p>
+                    <p>Request ID: \$${req.ip}-\$${Date.now()}</p>
                 </div>
             </div>
         </body>
@@ -295,11 +295,11 @@ app.get('/', async (req, res) => {
         res.send(html);
         
         // Log the request
-        console.log(\`[\${new Date().toISOString()}] GET / - \${req.ip} - Instance: ${INSTANCE_ID}\`);
+        console.log(\`[\$${new Date().toISOString()}] GET / - \$${req.ip} - Instance: $${INSTANCE_ID}\`);
         
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ error: 'Internal server error', instance: '${INSTANCE_ID}' });
+        res.status(500).json({ error: 'Internal server error', instance: '$${INSTANCE_ID}' });
     }
 });
 
@@ -307,8 +307,8 @@ app.get('/', async (req, res) => {
 app.get('/metrics', (req, res) => {
     const metrics = {
         timestamp: new Date().toISOString(),
-        instance_id: '${INSTANCE_ID}',
-        availability_zone: '${AZ}',
+        instance_id: '$${INSTANCE_ID}',
+        availability_zone: '$${AZ}',
         uptime_seconds: process.uptime(),
         memory_usage: process.memoryUsage(),
         cpu_usage: os.loadavg(),
@@ -338,15 +338,15 @@ app.get('/load', (req, res) => {
         iterations: iterations,
         duration_ms: duration,
         result: result,
-        instance: '${INSTANCE_ID}'
+        instance: '$${INSTANCE_ID}'
     });
 });
 
 // Start the server
 app.listen(port, () => {
-    console.log(\`Server running on port \${port}\`);
-    console.log(\`Instance: ${INSTANCE_ID}\`);
-    console.log(\`Environment: ${ENVIRONMENT}\`);
+    console.log(\`Server running on port \$${port}\`);
+    console.log(\`Instance: $${INSTANCE_ID}\`);
+    console.log(\`Environment: $${ENVIRONMENT}\`);
 });
 
 // Graceful shutdown

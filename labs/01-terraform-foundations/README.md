@@ -85,25 +85,21 @@ For experienced users who want to deploy immediately:
 git clone <repository-url>
 cd devops-studio/labs/01-terraform-foundations
 
-# 2. Set up backend
+# 2. Set up remote state (creates the S3 bucket, DynamoDB lock table,
+#    backend.tf, and a starter terraform.tfvars)
 ./scripts/setup-backend.sh
 
-# 3. Configure
-cp terraform.tfvars.example terraform.tfvars
-# Edit terraform.tfvars with your preferences
+# 3. (Optional) tweak the dev settings that `make` uses
+$EDITOR environments/dev.tfvars
 
-# 4. Deploy
+# 4. Deploy, test, and view outputs
 make apply
-
-# 5. Test
 make test
-
-# 6. View outputs
 make output
 ```
 
-**Deployment time**: ~15 minutes  
-**Estimated cost**: $20-40/month
+**Deployment time**: ~15–25 minutes
+**Cost**: roughly **$3–5** to deploy, run for an hour, and destroy. Left running it is **~$117/month** (see [Cost Considerations](#cost-considerations)) — always `make destroy` when you're done.
 
 ---
 
@@ -156,15 +152,15 @@ The backend setup script creates S3 bucket and DynamoDB table for remote state:
 
 ### Step 4: Configuration Customization
 
-```bash
-# Copy example configuration
-cp terraform.tfvars.example terraform.tfvars
+`make plan` and `make apply` read **`environments/<ENV>.tfvars`** (default `ENV=dev`). The backend script also created a `terraform.tfvars` that Terraform auto-loads on top. To change what gets deployed, edit the environment file:
 
-# Edit with your preferences
-nano terraform.tfvars
+```bash
+$EDITOR environments/dev.tfvars
 ```
 
-#### Key Configuration Options
+> **Two var files, by design:** `environments/dev|staging|prod.tfvars` hold per-environment settings — this is what `make` selects via `ENV=`. `terraform.tfvars` holds local overrides Terraform loads automatically. When both set the same value, the `-var-file` (environment file) wins.
+
+#### Key Configuration Options (in `environments/dev.tfvars`)
 
 ```hcl
 # Basic settings

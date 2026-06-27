@@ -83,16 +83,16 @@ ssh: ## SSH to a random instance (requires key pair)
 
 logs: ## View application logs
 	@echo "$(BLUE)Fetching application logs...$(NC)"
-	@LOG_GROUP="/aws/ec2/$(terraform output -raw project_name)-$(terraform output -raw environment)"; \
+	@LOG_GROUP="/aws/ec2/$$(terraform output -raw project_name)-$$(terraform output -raw environment)"; \
 	aws logs describe-log-streams \
-		--log-group-name "$LOG_GROUP" \
+		--log-group-name "$$LOG_GROUP" \
 		--order-by LastEventTime \
 		--descending \
 		--max-items 1 \
 		--query 'logStreams[0].logStreamName' \
 		--output text | \
 	xargs -I {} aws logs get-log-events \
-		--log-group-name "$LOG_GROUP" \
+		--log-group-name "$$LOG_GROUP" \
 		--log-stream-name {} \
 		--query 'events[*].[timestamp,message]' \
 		--output table
@@ -133,15 +133,13 @@ security: ## Run security scan (requires tfsec)
 # Multi-environment commands
 plan-all: ## Plan for all environments
 	@for env in dev staging prod; do \
-		echo "$(BLUE)Planning for $env environment...$(NC)"; \
-		make plan ENV=$env; \
+		echo "$(BLUE)Planning for $$env environment...$(NC)"; \
+		$(MAKE) plan ENV=$$env; \
 	done
 
-validate-all: ## Validate all environment configurations
-	@for env in dev staging prod; do \
-		echo "$(BLUE)Validating $env environment...$(NC)"; \
-		terraform validate -var-file="environments/$env.tfvars"; \
-	done
+validate-all: ## Validate the Terraform configuration
+	@echo "$(BLUE)Validating Terraform configuration...$(NC)"
+	terraform validate
 
 # Development helpers
 watch: ## Watch for changes and auto-format
