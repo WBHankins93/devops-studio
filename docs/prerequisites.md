@@ -1,5 +1,7 @@
 # Prerequisites Guide
 
+> [DevOps Studio](../README.md) › [Docs](./README.md) › Prerequisites
+
 This guide details all requirements for using DevOps Studio labs.
 
 ## Required Tools
@@ -32,7 +34,7 @@ aws configure
 
 ---
 
-### Terraform (v1.5+)
+### Terraform (v1.9+)
 
 **Purpose**: Infrastructure as Code
 
@@ -42,8 +44,8 @@ aws configure
 brew install terraform
 
 # Linux
-wget https://releases.hashicorp.com/terraform/1.5.0/terraform_1.5.0_linux_amd64.zip
-unzip terraform_1.5.0_linux_amd64.zip
+wget https://releases.hashicorp.com/terraform/1.9.8/terraform_1.9.8_linux_amd64.zip
+unzip terraform_1.9.8_linux_amd64.zip
 sudo mv terraform /usr/local/bin/
 
 # Verify
@@ -87,7 +89,7 @@ git --version
 
 ## Optional but Recommended Tools
 
-### kubectl (v1.28+)
+### kubectl (v1.32+)
 
 **Purpose**: Kubernetes cluster management (Lab 02+)
 

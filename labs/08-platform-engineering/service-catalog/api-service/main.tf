@@ -2,7 +2,7 @@
 # API Service Template - Main Configuration
 
 terraform {
-  required_version = ">= 1.5"
+  required_version = ">= 1.9"
   
   required_providers {
     aws = {
@@ -30,7 +30,7 @@ variable "environment" {
 variable "lambda_runtime" {
   description = "Lambda runtime"
   type        = string
-  default     = "python3.11"
+  default     = "python3.13"
 }
 
 variable "lambda_memory" {

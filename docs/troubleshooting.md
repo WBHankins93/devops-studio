@@ -1,5 +1,7 @@
 # Troubleshooting Guide
 
+> [DevOps Studio](../README.md) › [Docs](./README.md) › Troubleshooting
+
 Common issues and solutions for DevOps Studio labs.
 
 ## Quick Diagnostics

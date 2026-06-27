@@ -1,5 +1,7 @@
 # Documentation
 
+> [DevOps Studio](../README.md) › Docs
+
 This directory contains all documentation for the DevOps Studio platform.
 
 ## Structure

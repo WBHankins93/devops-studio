@@ -1,7 +1,7 @@
 # Makefile Guide
 *Understanding and Using Makefiles in DevOps Studio*
 
-> **Navigation**: [DevOps Studio](../README.md) > [Documentation](README.md) > Makefile Guide
+> [DevOps Studio](../README.md) › [Docs](./README.md) › Makefile Guide
 
 ---
 

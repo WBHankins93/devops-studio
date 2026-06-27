@@ -1,7 +1,7 @@
 # Observability Tools Explained
 *Understanding Jaeger, OpenSearch, and the Three Pillars of Observability*
 
-> **Navigation**: [DevOps Studio](../README.md) > [Documentation](README.md) > Observability Tools Explained
+> [DevOps Studio](../README.md) › [Docs](./README.md) › Observability Tools
 
 ---
 

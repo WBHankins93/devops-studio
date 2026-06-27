@@ -1,96 +1,20 @@
-# Lab 04 - Observability Stack
-*Complete Monitoring, Logging, and Tracing with Prometheus, Grafana, Jaeger, and OpenSearch*
+# Lab 04 · Observability Stack
 
-> **Navigation**: [DevOps Studio](../../README.md) > [Labs](../README.md) > Lab 04  
-> **Previous Lab**: [Lab 03 - CI/CD Pipelines](../03-cicd-pipelines/README.md)  
-> **Next Lab**: [Lab 05 - Security Automation](../05-security-automation/README.md)
+> [DevOps Studio](../../README.md) › [Labs](../README.md) › Lab 04 · ⏱ 2–3 hours · **Advanced**
 
-[![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?logo=prometheus)](https://prometheus.io)
-[![Grafana](https://img.shields.io/badge/Grafana-F46800?logo=grafana)](https://grafana.com)
-[![Jaeger](https://img.shields.io/badge/Jaeger-1296C2?logo=jaeger)](https://www.jaegertracing.io)
-[![OpenSearch](https://img.shields.io/badge/OpenSearch-005571?logo=opensearch)](https://opensearch.org)
+**See what your systems are actually doing — metrics, logs, and traces in one place. By the end you'll have Prometheus, Grafana, Jaeger, and OpenSearch wired together with dashboards and alerts.**
 
-> **Objective**: Deploy a complete observability stack covering the three pillars of observability: metrics (Prometheus), visualization (Grafana), distributed tracing (Jaeger), and log aggregation (OpenSearch). Learn to monitor, debug, and optimize your Kubernetes applications and infrastructure.
+**On this page:** [Architecture](#architecture) · [Prerequisites](#prerequisites) · [Quick Start](#quick-start) · [Detailed Setup](#detailed-setup) · [Project Structure](#project-structure) · [Components](#components) · [Troubleshooting](#troubleshooting) · [Cleanup](#cleanup)
 
----
+## What you build
 
-## 📑 Table of Contents
+- **Prometheus** — metrics collection
+- **Grafana** — dashboards
+- **Jaeger** — distributed traces
+- **OpenSearch + Fluent Bit** — log aggregation
+- **Alertmanager** — alerting on the metrics
 
-- [Overview](#overview)
-- [What You'll Learn](#what-youll-learn)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Detailed Setup](#detailed-setup)
-- [Project Structure](#project-structure)
-- [Components](#components)
-- [Integration](#integration)
-- [Usage Examples](#usage-examples)
-- [Troubleshooting](#troubleshooting)
-- [Cleanup](#cleanup)
-- [Learning Objectives](#learning-objectives)
-- [Best Practices Demonstrated](#best-practices-demonstrated)
-- [Cost Considerations](#cost-considerations)
-- [Next Steps](#next-steps)
-- [Additional Resources](#additional-resources)
-
----
-
-## Overview
-
-This lab deploys a production-ready observability stack that provides complete visibility into your Kubernetes cluster and applications. You'll learn how to collect metrics, aggregate logs, trace requests, and visualize everything in dashboards.
-
-### What Gets Built
-
-- **Prometheus** - Metrics collection and time-series database
-- **Grafana** - Visualization and dashboards
-- **Jaeger** - Distributed tracing system
-- **OpenSearch** - Log aggregation and search engine
-- **Fluent Bit** - Log collection and forwarding
-- **Integrated Dashboards** - Pre-configured monitoring views
-
-### Key Features
-
-- ✅ **Three Pillars of Observability**: Metrics, Logs, and Traces
-- ✅ **Production Patterns**: Real enterprise-grade configurations
-- ✅ **Kubernetes Native**: Built for Kubernetes environments
-- ✅ **Integrated Stack**: All components work together
-- ✅ **Well Documented**: Clear examples and use cases
-
----
-
-## What You'll Learn
-
-### Observability Fundamentals
-- The three pillars: Metrics, Logs, Traces
-- When to use each data type
-- How they complement each other
-
-### Prometheus (Metrics)
-- Metrics collection and scraping
-- PromQL query language
-- Alerting rules
-- Service discovery
-
-### Grafana (Visualization)
-- Dashboard creation
-- Data source configuration
-- Alerting and notifications
-- Panel types and visualizations
-
-### Jaeger (Distributed Tracing)
-- Request tracing across services
-- Service dependency mapping
-- Performance bottleneck identification
-- Trace analysis
-
-### OpenSearch (Log Aggregation)
-- Centralized log storage
-- Full-text search
-- Log analysis and dashboards
-- Index management
-
----
+**Skills you'll practice:** the three pillars (metrics, logs, traces) · Prometheus queries · Grafana dashboards · distributed tracing · log aggregation · alerting.
 
 ## Architecture
 
@@ -111,7 +35,7 @@ This lab deploys a production-ready observability stack that provides complete v
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| **kubectl** | 1.28+ | Kubernetes cluster management |
+| **kubectl** | 1.32+ | Kubernetes cluster management |
 | **Helm** | 3.10+ | Package management |
 | **curl** | Latest | API testing |
 
@@ -390,47 +314,6 @@ kubectl delete namespace observability
 
 ---
 
-## Learning Objectives
-
-### Beginner Level ✅
-After completing this lab, you should understand:
-- What observability means
-- The three pillars (metrics, logs, traces)
-- Basic dashboard creation
-- Log search and analysis
-
-### Intermediate Level ✅
-You should be able to:
-- Create custom Grafana dashboards
-- Write PromQL queries
-- Configure log aggregation
-- Set up distributed tracing
-
-### Advanced Level ✅
-You should master:
-- Complete observability stack design
-- Performance optimization
-- Alerting configuration
-- Integration patterns
-
----
-
-## Best Practices Demonstrated
-
-### Observability
-- ✅ **Three Pillars**: Metrics, Logs, Traces
-- ✅ **Centralized Collection**: All data in one place
-- ✅ **Integrated Visualization**: Single pane of glass
-- ✅ **Production Ready**: Scalable configurations
-
-### Monitoring
-- ✅ **Comprehensive Coverage**: Infrastructure and applications
-- ✅ **Real-time Insights**: Live dashboards
-- ✅ **Historical Analysis**: Time-series data retention
-- ✅ **Alerting**: Proactive issue detection
-
----
-
 ## Cost Considerations
 
 ### Estimated Costs
@@ -493,3 +376,6 @@ You should master:
 
 **Ready for the next challenge?** Continue to [Lab 05 - Security Automation](../05-security-automation/) to secure your platform!
 
+---
+
+**Navigation:** [◀ Lab 03 · CI/CD Pipelines](../03-cicd-pipelines/README.md) · [All labs](../README.md) · [Lab 05 · Security Automation ▶](../05-security-automation/README.md)

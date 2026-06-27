@@ -40,7 +40,7 @@ Internet
 |-----------|------|----------|---------|-------------|
 | `api_name` | string | Yes | - | API name |
 | `environment` | string | Yes | - | Environment (dev/staging/prod) |
-| `lambda_runtime` | string | No | python3.11 | Lambda runtime |
+| `lambda_runtime` | string | No | python3.13 | Lambda runtime |
 | `lambda_memory` | number | No | 256 | Lambda memory (MB) |
 | `dynamodb_billing_mode` | string | No | PAY_PER_REQUEST | DynamoDB billing mode |
 

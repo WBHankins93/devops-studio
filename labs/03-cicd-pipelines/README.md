@@ -1,123 +1,20 @@
-# Lab 03 - CI/CD Pipelines
-*Automating Build, Test, and Deployment with GitHub Actions, GitLab CI, and Jenkins*
+# Lab 03 · CI/CD Pipelines
 
-> **Navigation**: [DevOps Studio](../../README.md) > [Labs](../README.md) > Lab 03  
-> **Previous Lab**: [Lab 02 - Kubernetes Platform](../02-kubernetes-platform/README.md)  
-> **Next Lab**: [Lab 04 - Observability Stack](../04-observability-stack/README.md)
+> [DevOps Studio](../../README.md) › [Labs](../README.md) › Lab 03 · ⏱ 1–2 hours · **Beginner**
 
-[![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?logo=github-actions&logoColor=white)](https://github.com/features/actions)
-[![GitLab CI](https://img.shields.io/badge/GitLab_CI-FC6D26?logo=gitlab&logoColor=white)](https://docs.gitlab.com/ee/ci/)
-[![Jenkins](https://img.shields.io/badge/Jenkins-D24939?logo=jenkins&logoColor=white)](https://www.jenkins.io/)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?logo=kubernetes&logoColor=white)](https://kubernetes.io)
+**Automate the path from a git commit to a deployed app — three different ways. By the end you'll have working build → test → scan → deploy pipelines in GitHub Actions, GitLab CI, and Jenkins.**
 
-> **Objective**: Build comprehensive CI/CD pipelines using GitHub Actions, GitLab CI, and Jenkins. Learn to automate testing, container image building, security scanning, and deployments to Kubernetes. This lab demonstrates real-world DevOps automation patterns used in production environments.
+**On this page:** [Architecture](#architecture) · [Prerequisites](#prerequisites) · [Quick Start](#quick-start) · [Detailed Setup](#detailed-setup) · [Project Structure](#project-structure) · [GitHub Actions](#github-actions) · [Troubleshooting](#troubleshooting) · [Cleanup](#cleanup)
 
----
+## What you build
 
-## 📑 Table of Contents
+- **A sample app** with unit and integration tests
+- **A GitHub Actions pipeline**
+- **A GitLab CI pipeline**
+- **A Jenkins pipeline**
+- **Image build + push to ECR**, then deploy to Kubernetes
 
-- [Overview](#overview)
-- [What You'll Learn](#what-youll-learn)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Detailed Setup](#detailed-setup)
-- [Project Structure](#project-structure)
-- [GitHub Actions](#github-actions)
-- [GitLab CI](#gitlab-ci)
-- [Jenkins](#jenkins)
-- [Testing & Validation](#testing--validation)
-- [Deployment](#deployment)
-- [Troubleshooting](#troubleshooting)
-- [Cleanup](#cleanup)
-- [Learning Objectives](#learning-objectives)
-- [Best Practices Demonstrated](#best-practices-demonstrated)
-- [Cost Considerations](#cost-considerations)
-- [Next Steps](#next-steps)
-- [Additional Resources](#additional-resources)
-
----
-
-## Overview
-
-This lab provides complete CI/CD pipeline implementations using three popular tools: GitHub Actions, GitLab CI, and Jenkins. You'll learn how to automate the entire software delivery lifecycle from code commit to production deployment.
-
-### What Gets Built
-
-- **Sample Application** with Dockerfile and tests
-- **GitHub Actions Workflows** for CI/CD
-- **GitLab CI Pipeline** configuration
-- **Jenkins Pipeline** (Jenkinsfile)
-- **Docker Image Building** and registry management
-- **Automated Testing** (unit, integration, security)
-- **Security Scanning** (Trivy, Snyk)
-- **Kubernetes Deployment** automation
-- **Multi-environment** deployment strategies
-
-### Key Features
-
-- ✅ **Multiple CI/CD Tools**: GitHub Actions, GitLab CI, Jenkins
-- ✅ **Production Patterns**: Real enterprise-grade pipeline configurations
-- ✅ **Security Integration**: Automated vulnerability scanning
-- ✅ **Multi-Environment**: Dev, staging, and production deployments
-- ✅ **Kubernetes Integration**: Deploy to EKS cluster from Lab 02
-- ✅ **Well Documented**: Clear explanations and examples
-
----
-
-## What You'll Learn
-
-### CI/CD Fundamentals
-- Continuous Integration concepts
-- Continuous Deployment vs Continuous Delivery
-- Pipeline as Code
-- Build automation
-- Test automation
-
-### GitHub Actions
-- Workflow syntax and structure
-- Jobs, steps, and actions
-- Matrix builds and parallelization
-- Secrets management
-- Artifact management
-
-### GitLab CI
-- `.gitlab-ci.yml` configuration
-- Stages and jobs
-- Runners and executors
-- CI/CD variables
-- Pipeline artifacts
-
-### Jenkins
-- Jenkinsfile (declarative and scripted)
-- Pipeline stages
-- Shared libraries
-- Jenkins agents
-- Plugin management
-
-### Container Workflows
-- Docker image building
-- Multi-stage builds
-- Image scanning
-- Registry management
-- Image tagging strategies
-
-### Kubernetes Deployment
-- kubectl in CI/CD
-- Helm chart deployment
-- Rolling updates
-- Blue-green deployments
-- Canary releases
-
-### Security in CI/CD
-- Vulnerability scanning
-- Secret scanning
-- SAST/DAST integration
-- Policy enforcement
-- Compliance checks
-
----
+**Skills you'll practice:** Pipeline design · automated testing · container builds · image registries · deploying to Kubernetes · comparing CI tools.
 
 ## Architecture
 
@@ -143,7 +40,7 @@ This lab provides complete CI/CD pipeline implementations using three popular to
 |------|---------|---------|
 | **Docker** | 20.0+ | Container image building |
 | **Git** | 2.0+ | Version control |
-| **kubectl** | 1.28+ | Kubernetes deployment |
+| **kubectl** | 1.32+ | Kubernetes deployment |
 | **Helm** | 3.10+ | Kubernetes package management |
 
 ### AWS Requirements
@@ -472,47 +369,6 @@ aws ecr batch-delete-image --repository-name <repo-name> --image-ids ...
 
 ---
 
-## Learning Objectives
-
-### Beginner Level ✅
-After completing this lab, you should understand:
-- CI/CD pipeline concepts
-- Basic GitHub Actions/GitLab CI/Jenkins usage
-- Docker image building
-- Automated testing in pipelines
-
-### Intermediate Level ✅
-You should be able to:
-- Design multi-stage pipelines
-- Integrate security scanning
-- Deploy to Kubernetes automatically
-- Manage secrets securely
-
-### Advanced Level ✅
-You should master:
-- Pipeline optimization
-- Multi-environment deployments
-- Advanced deployment strategies
-- Pipeline monitoring and observability
-
----
-
-## Best Practices Demonstrated
-
-### CI/CD
-- ✅ **Pipeline as Code**: Version controlled pipelines
-- ✅ **Automated Testing**: Tests run on every change
-- ✅ **Security Scanning**: Automated vulnerability detection
-- ✅ **Multi-Stage**: Build, test, scan, deploy stages
-
-### Security
-- ✅ **Secrets Management**: Secure credential handling
-- ✅ **Image Scanning**: Container vulnerability scanning
-- ✅ **Least Privilege**: Minimal required permissions
-- ✅ **Audit Trail**: Complete pipeline history
-
----
-
 ## Cost Considerations
 
 ### Estimated Costs
@@ -575,3 +431,6 @@ You should master:
 
 **Ready for the next challenge?** Continue to [Lab 04 - Observability Stack](../04-observability-stack/) to monitor your deployments!
 
+---
+
+**Navigation:** [◀ Lab 02 · Kubernetes Platform](../02-kubernetes-platform/README.md) · [All labs](../README.md) · [Lab 04 · Observability Stack ▶](../04-observability-stack/README.md)

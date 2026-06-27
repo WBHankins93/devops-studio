@@ -1,162 +1,19 @@
-# Lab 06 - GitOps Workflows
-*Automated deployments with Kustomize, Argo CD, and Flux*
+# Lab 06 · GitOps Workflows
 
-> **Navigation**: [DevOps Studio](../../README.md) > [Labs](../README.md) > Lab 06  
-> **Previous Lab**: [Lab 05 - Security Automation](../05-security-automation/README.md)  
-> **Next Lab**: [Lab 07 - Serverless Operations](../07-serverless-operations/README.md)
+> [DevOps Studio](../../README.md) › [Labs](../README.md) › Lab 06 · ⏱ 1–2 hours · **Intermediate**
 
-[![Kustomize](https://img.shields.io/badge/Kustomize-326CE5?logo=kubernetes)](https://kustomize.io/)
-[![Argo CD](https://img.shields.io/badge/Argo%20CD-EF7B4D?logo=argo)](https://argo-cd.readthedocs.io/)
-[![Flux](https://img.shields.io/badge/Flux-0B1229?logo=flux)](https://fluxcd.io/)
+**Let Git drive your deployments. By the end you'll manage environments with Kustomize and have Argo CD (or Flux) continuously reconcile the cluster to match what's committed in Git.**
 
-> **Objective**: Learn GitOps workflows using Kustomize for configuration management and Argo CD/Flux for automated deployments. Understand when to use each tool and how they work together to create a complete GitOps pipeline.
+**On this page:** [Architecture](#architecture) · [Prerequisites](#prerequisites) · [Quick Start](#quick-start) · [Detailed Setup](#detailed-setup) · [Project Structure](#project-structure) · [Kustomize](#kustomize) · [Troubleshooting](#troubleshooting) · [Cleanup](#cleanup)
 
----
+## What you build
 
-## 📑 Table of Contents
+- **Kustomize** — a base plus staging and production overlays
+- **Argo CD** — Git-driven deployments with a UI
+- **Flux** — a CLI-based alternative
+- **Automatic sync & drift detection**
 
-- [Overview](#overview)
-- [Understanding the Tools](#understanding-the-tools)
-- [What You'll Learn](#what-youll-learn)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Detailed Setup](#detailed-setup)
-- [Project Structure](#project-structure)
-- [Kustomize](#kustomize)
-- [Argo CD](#argo-cd)
-- [Flux](#flux)
-- [Tool Comparison](#tool-comparison)
-- [Integration Examples](#integration-examples)
-- [Troubleshooting](#troubleshooting)
-- [Cleanup](#cleanup)
-- [Learning Objectives](#learning-objectives)
-- [Best Practices Demonstrated](#best-practices-demonstrated)
-- [Cost Considerations](#cost-considerations)
-- [Next Steps](#next-steps)
-- [Additional Resources](#additional-resources)
-
----
-
-## Overview
-
-This lab implements a complete GitOps workflow using three complementary tools:
-
-- **Kustomize** - Configuration management (write and organize Kubernetes YAML)
-- **Argo CD** - GitOps deployment with visual UI
-- **Flux** - GitOps deployment with CLI focus
-
-### What Gets Built
-
-- **Kustomize Base & Overlays** - Environment-specific configurations
-- **Argo CD Setup** - Visual GitOps deployment platform
-- **Flux Setup** - Lightweight GitOps controller
-- **GitOps Workflows** - Automated deployment pipelines
-- **Multi-Environment Management** - Staging and production configurations
-
-### Key Features
-
-- ✅ **Configuration Management**: Kustomize for organizing YAML
-- ✅ **Automated Deployments**: GitOps with Argo CD or Flux
-- ✅ **Visual Dashboard**: Argo CD UI for monitoring
-- ✅ **CLI-First Option**: Flux for platform engineers
-- ✅ **Multi-Environment**: Staging and production overlays
-- ✅ **Production Ready**: Enterprise-grade GitOps workflows
-
----
-
-## Understanding the Tools
-
-### The Two Phases of GitOps
-
-**Important**: Kustomize and Argo CD/Flux serve different phases:
-
-1. **Configuration Phase** (Kustomize) - Writing and organizing Kubernetes YAML
-2. **Deployment Phase** (Argo CD/Flux) - Automatically deploying from Git to cluster
-
-### Kustomize: The "Writer"
-
-**Role**: Configuration Management / Templating
-
-**What it does**:
-- Helps write and organize Kubernetes YAML files
-- Creates base configurations and environment-specific overlays
-- Merges base + overlays to generate final YAML
-- Template-free (just patches standard YAML)
-
-**When to use**: When you need to manage multiple environments (staging, prod) without copy-pasting YAML.
-
-### Argo CD: The "Deployer" (Visual)
-
-**Role**: Continuous Delivery (GitOps) with UI
-
-**What it does**:
-- Watches Git repository for changes
-- Automatically deploys to Kubernetes cluster
-- Provides visual dashboard for monitoring
-- Centralized service for managing deployments
-
-**When to use**: When you want a visual dashboard and need to troubleshoot deployments interactively.
-
-### Flux: The "Deployer" (CLI)
-
-**Role**: Continuous Delivery (GitOps) without UI
-
-**What it does**:
-- Watches Git repository for changes
-- Automatically deploys to Kubernetes cluster
-- CLI-focused, lightweight automation
-- Modular controllers (Source, Kustomize, Helm)
-
-**When to use**: When you want pure automation without UI overhead, or for edge/IoT deployments.
-
-### How They Work Together
-
-You **combine** Kustomize with Argo CD or Flux:
-
-1. **Write** manifests using Kustomize (base + overlays)
-2. **Push** to Git repository
-3. **Argo CD or Flux** detects the change
-4. **Argo CD or Flux** runs `kustomize build` internally
-5. **Argo CD or Flux** applies YAML to cluster
-
-**You don't choose between them - you use Kustomize WITH Argo CD or Flux!**
-
----
-
-## What You'll Learn
-
-### GitOps Fundamentals
-- GitOps principles and workflows
-- Configuration vs. deployment tools
-- Declarative infrastructure management
-- Automated deployment pipelines
-
-### Kustomize (Configuration Management)
-- Base and overlay patterns
-- Environment-specific configurations
-- Resource patching and transformations
-- Multi-environment management
-
-### Argo CD (Visual GitOps)
-- Argo CD installation and setup
-- Application definitions
-- Visual dashboard usage
-- Sync policies and automation
-
-### Flux (CLI GitOps)
-- Flux installation and setup
-- GitRepository and Kustomization resources
-- CLI-based management
-- Modular controller architecture
-
-### Best Practices
-- GitOps workflow design
-- Environment separation
-- Security and access control
-- Monitoring and observability
-
----
+**Skills you'll practice:** GitOps principles · Kustomize overlays · Argo CD · Flux · reconciliation and drift detection · environment promotion.
 
 ## Architecture
 
@@ -179,7 +36,7 @@ You **combine** Kustomize with Argo CD or Flux:
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| **kubectl** | 1.28+ | Kubernetes cluster management |
+| **kubectl** | 1.32+ | Kubernetes cluster management |
 | **kustomize** | 4.5+ | Configuration management |
 | **Helm** | 3.10+ | Package management |
 | **Git** | 2.30+ | Version control |
@@ -554,51 +411,6 @@ make uninstall-flux
 
 ---
 
-## Learning Objectives
-
-### Beginner Level ✅
-After completing this lab, you should understand:
-- What GitOps means
-- Difference between configuration and deployment tools
-- Basic Kustomize usage
-- How Argo CD/Flux work
-
-### Intermediate Level ✅
-You should be able to:
-- Create Kustomize base and overlays
-- Set up Argo CD applications
-- Configure Flux GitRepositories
-- Manage multi-environment deployments
-
-### Advanced Level ✅
-You should master:
-- Complete GitOps workflows
-- Advanced Kustomize patching
-- Argo CD sync policies
-- Flux automation patterns
-
----
-
-## Best Practices Demonstrated
-
-### GitOps
-- ✅ **Declarative**: Everything defined in Git
-- ✅ **Automated**: No manual kubectl apply
-- ✅ **Auditable**: All changes tracked in Git
-- ✅ **Reproducible**: Same Git state = same cluster state
-
-### Configuration Management
-- ✅ **Base + Overlays**: DRY principle
-- ✅ **Environment Separation**: Clear staging/prod split
-- ✅ **Version Control**: All configs in Git
-
-### Deployment
-- ✅ **Automated Sync**: Changes auto-deployed
-- ✅ **Self-Healing**: Cluster matches Git state
-- ✅ **Rollback**: Git revert = cluster rollback
-
----
-
 ## Cost Considerations
 
 ### Estimated Costs
@@ -659,3 +471,6 @@ You should master:
 
 **Ready for the next challenge?** Continue to [Lab 07 - Serverless Operations](../07-serverless-operations/) to build serverless applications!
 
+---
+
+**Navigation:** [◀ Lab 05 · Security Automation](../05-security-automation/README.md) · [All labs](../README.md) · [Lab 07 · Serverless Operations ▶](../07-serverless-operations/README.md)

@@ -1,198 +1,20 @@
-# Lab 08 - Platform Engineering
-*Building Internal Developer Platforms for Self-Service Infrastructure*
+# Lab 08 · Platform Engineering
 
-> **Navigation**: [DevOps Studio](../../README.md) > [Labs](../README.md) > Lab 08  
-> **Previous Lab**: [Lab 07 - Serverless Operations](../07-serverless-operations/README.md)
+> [DevOps Studio](../../README.md) › [Labs](../README.md) › Lab 08 · ⏱ 3–4 hours · **Expert**
 
-[![Platform Engineering](https://img.shields.io/badge/Platform%20Engineering-FF6B6B?logo=kubernetes)](https://platformengineering.org/)
-[![Backstage](https://img.shields.io/badge/Backstage-9BF0E1?logo=backstage)](https://backstage.io/)
-[![Terraform](https://img.shields.io/badge/Terraform-7B42BC?logo=terraform)](https://www.terraform.io/)
+**Build an internal developer platform that lets engineers self-serve infrastructure. By the end you'll have a service catalog, a platform API, and automation that provisions real AWS resources from a template.**
 
-> **Objective**: Master Platform Engineering by building an Internal Developer Platform (IDP) that enables self-service infrastructure provisioning, service catalogs, developer portals, and automated workflows. Learn to create a platform that empowers developers while maintaining governance and best practices.
+**On this page:** [Architecture](#architecture) · [Prerequisites](#prerequisites) · [Quick Start](#quick-start) · [Detailed Setup](#detailed-setup) · [Project Structure](#project-structure) · [Core Components](#core-components) · [Troubleshooting](#troubleshooting) · [Cleanup](#cleanup)
 
----
+## What you build
 
-## 📑 Table of Contents
+- **A service catalog** of golden-path templates
+- **A platform API** — provisioning, CI/CD, and monitoring endpoints
+- **Terraform-based provisioning automation**
+- **A self-service developer portal**
+- **Platform monitoring**
 
-- [Overview](#overview)
-- [What is Platform Engineering?](#what-is-platform-engineering)
-- [Internal Developer Platform (IDP) Concepts](#internal-developer-platform-idp-concepts)
-- [What You'll Learn](#what-youll-learn)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Detailed Setup](#detailed-setup)
-- [Project Structure](#project-structure)
-- [Core Components](#core-components)
-- [Step-by-Step Tutorials](#step-by-step-tutorials)
-- [Advanced Patterns](#advanced-patterns)
-- [Monitoring and Metrics](#monitoring-and-metrics)
-- [Troubleshooting](#troubleshooting)
-- [Cleanup](#cleanup)
-- [Learning Objectives](#learning-objectives)
-- [Best Practices Demonstrated](#best-practices-demonstrated)
-- [Cost Considerations](#cost-considerations)
-- [Next Steps](#next-steps)
-- [Additional Resources](#additional-resources)
-
----
-
-## Overview
-
-This lab provides a comprehensive introduction to Platform Engineering. You'll build an Internal Developer Platform (IDP) that enables developers to provision infrastructure, discover services, and manage applications through self-service capabilities.
-
-### What Gets Built
-
-- **Developer Portal** - Central hub for developers
-- **Service Catalog** - Pre-configured infrastructure templates
-- **Self-Service Provisioning** - Automated infrastructure deployment
-- **CI/CD Integration** - Automated pipeline creation
-- **Monitoring Dashboard** - Platform health and metrics
-- **Documentation Hub** - Centralized documentation
-- **API Gateway** - Platform APIs for automation
-
-### Key Features
-
-- ✅ **Self-Service** - Developers provision infrastructure independently
-- ✅ **Service Catalog** - Pre-approved infrastructure templates
-- ✅ **Governance** - Built-in policies and guardrails
-- ✅ **Automation** - Automated workflows and pipelines
-- ✅ **Observability** - Platform metrics and health monitoring
-- ✅ **Production Ready** - Enterprise-grade platform patterns
-
----
-
-## What is Platform Engineering?
-
-### Definition
-
-**Platform Engineering** is the discipline of designing and building toolchains and workflows that enable self-service capabilities for software engineering organizations. The goal is to improve developer experience and productivity by providing a curated set of tools, capabilities, and processes.
-
-### The Evolution
-
-**Traditional DevOps**:
-- Developers request infrastructure
-- DevOps team manually provisions
-- Long wait times
-- Inconsistent configurations
-
-**Platform Engineering**:
-- Developers self-serve infrastructure
-- Automated provisioning with templates
-- Instant availability
-- Consistent, governed configurations
-
-### Key Principles
-
-1. **Self-Service** - Developers can provision without waiting
-2. **Golden Paths** - Pre-approved, best-practice templates
-3. **Guardrails** - Safety without blocking innovation
-4. **Developer Experience** - Easy to use, well-documented
-5. **Observability** - Visibility into platform usage
-
-### Benefits
-
-- **Faster Time to Market** - Developers deploy faster
-- **Consistency** - Standardized infrastructure
-- **Governance** - Built-in compliance and security
-- **Cost Optimization** - Better resource utilization
-- **Developer Satisfaction** - Better developer experience
-
----
-
-## Internal Developer Platform (IDP) Concepts
-
-### What is an IDP?
-
-An **Internal Developer Platform (IDP)** is a set of tools, services, and workflows that enable developers to build, deploy, and operate applications independently, without requiring deep infrastructure knowledge.
-
-### Core Components
-
-1. **Developer Portal** - Single entry point for all developer needs
-2. **Service Catalog** - Pre-configured infrastructure templates
-3. **Self-Service APIs** - APIs for automated provisioning
-4. **CI/CD Platform** - Automated build and deployment
-5. **Observability** - Monitoring, logging, and metrics
-6. **Documentation** - Centralized knowledge base
-
-### Platform Layers
-
-```
-┌─────────────────────────────────────┐
-│     Developer Experience Layer      │
-│  (Portal, CLI, APIs, Documentation) │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────▼──────────────────────┐
-│      Platform Services Layer        │
-│  (Provisioning, CI/CD, Monitoring)  │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────▼──────────────────────┐
-│      Infrastructure Layer           │
-│  (AWS, Kubernetes, Terraform)      │
-└─────────────────────────────────────┘
-```
-
-### Golden Paths
-
-**Golden Paths** are pre-approved, well-tested infrastructure templates that represent best practices. Examples:
-
-- **Web Application** - Standard web app template (ALB, ASG, RDS)
-- **API Service** - API template (API Gateway, Lambda)
-- **Data Pipeline** - ETL template (Glue, S3, Redshift)
-- **Container Service** - Kubernetes template (EKS, Deployment)
-
-### Guardrails
-
-**Guardrails** are automated policies that ensure compliance:
-
-- **Security** - Encryption, IAM policies, network isolation
-- **Cost** - Budget limits, resource tagging
-- **Compliance** - Regulatory requirements
-- **Best Practices** - Naming conventions, resource limits
-
----
-
-## What You'll Learn
-
-### Platform Engineering Fundamentals
-- Understanding Platform Engineering vs DevOps
-- IDP architecture and design
-- Self-service capabilities
-- Developer experience principles
-
-### Developer Portal
-- Portal setup and configuration
-- Service catalog creation
-- Documentation integration
-- Developer onboarding
-
-### Service Catalog
-- Template creation
-- Infrastructure as Code templates
-- Parameter validation
-- Version management
-
-### Self-Service Provisioning
-- Automated infrastructure deployment
-- Terraform automation
-- Approval workflows
-- Resource management
-
-### CI/CD Platform
-- Pipeline templates
-- Automated pipeline creation
-- Multi-environment support
-- Deployment automation
-
-### Monitoring and Observability
-- Platform metrics
-- Usage analytics
-- Cost tracking
-- Health monitoring
-
----
+**Skills you'll practice:** internal developer platforms · service catalogs · platform APIs · self-service provisioning · golden paths · Terraform automation.
 
 ## Architecture
 
@@ -208,9 +30,9 @@ An **Internal Developer Platform (IDP)** is a set of tools, services, and workfl
 | Tool | Version | Purpose |
 |------|---------|---------|
 | **AWS CLI** | 2.0+ | AWS service management |
-| **Terraform** | 1.5+ | Infrastructure as Code |
+| **Terraform** | 1.9+ | Infrastructure as Code |
 | **Docker** | 20.10+ | Container runtime |
-| **kubectl** | 1.28+ | Kubernetes management |
+| **kubectl** | 1.32+ | Kubernetes management |
 | **Node.js** | 18+ | Portal development |
 | **Python** | 3.9+ | Automation scripts |
 
@@ -365,57 +187,57 @@ labs/08-platform-engineering/
 │   ├── README.md               # How to use the service catalog
 │   ├── web-app/                # Web Application Template
 │   │   ├── README.md           # Template documentation
-│   │   └── main.tf             # ✅ WORKING Terraform template
+│   │   └── main.tf             # WORKING Terraform template
 │   ├── api-service/            # API Service Template
 │   │   ├── README.md           # Template documentation
-│   │   └── main.tf             # ✅ WORKING Terraform template
+│   │   └── main.tf             # WORKING Terraform template
 │   └── data-pipeline/          # Data Pipeline Template
 │       ├── README.md           # Template documentation
-│       └── main.tf             # ✅ WORKING Terraform template
+│       └── main.tf             # WORKING Terraform template
 │
 ├── platform-api/                # Platform APIs - Lambda functions
 │   ├── README.md               # API documentation
 │   ├── provisioning/           # Provisioning API
 │   │   ├── README.md           # API endpoint docs
-│   │   └── lambda_function.py  # ✅ WORKING Lambda function
+│   │   └── lambda_function.py  # WORKING Lambda function
 │   └── monitoring/             # Monitoring API
 │       ├── README.md           # API endpoint docs
-│       └── lambda_function.py  # ✅ WORKING Lambda function
+│       └── lambda_function.py  # WORKING Lambda function
 │
 ├── automation/                  # Automation Tools - Working scripts
 │   ├── README.md               # Automation overview
 │   ├── terraform-runner/       # Terraform execution automation
 │   │   ├── README.md           # How to use the runner
-│   │   ├── terraform_runner.py # ✅ WORKING Python script
+│   │   ├── terraform_runner.py # WORKING Python script
 │   │   └── requirements.txt    # Python dependencies
 │   └── ci-cd-generator/        # CI/CD pipeline generator
 │       ├── README.md           # How to use the generator
-│       └── generate_pipeline.py # ✅ WORKING Python script
+│       └── generate_pipeline.py # WORKING Python script
 │
 ├── monitoring/                  # Platform Monitoring - Dashboards & Metrics
 │   ├── README.md               # Monitoring overview
 │   ├── dashboards/             # CloudWatch dashboards
 │   │   ├── README.md           # Dashboard documentation
-│   │   ├── platform-health.json # ✅ WORKING dashboard config
-│   │   └── cost-tracking.json  # ✅ WORKING dashboard config
+│   │   ├── platform-health.json # WORKING dashboard config
+│   │   └── cost-tracking.json  # WORKING dashboard config
 │   └── metrics/                # Custom metrics
 │       ├── README.md           # Metrics documentation
-│       └── publish_metrics.py  # ✅ WORKING metrics script
+│       └── publish_metrics.py  # WORKING metrics script
 │
 ├── portal/                      # Developer Portal (Optional)
 │   ├── README.md               # Portal setup guide
 │   └── config/                 # Portal configuration
-│       └── app-config.yaml     # ✅ Example portal config
+│       └── app-config.yaml     # Example portal config
 │
 ├── backstage/                   # Backstage Portal (Optional)
 │   └── README.md               # Backstage setup guide
 │
 └── scripts/                     # Utility Scripts
-    └── validate.sh             # ✅ WORKING validation script
+    └── validate.sh             # WORKING validation script
 ```
 
 **Legend**:
-- ✅ = Working implementation (actual code you can run)
+- = Working implementation (actual code you can run)
 - 📄 = Documentation only
 
 ---
@@ -424,7 +246,7 @@ labs/08-platform-engineering/
 
 This lab includes **actual working code** you can use immediately:
 
-### ✅ Service Catalog Templates (3 Ready-to-Use Templates)
+### Service Catalog Templates (3 Ready-to-Use Templates)
 
 **Location**: `service-catalog/`
 
@@ -455,7 +277,7 @@ terraform plan
 terraform apply
 ```
 
-### ✅ Platform APIs (2 Working Lambda Functions)
+### Platform APIs (2 Working Lambda Functions)
 
 **Location**: `platform-api/`
 
@@ -480,7 +302,7 @@ terraform apply
 aws lambda invoke --function-name provisioning-api --payload '{"template":"web-app"}'
 ```
 
-### ✅ Automation Tools (2 Working Python Scripts)
+### Automation Tools (2 Working Python Scripts)
 
 **Location**: `automation/`
 
@@ -516,7 +338,7 @@ python automation/ci-cd-generator/generate_pipeline.py \
   --template standard-web-app
 ```
 
-### ✅ Monitoring Tools (Dashboards & Metrics Scripts)
+### Monitoring Tools (Dashboards & Metrics Scripts)
 
 **Location**: `monitoring/`
 
@@ -894,54 +716,6 @@ make destroy
 
 ---
 
-## Learning Objectives
-
-### Beginner Level ✅
-After completing this lab, you should understand:
-- What Platform Engineering is
-- IDP concepts and benefits
-- Self-service provisioning
-- Service catalog basics
-
-### Intermediate Level ✅
-You should be able to:
-- Set up a developer portal
-- Create service catalog templates
-- Build platform APIs
-- Implement automation workflows
-
-### Advanced Level ✅
-You should master:
-- Complete IDP architecture
-- Multi-tenancy support
-- Advanced automation patterns
-- Platform observability
-- Cost optimization strategies
-
----
-
-## Best Practices Demonstrated
-
-### Platform Design
-- ✅ **Golden Paths** - Pre-approved templates
-- ✅ **Guardrails** - Automated compliance
-- ✅ **Self-Service** - Developer autonomy
-- ✅ **Documentation** - Comprehensive guides
-
-### Developer Experience
-- ✅ **Easy Onboarding** - Simple first steps
-- ✅ **Clear Documentation** - Well-documented APIs
-- ✅ **Fast Feedback** - Quick provisioning
-- ✅ **Visibility** - Transparent processes
-
-### Governance
-- ✅ **Policy Enforcement** - Automated policies
-- ✅ **Cost Controls** - Budget limits
-- ✅ **Security** - Built-in security
-- ✅ **Compliance** - Regulatory compliance
-
----
-
 ## Cost Considerations
 
 ### Estimated Costs
@@ -1014,3 +788,6 @@ Apply what you've learned to:
 
 **You're ready to build amazing platforms!** 🚀
 
+---
+
+**Navigation:** [◀ Lab 07 · Serverless Operations](../07-serverless-operations/README.md) · [All labs](../README.md)

@@ -1,102 +1,19 @@
-# Lab 05 - Security Automation
-*Implementing DevSecOps with Trivy, OPA, Falco, and RBAC*
+# Lab 05 · Security Automation
 
-> **Navigation**: [DevOps Studio](../../README.md) > [Labs](../README.md) > Lab 05  
-> **Previous Lab**: [Lab 04 - Observability Stack](../04-observability-stack/README.md)  
-> **Next Lab**: [Lab 06 - GitOps Workflows](../06-gitops-workflows/README.md)
+> [DevOps Studio](../../README.md) › [Labs](../README.md) › Lab 05 · ⏱ 1–2 hours · **Advanced**
 
-[![Trivy](https://img.shields.io/badge/Trivy-1904DA?logo=aquasecurity)](https://aquasecurity.github.io/trivy/)
-[![OPA](https://img.shields.io/badge/OPA-7A858D?logo=openpolicyagent)](https://www.openpolicyagent.org/)
-[![Falco](https://img.shields.io/badge/Falco-00BCE4?logo=falco)](https://falco.org/)
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?logo=kubernetes)](https://kubernetes.io)
+**Add automated security controls across build, deploy, and runtime. By the end you'll scan images with Trivy, enforce policy with OPA, catch runtime threats with Falco, and lock down access with RBAC.**
 
-> **Objective**: Implement comprehensive security automation covering vulnerability scanning (Trivy), policy enforcement (OPA), runtime security (Falco), and access control (RBAC). Learn DevSecOps practices to secure your Kubernetes platform and applications.
+**On this page:** [Architecture](#architecture) · [Prerequisites](#prerequisites) · [Quick Start](#quick-start) · [Detailed Setup](#detailed-setup) · [Project Structure](#project-structure) · [Security Tools](#security-tools) · [Troubleshooting](#troubleshooting) · [Cleanup](#cleanup)
 
----
+## What you build
 
-## 📑 Table of Contents
+- **Trivy** — image and dependency scanning
+- **OPA / Gatekeeper** — admission policies
+- **Falco** — runtime threat detection
+- **Kubernetes RBAC** — roles and bindings
 
-- [Overview](#overview)
-- [What You'll Learn](#what-youll-learn)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Detailed Setup](#detailed-setup)
-- [Project Structure](#project-structure)
-- [Security Tools](#security-tools)
-- [Integration](#integration)
-- [Usage Examples](#usage-examples)
-- [Troubleshooting](#troubleshooting)
-- [Cleanup](#cleanup)
-- [Learning Objectives](#learning-objectives)
-- [Best Practices Demonstrated](#best-practices-demonstrated)
-- [Cost Considerations](#cost-considerations)
-- [Next Steps](#next-steps)
-- [Additional Resources](#additional-resources)
-
----
-
-## Overview
-
-This lab implements a complete DevSecOps security stack that automates security at every stage of the software lifecycle: build, deploy, and runtime.
-
-### What Gets Built
-
-- **Trivy** - Advanced vulnerability scanning (images, filesystems, infrastructure)
-- **OPA Gatekeeper** - Policy enforcement for Kubernetes resources
-- **Falco** - Runtime security monitoring and threat detection
-- **RBAC** - Role-based access control configurations
-- **Security Policies** - Pre-built policies for common security requirements
-- **Automated Scanning** - CI/CD integration for continuous security
-
-### Key Features
-
-- ✅ **Shift-Left Security**: Catch issues early in development
-- ✅ **Policy as Code**: Version-controlled security policies
-- ✅ **Runtime Protection**: Detect threats in running containers
-- ✅ **Access Control**: Least privilege access management
-- ✅ **Automated Enforcement**: Policies enforced automatically
-- ✅ **Production Ready**: Enterprise-grade security configurations
-
----
-
-## What You'll Learn
-
-### DevSecOps Fundamentals
-- Shift-left security practices
-- Security automation principles
-- Policy as code
-- Continuous security scanning
-
-### Trivy (Vulnerability Scanning)
-- Container image scanning
-- Filesystem scanning
-- Infrastructure as Code scanning
-- Kubernetes cluster scanning
-- CI/CD integration
-
-### OPA (Policy Enforcement)
-- Open Policy Agent basics
-- Rego policy language
-- OPA Gatekeeper for Kubernetes
-- Policy templates and constraints
-- Admission control
-
-### Falco (Runtime Security)
-- Runtime threat detection
-- System call monitoring
-- Custom rules creation
-- Alerting and notifications
-- Integration with SIEM
-
-### RBAC (Access Control)
-- Kubernetes RBAC model
-- Role and ClusterRole creation
-- Service account security
-- Least privilege principles
-- Access auditing
-
----
+**Skills you'll practice:** image scanning · policy as code · admission control · runtime detection · RBAC least privilege · defense in depth.
 
 ## Architecture
 
@@ -120,7 +37,7 @@ This lab implements a complete DevSecOps security stack that automates security 
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| **kubectl** | 1.28+ | Kubernetes cluster management |
+| **kubectl** | 1.32+ | Kubernetes cluster management |
 | **Helm** | 3.10+ | Package management |
 | **Trivy** | 0.45+ | Vulnerability scanning |
 
@@ -401,48 +318,6 @@ make uninstall-falco
 
 ---
 
-## Learning Objectives
-
-### Beginner Level ✅
-After completing this lab, you should understand:
-- What DevSecOps means
-- Basic security scanning concepts
-- Policy enforcement basics
-- Access control fundamentals
-
-### Intermediate Level ✅
-You should be able to:
-- Configure vulnerability scanners
-- Write basic OPA policies
-- Create Falco rules
-- Design RBAC roles
-
-### Advanced Level ✅
-You should master:
-- Complete security automation
-- Custom policy development
-- Runtime threat detection
-- Security architecture design
-
----
-
-## Best Practices Demonstrated
-
-### Security
-- ✅ **Shift-Left**: Security early in development
-- ✅ **Policy as Code**: Version-controlled policies
-- ✅ **Automated Enforcement**: No manual checks needed
-- ✅ **Defense in Depth**: Multiple security layers
-- ✅ **Least Privilege**: Minimal required access
-
-### Automation
-- ✅ **CI/CD Integration**: Automated scanning
-- ✅ **Admission Control**: Automatic policy enforcement
-- ✅ **Real-time Monitoring**: Continuous threat detection
-- ✅ **Audit Trail**: Complete security logging
-
----
-
 ## Cost Considerations
 
 ### Estimated Costs
@@ -505,3 +380,6 @@ You should master:
 
 **Ready for the next challenge?** Continue to [Lab 06 - GitOps Workflows](../06-gitops-workflows/) to deploy securely with GitOps!
 
+---
+
+**Navigation:** [◀ Lab 04 · Observability Stack](../04-observability-stack/README.md) · [All labs](../README.md) · [Lab 06 · GitOps Workflows ▶](../06-gitops-workflows/README.md)
