@@ -70,16 +70,16 @@ output "node_security_group_id" {
 output "infrastructure_summary" {
   description = "Summary of deployed EKS infrastructure"
   value = {
-    project_name        = var.project_name
-    environment         = var.environment
-    region              = var.region
-    cluster_name        = module.eks.cluster_name
-    cluster_version     = module.eks.cluster_version
-    cluster_endpoint     = module.eks.cluster_endpoint
-    node_group_id       = module.eks.node_group_id
-    node_desired_size   = var.node_desired_size
-    vpc_id              = module.eks.vpc_id
-    kubeconfig_command  = "aws eks update-kubeconfig --name ${module.eks.cluster_name} --region ${var.region}"
+    project_name       = var.project_name
+    environment        = var.environment
+    region             = var.region
+    cluster_name       = module.eks.cluster_name
+    cluster_version    = module.eks.cluster_version
+    cluster_endpoint   = module.eks.cluster_endpoint
+    node_group_id      = module.eks.node_group_id
+    node_desired_size  = var.node_desired_size
+    vpc_id             = module.eks.vpc_id
+    kubeconfig_command = "aws eks update-kubeconfig --name ${module.eks.cluster_name} --region ${var.region}"
   }
   sensitive = true
 }

@@ -56,8 +56,8 @@ output "step_functions_arn" {
 output "invoke_commands" {
   description = "Example AWS CLI commands to invoke Lambda functions"
   value = {
-    hello_world = "aws lambda invoke --function-name ${aws_lambda_function.hello_world.function_name} --payload '{\"name\":\"Developer\",\"message\":\"Hello\"}' response.json"
-    api_handler = "aws lambda invoke --function-name ${aws_lambda_function.api_handler.function_name} --payload '{\"httpMethod\":\"GET\",\"path\":\"/test\"}' response.json"
+    hello_world     = "aws lambda invoke --function-name ${aws_lambda_function.hello_world.function_name} --payload '{\"name\":\"Developer\",\"message\":\"Hello\"}' response.json"
+    api_handler     = "aws lambda invoke --function-name ${aws_lambda_function.api_handler.function_name} --payload '{\"httpMethod\":\"GET\",\"path\":\"/test\"}' response.json"
     event_processor = "aws lambda invoke --function-name ${aws_lambda_function.event_processor.function_name} --payload '{\"source\":\"test\",\"detail-type\":\"Test Event\"}' response.json"
   }
 }

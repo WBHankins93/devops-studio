@@ -3,7 +3,7 @@
 
 terraform {
   required_version = ">= 1.9"
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -14,7 +14,7 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
-  
+
   default_tags {
     tags = merge(
       var.tags,
@@ -46,7 +46,7 @@ resource "aws_s3_bucket_versioning" "platform_state" {
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "platform_state" {
   bucket = aws_s3_bucket.platform_state.id
-  
+
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
@@ -56,15 +56,15 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "platform_state" {
 
 # DynamoDB table for Terraform state locking
 resource "aws_dynamodb_table" "platform_state_lock" {
-  name           = "${var.project_name}-${var.environment}-platform-state-lock"
-  billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "LockID"
-  
+  name         = "${var.project_name}-${var.environment}-platform-state-lock"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+
   attribute {
     name = "LockID"
     type = "S"
   }
-  
+
   tags = {
     Name = "${var.project_name}-${var.environment}-platform-state-lock"
   }
@@ -73,7 +73,7 @@ resource "aws_dynamodb_table" "platform_state_lock" {
 # IAM role for platform automation
 resource "aws_iam_role" "platform_automation" {
   name = "${var.project_name}-${var.environment}-platform-automation-role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -92,7 +92,7 @@ resource "aws_iam_role" "platform_automation" {
 resource "aws_iam_role_policy" "platform_automation" {
   name = "${var.project_name}-${var.environment}-platform-automation-policy"
   role = aws_iam_role.platform_automation.id
-  
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -142,8 +142,8 @@ resource "aws_cloudwatch_log_group" "platform_operations" {
 
 # SSM Parameter Store for platform configuration
 resource "aws_ssm_parameter" "platform_config" {
-  name  = "/platform/${var.project_name}/${var.environment}/config"
-  type  = "String"
+  name = "/platform/${var.project_name}/${var.environment}/config"
+  type = "String"
   value = jsonencode({
     project_name = var.project_name
     environment  = var.environment

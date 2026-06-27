@@ -3,21 +3,21 @@
 
 locals {
   name_prefix = "${var.project_name}-${var.environment}"
-  
+
   # Use provided VPC or create new one
   create_vpc = var.vpc_id == ""
-  
+
   # Calculate subnet CIDRs if creating VPC
   vpc_cidr_bits = split("/", var.vpc_cidr)[1]
   subnet_bits   = 8 - (32 - local.vpc_cidr_bits)
-  
+
   public_subnets = local.create_vpc ? [
-    for i, az in var.availability_zones : 
+    for i, az in var.availability_zones :
     cidrsubnet(var.vpc_cidr, local.subnet_bits, i)
   ] : []
-  
+
   private_subnets = local.create_vpc ? [
-    for i, az in var.availability_zones : 
+    for i, az in var.availability_zones :
     cidrsubnet(var.vpc_cidr, local.subnet_bits, i + length(var.availability_zones))
   ] : []
 }
@@ -33,7 +33,7 @@ data "aws_vpc" "existing" {
 
 resource "aws_vpc" "main" {
   count = local.create_vpc ? 1 : 0
-  
+
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -46,7 +46,7 @@ resource "aws_vpc" "main" {
 
 resource "aws_internet_gateway" "main" {
   count = local.create_vpc ? 1 : 0
-  
+
   vpc_id = aws_vpc.main[0].id
 
   tags = merge(var.tags, {
@@ -65,8 +65,8 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = merge(var.tags, {
-    Name = "${local.name_prefix}-public-${substr(var.availability_zones[count.index], -1, 1)}"
-    Type = "public-subnet"
+    Name                     = "${local.name_prefix}-public-${substr(var.availability_zones[count.index], -1, 1)}"
+    Type                     = "public-subnet"
     "kubernetes.io/role/elb" = "1"
   })
 }
@@ -80,8 +80,8 @@ resource "aws_subnet" "private" {
   availability_zone = var.availability_zones[count.index]
 
   tags = merge(var.tags, {
-    Name = "${local.name_prefix}-private-${substr(var.availability_zones[count.index], -1, 1)}"
-    Type = "private-subnet"
+    Name                              = "${local.name_prefix}-private-${substr(var.availability_zones[count.index], -1, 1)}"
+    Type                              = "private-subnet"
     "kubernetes.io/role/internal-elb" = "1"
   })
 }
@@ -90,7 +90,7 @@ resource "aws_subnet" "private" {
 resource "aws_eip" "nat" {
   count = local.create_vpc ? length(var.availability_zones) : 0
 
-  domain = "vpc"
+  domain     = "vpc"
   depends_on = [aws_internet_gateway.main]
 
   tags = merge(var.tags, {
@@ -164,12 +164,12 @@ resource "aws_route_table_association" "private" {
 # Try to find private subnets in existing VPC
 data "aws_subnets" "existing_private" {
   count = local.create_vpc ? 0 : 1
-  
+
   filter {
     name   = "vpc-id"
     values = [var.vpc_id]
   }
-  
+
   # Look for subnets tagged as private or in private AZs
   filter {
     name   = "tag:Type"
@@ -180,7 +180,7 @@ data "aws_subnets" "existing_private" {
 # If no tagged subnets found, get all subnets in VPC (user will need to filter)
 data "aws_subnets" "all_existing" {
   count = local.create_vpc ? 0 : (length(data.aws_subnets.existing_private) > 0 && length(data.aws_subnets.existing_private[0].ids) == 0 ? 1 : 0)
-  
+
   filter {
     name   = "vpc-id"
     values = [var.vpc_id]
@@ -190,7 +190,7 @@ data "aws_subnets" "all_existing" {
 # Get VPC and subnet IDs
 locals {
   vpc_id = local.create_vpc ? aws_vpc.main[0].id : var.vpc_id
-  
+
   # Get existing subnets if VPC is provided, otherwise use created ones
   # If using existing VPC, prefer tagged private subnets, otherwise use all subnets
   private_subnet_ids = local.create_vpc ? aws_subnet.private[*].id : (
@@ -332,7 +332,7 @@ resource "aws_eks_cluster" "main" {
 
   vpc_config {
     subnet_ids              = length(local.private_subnet_ids) > 0 ? local.private_subnet_ids : (local.create_vpc ? aws_subnet.private[*].id : [])
-    security_group_ids     = [aws_security_group.cluster.id]
+    security_group_ids      = [aws_security_group.cluster.id]
     endpoint_private_access = var.cluster_endpoint_private_access
     endpoint_public_access  = var.cluster_endpoint_public_access
   }
@@ -407,28 +407,28 @@ resource "aws_eks_node_group" "main" {
 resource "aws_eks_addon" "vpc_cni" {
   cluster_name = aws_eks_cluster.main.name
   addon_name   = "vpc-cni"
-  
+
   tags = var.tags
 }
 
 resource "aws_eks_addon" "kube_proxy" {
   cluster_name = aws_eks_cluster.main.name
   addon_name   = "kube-proxy"
-  
+
   tags = var.tags
 }
 
 resource "aws_eks_addon" "coredns" {
   cluster_name = aws_eks_cluster.main.name
   addon_name   = "coredns"
-  
+
   tags = var.tags
 }
 
 # IAM Role for EBS CSI Driver
 resource "aws_iam_role" "ebs_csi" {
   count = length(aws_iam_openid_connect_provider.cluster) > 0 ? 1 : 0
-  
+
   name = "${local.name_prefix}-eks-ebs-csi-role"
 
   assume_role_policy = jsonencode({
@@ -455,7 +455,7 @@ resource "aws_iam_role" "ebs_csi" {
 
 resource "aws_iam_role_policy_attachment" "ebs_csi" {
   count = length(aws_iam_role.ebs_csi) > 0 ? 1 : 0
-  
+
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
   role       = aws_iam_role.ebs_csi[0].name
 }
@@ -463,9 +463,9 @@ resource "aws_iam_role_policy_attachment" "ebs_csi" {
 resource "aws_eks_addon" "ebs_csi_driver" {
   cluster_name = aws_eks_cluster.main.name
   addon_name   = "aws-ebs-csi-driver"
-  
+
   service_account_role_arn = length(aws_iam_role.ebs_csi) > 0 ? aws_iam_role.ebs_csi[0].arn : null
-  
+
   tags = var.tags
 }
 
@@ -476,7 +476,7 @@ data "tls_certificate" "cluster" {
 
 resource "aws_iam_openid_connect_provider" "cluster" {
   count = length(aws_eks_cluster.main.identity[0].oidc) > 0 ? 1 : 0
-  
+
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = length(data.tls_certificate.cluster.certificates) > 0 ? [data.tls_certificate.cluster.certificates[0].sha1_fingerprint] : []
   url             = aws_eks_cluster.main.identity[0].oidc[0].issuer

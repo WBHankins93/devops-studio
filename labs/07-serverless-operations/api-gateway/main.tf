@@ -5,20 +5,20 @@
 resource "aws_api_gateway_rest_api" "api" {
   name        = "${var.project_name}-${var.environment}-api"
   description = "Serverless API for ${var.project_name}"
-  
+
   endpoint_configuration {
     types = ["REGIONAL"]
   }
-  
+
   # Enable CORS
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
+        Effect    = "Allow"
         Principal = "*"
-        Action = "execute-api:Invoke"
-        Resource = "*"
+        Action    = "execute-api:Invoke"
+        Resource  = "*"
       }
     ]
   })
@@ -44,10 +44,10 @@ resource "aws_api_gateway_integration" "api" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   resource_id = aws_api_gateway_resource.api.id
   http_method = aws_api_gateway_method.api.http_method
-  
+
   integration_http_method = "POST"
-  type                   = "AWS_PROXY"
-  uri                    = "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/${var.api_handler_arn}/invocations"
+  type                    = "AWS_PROXY"
+  uri                     = "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/${var.api_handler_arn}/invocations"
 }
 
 # Root resource method (for root path)
@@ -62,10 +62,10 @@ resource "aws_api_gateway_integration" "root" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   resource_id = aws_api_gateway_rest_api.api.root_resource_id
   http_method = aws_api_gateway_method.root.http_method
-  
+
   integration_http_method = "POST"
-  type                   = "AWS_PROXY"
-  uri                    = "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/${var.api_handler_arn}/invocations"
+  type                    = "AWS_PROXY"
+  uri                     = "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/${var.api_handler_arn}/invocations"
 }
 
 # Lambda permission for API Gateway
@@ -85,9 +85,9 @@ resource "aws_api_gateway_deployment" "api" {
     aws_api_gateway_method.root,
     aws_api_gateway_integration.root
   ]
-  
+
   rest_api_id = aws_api_gateway_rest_api.api.id
-  
+
   triggers = {
     redeployment = sha1(jsonencode([
       aws_api_gateway_resource.api.id,
@@ -95,7 +95,7 @@ resource "aws_api_gateway_deployment" "api" {
       aws_api_gateway_integration.api.id
     ]))
   }
-  
+
   lifecycle {
     create_before_destroy = true
   }
@@ -104,9 +104,9 @@ resource "aws_api_gateway_deployment" "api" {
 # API Gateway Stage
 resource "aws_api_gateway_stage" "api" {
   deployment_id = aws_api_gateway_deployment.api.id
-  rest_api_id  = aws_api_gateway_rest_api.api.id
-  stage_name   = var.environment
-  
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  stage_name    = var.environment
+
   # Enable CloudWatch logging
   access_log_settings {
     destination_arn = aws_cloudwatch_log_group.api_gateway.arn

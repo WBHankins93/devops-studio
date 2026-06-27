@@ -4,7 +4,7 @@
 # IAM Role for Step Functions
 resource "aws_iam_role" "step_functions" {
   name = "${var.project_name}-${var.environment}-step-functions-role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -23,7 +23,7 @@ resource "aws_iam_role" "step_functions" {
 resource "aws_iam_role_policy" "step_functions" {
   name = "${var.project_name}-${var.environment}-step-functions-policy"
   role = aws_iam_role.step_functions.id
-  
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -56,7 +56,7 @@ resource "aws_iam_role_policy" "step_functions" {
 resource "aws_sfn_state_machine" "workflow" {
   name     = "${var.project_name}-${var.environment}-workflow"
   role_arn = aws_iam_role.step_functions.arn
-  
+
   definition = jsonencode({
     Comment = "Serverless workflow orchestration"
     StartAt = "HelloWorld"
@@ -87,8 +87,8 @@ resource "aws_sfn_state_machine" "workflow" {
         Input = {
           "httpMethod" = "POST"
           "path"       = "/process"
-          "body"       = {
-            "message" = "Processed by Step Functions"
+          "body" = {
+            "message"  = "Processed by Step Functions"
             "previous" = "$.Payload"
           }
         }
@@ -110,19 +110,19 @@ resource "aws_sfn_state_machine" "workflow" {
         ]
       }
       ErrorHandler = {
-        Type = "Fail"
+        Type  = "Fail"
         Error = "WorkflowError"
         Cause = "An error occurred in the workflow"
       }
     }
   })
-  
+
   logging_configuration {
     log_destination        = "${aws_cloudwatch_log_group.step_functions.arn}:*"
     include_execution_data = true
     level                  = "ALL"
   }
-  
+
   tags = {
     Name = "${var.project_name}-${var.environment}-workflow"
   }

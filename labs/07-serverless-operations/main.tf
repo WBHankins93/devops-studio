@@ -3,7 +3,7 @@
 
 terraform {
   required_version = ">= 1.9"
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -14,7 +14,7 @@ terraform {
       version = "~> 2.4"
     }
   }
-  
+
   # Uncomment and configure if using remote state
   # backend "s3" {
   #   bucket = "your-terraform-state-bucket"
@@ -25,7 +25,7 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
-  
+
   default_tags {
     tags = merge(
       var.tags,
@@ -57,7 +57,7 @@ resource "aws_s3_bucket_versioning" "lambda_deployments" {
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "lambda_deployments" {
   bucket = aws_s3_bucket.lambda_deployments.id
-  
+
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
@@ -68,7 +68,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "lambda_deployment
 # IAM role for Lambda functions
 resource "aws_iam_role" "lambda_execution" {
   name = "${var.project_name}-${var.environment}-lambda-execution-role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -93,7 +93,7 @@ resource "aws_iam_role_policy_attachment" "lambda_basic" {
 resource "aws_iam_role_policy" "lambda_additional" {
   name = "${var.project_name}-${var.environment}-lambda-additional-permissions"
   role = aws_iam_role.lambda_execution.id
-  
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -163,16 +163,16 @@ resource "aws_lambda_function" "hello_world" {
   runtime       = "python3.13"
   timeout       = 30
   memory_size   = 128
-  
+
   filename         = data.archive_file.hello_world.output_path
   source_code_hash = data.archive_file.hello_world.output_base64sha256
-  
+
   environment {
     variables = {
       ENVIRONMENT = var.environment
     }
   }
-  
+
   depends_on = [
     aws_iam_role_policy_attachment.lambda_basic,
     aws_cloudwatch_log_group.hello_world
@@ -187,16 +187,16 @@ resource "aws_lambda_function" "api_handler" {
   runtime       = "python3.13"
   timeout       = 30
   memory_size   = 256
-  
+
   filename         = data.archive_file.api_handler.output_path
   source_code_hash = data.archive_file.api_handler.output_base64sha256
-  
+
   environment {
     variables = {
       ENVIRONMENT = var.environment
     }
   }
-  
+
   depends_on = [
     aws_iam_role_policy_attachment.lambda_basic,
     aws_cloudwatch_log_group.api_handler
@@ -211,17 +211,17 @@ resource "aws_lambda_function" "event_processor" {
   runtime       = "python3.13"
   timeout       = 60
   memory_size   = 256
-  
+
   filename         = data.archive_file.event_processor.output_path
   source_code_hash = data.archive_file.event_processor.output_base64sha256
-  
+
   environment {
     variables = {
-      ENVIRONMENT        = var.environment
-      EVENTS_TABLE_NAME  = aws_dynamodb_table.events.name
+      ENVIRONMENT       = var.environment
+      EVENTS_TABLE_NAME = aws_dynamodb_table.events.name
     }
   }
-  
+
   depends_on = [
     aws_iam_role_policy_attachment.lambda_basic,
     aws_cloudwatch_log_group.event_processor
@@ -246,31 +246,31 @@ resource "aws_cloudwatch_log_group" "event_processor" {
 
 # DynamoDB Table for Events
 resource "aws_dynamodb_table" "events" {
-  name           = "${var.project_name}-${var.environment}-events"
-  billing_mode  = "PAY_PER_REQUEST" # On-demand pricing
-  hash_key      = "event_id"
-  
+  name         = "${var.project_name}-${var.environment}-events"
+  billing_mode = "PAY_PER_REQUEST" # On-demand pricing
+  hash_key     = "event_id"
+
   attribute {
     name = "event_id"
     type = "S"
   }
-  
+
   attribute {
     name = "timestamp"
     type = "S"
   }
-  
+
   # Global Secondary Index for querying by timestamp
   global_secondary_index {
     name            = "timestamp-index"
     hash_key        = "timestamp"
     projection_type = "ALL"
   }
-  
+
   point_in_time_recovery {
     enabled = true
   }
-  
+
   tags = {
     Name = "${var.project_name}-${var.environment}-events"
   }
@@ -279,17 +279,17 @@ resource "aws_dynamodb_table" "events" {
 # Include API Gateway configuration
 module "api_gateway" {
   source = "./api-gateway"
-  
-  project_name   = var.project_name
-  environment    = var.environment
-  api_handler_arn = aws_lambda_function.api_handler.arn
+
+  project_name     = var.project_name
+  environment      = var.environment
+  api_handler_arn  = aws_lambda_function.api_handler.arn
   api_handler_name = aws_lambda_function.api_handler.function_name
 }
 
 # Include EventBridge configuration
 module "eventbridge" {
   source = "./eventbridge"
-  
+
   project_name        = var.project_name
   environment         = var.environment
   event_processor_arn = aws_lambda_function.event_processor.arn
@@ -298,9 +298,9 @@ module "eventbridge" {
 # Include Step Functions configuration
 module "step_functions" {
   source = "./step-functions"
-  
-  project_name   = var.project_name
-  environment    = var.environment
+
+  project_name = var.project_name
+  environment  = var.environment
   lambda_arns = {
     hello_world = aws_lambda_function.hello_world.arn
     api_handler = aws_lambda_function.api_handler.arn

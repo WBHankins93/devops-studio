@@ -11,7 +11,7 @@ resource "aws_cloudwatch_event_rule" "scheduled" {
   name                = "${var.project_name}-${var.environment}-scheduled-rule"
   description         = "Trigger event processor every 5 minutes"
   schedule_expression = "rate(5 minutes)"
-  
+
   event_bus_name = aws_cloudwatch_event_bus.custom.name
 }
 
@@ -19,9 +19,9 @@ resource "aws_cloudwatch_event_rule" "scheduled" {
 resource "aws_cloudwatch_event_rule" "custom_events" {
   name        = "${var.project_name}-${var.environment}-custom-rule"
   description = "Route custom events to event processor"
-  
+
   event_bus_name = aws_cloudwatch_event_bus.custom.name
-  
+
   event_pattern = jsonencode({
     source      = ["${var.project_name}.${var.environment}"]
     detail-type = ["Custom Event"]
@@ -33,7 +33,7 @@ resource "aws_cloudwatch_event_target" "event_processor" {
   rule      = aws_cloudwatch_event_rule.scheduled.name
   target_id = "EventProcessorLambda"
   arn       = var.event_processor_arn
-  
+
   event_bus_name = aws_cloudwatch_event_bus.custom.name
 }
 
@@ -51,7 +51,7 @@ resource "aws_cloudwatch_event_target" "custom_events" {
   rule      = aws_cloudwatch_event_rule.custom_events.name
   target_id = "CustomEventsLambda"
   arn       = var.event_processor_arn
-  
+
   event_bus_name = aws_cloudwatch_event_bus.custom.name
 }
 

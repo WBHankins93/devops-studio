@@ -3,7 +3,7 @@
 
 terraform {
   required_version = ">= 1.9"
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -48,7 +48,7 @@ variable "dynamodb_billing_mode" {
 # IAM role for Lambda
 resource "aws_iam_role" "lambda" {
   name = "${var.api_name}-${var.environment}-lambda-role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -67,7 +67,7 @@ resource "aws_iam_role" "lambda" {
 resource "aws_iam_role_policy" "lambda" {
   name = "${var.api_name}-${var.environment}-lambda-policy"
   role = aws_iam_role.lambda.id
-  
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -104,7 +104,7 @@ data "archive_file" "lambda" {
   type        = "zip"
   output_path = "${path.module}/lambda.zip"
   source {
-    content = <<EOF
+    content  = <<EOF
 def lambda_handler(event, context):
     return {
         'statusCode': 200,
@@ -123,7 +123,7 @@ resource "aws_lambda_function" "api" {
   runtime       = var.lambda_runtime
   memory_size   = var.lambda_memory
   timeout       = 30
-  
+
   filename         = data.archive_file.lambda.output_path
   source_code_hash = data.archive_file.lambda.output_base64sha256
 }
@@ -154,10 +154,10 @@ resource "aws_api_gateway_integration" "api" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   resource_id = aws_api_gateway_resource.api.id
   http_method = aws_api_gateway_method.api.http_method
-  
+
   integration_http_method = "POST"
-  type                   = "AWS_PROXY"
-  uri                    = aws_lambda_function.api.invoke_arn
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.api.invoke_arn
 }
 
 # Lambda permission
@@ -175,22 +175,22 @@ resource "aws_api_gateway_deployment" "api" {
     aws_api_gateway_method.api,
     aws_api_gateway_integration.api
   ]
-  
+
   rest_api_id = aws_api_gateway_rest_api.api.id
   stage_name  = var.environment
 }
 
 # DynamoDB Table
 resource "aws_dynamodb_table" "api" {
-  name           = "${var.api_name}-${var.environment}-data"
-  billing_mode   = var.dynamodb_billing_mode
-  hash_key       = "id"
-  
+  name         = "${var.api_name}-${var.environment}-data"
+  billing_mode = var.dynamodb_billing_mode
+  hash_key     = "id"
+
   attribute {
     name = "id"
     type = "S"
   }
-  
+
   tags = {
     Name = "${var.api_name}-${var.environment}-data"
   }

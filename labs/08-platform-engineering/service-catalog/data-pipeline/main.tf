@@ -3,7 +3,7 @@
 
 terraform {
   required_version = ">= 1.9"
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -36,7 +36,7 @@ variable "destination_bucket" {
 variable "schedule" {
   description = "Execution schedule (cron expression)"
   type        = string
-  default     = "cron(0 2 * * ? *)"  # Daily at 2 AM
+  default     = "cron(0 2 * * ? *)" # Daily at 2 AM
 }
 
 # S3 Bucket for raw data (if not provided)
@@ -70,7 +70,7 @@ resource "aws_s3_bucket_versioning" "destination" {
 # IAM Role for Glue
 resource "aws_iam_role" "glue" {
   name = "${var.pipeline_name}-${var.environment}-glue-role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -89,7 +89,7 @@ resource "aws_iam_role" "glue" {
 resource "aws_iam_role_policy" "glue" {
   name = "${var.pipeline_name}-${var.environment}-glue-policy"
   role = aws_iam_role.glue.id
-  
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -122,21 +122,21 @@ resource "aws_iam_role_policy" "glue" {
 resource "aws_glue_job" "pipeline" {
   name     = "${var.pipeline_name}-${var.environment}-job"
   role_arn = aws_iam_role.glue.arn
-  
+
   command {
     script_location = "s3://${var.source_bucket != "" ? var.source_bucket : aws_s3_bucket.source[0].id}/scripts/etl_script.py"
     python_version  = "3"
   }
-  
+
   default_arguments = {
-    "--TempDir" = "s3://${var.source_bucket != "" ? var.source_bucket : aws_s3_bucket.source[0].id}/temp/"
-    "--job-language" = "python"
+    "--TempDir"             = "s3://${var.source_bucket != "" ? var.source_bucket : aws_s3_bucket.source[0].id}/temp/"
+    "--job-language"        = "python"
     "--job-bookmark-option" = "job-bookmark-enable"
   }
-  
+
   max_retries = 2
   timeout     = 60
-  
+
   tags = {
     Name = "${var.pipeline_name}-${var.environment}-job"
   }
@@ -160,7 +160,7 @@ resource "aws_cloudwatch_event_target" "glue_job" {
 # IAM Role for EventBridge
 resource "aws_iam_role" "eventbridge" {
   name = "${var.pipeline_name}-${var.environment}-eventbridge-role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -178,7 +178,7 @@ resource "aws_iam_role" "eventbridge" {
 resource "aws_iam_role_policy" "eventbridge" {
   name = "${var.pipeline_name}-${var.environment}-eventbridge-policy"
   role = aws_iam_role.eventbridge.id
-  
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
