@@ -31,3 +31,9 @@ Eight self-contained, production-grade labs. Each includes working code, a detai
 ## Suggested order
 
 For the complete curriculum, work the labs in order: **01 → 02 → 03 → 04 → 05 → 06 → 07 → 08**. To target a specific role instead, follow a [Learning Path](../docs/learning-paths.md).
+
+## How the labs connect
+
+The map above shows the learning order; this one shows how the labs' systems fit together as a single platform.
+
+![How the eight labs connect into one platform](../assets/diagrams/overview-platform.png)

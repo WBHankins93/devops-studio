@@ -60,6 +60,12 @@ The [Getting Started guide](./docs/getting-started.md) walks through tool instal
 | [Troubleshooting](./docs/troubleshooting.md) | Common setup and lab-specific issues |
 | [Architecture Decisions](./docs/architecture-decisions/001-terraform-structure.md) | ADRs recording why key choices were made |
 
+## How it all connects
+
+The labs compose into one platform — a Terraform foundation beneath everything, EKS at the center, CI/CD and GitOps deploying into it, observability and security around it, serverless alongside, and a self-service platform layer on top.
+
+![How the eight labs connect into one platform](./assets/diagrams/overview-platform.png)
+
 ## Repository structure
 
 ```
