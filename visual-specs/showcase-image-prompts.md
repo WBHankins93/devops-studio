@@ -216,6 +216,29 @@ prompt straight into the tool.
 
 ---
 
+## Platform connection map (how it all connects)
+
+- **File:** `assets/diagrams/overview-connections.png`
+- **Embed in:** `index.md` (home) and the top of `labs/README.md`
+- **Size:** landscape `1536×1024`
+- **One job:** show how the eight labs' systems compose into one platform — *not* every internal detail.
+
+> **Readability is the point.** This replaces the dense "everything at once" overview. Keep it to ~10 boxes (one headline system per lab) and only the connections below. Big labels, lots of whitespace, legible at a glance.
+
+**FULL PROMPT**
+
+> Create a clean, modern technical system-architecture diagram in flat vector infographic style. White background, generous whitespace, precise alignment, large legible labels. Render each system as a soft rounded rectangle with a thin border and a very light tint fill; connect with thin arrows carrying short labels where direction is meaningful. Flat line icons only — no photorealism, no 3D, no gradients, no drop shadows, no decorative noise. Clean sans-serif type, short bold labels, high contrast. Keep it uncluttered: about ten boxes and only the arrows listed — do not add internal sub-components. Palette: ink/text deep navy `#0f1923`; primary/active path teal `#0f766e`; control/platform layer purple `#6b21a8`; soft tints only. CRITICAL: render every label EXACTLY as written, no invented boxes or arrows.
+>
+> TITLE: "DevOps Studio — How It All Connects". SUBTITLE: "Eight labs, one platform".
+> Layout in horizontal bands:
+> - TOP band — a single wide box spanning the width: "Lab 08 · Platform Engineering (self-service portal)" (tint purple). A downward arrow labeled "provisions & orchestrates" points into the platform below.
+> - CENTER — the hub box "Lab 02 · Kubernetes Platform (EKS)".
+> - LEFT of center — a "Delivery" group with two boxes, "Lab 03 · CI/CD Pipelines" and "Lab 06 · GitOps Workflows", each with a teal arrow into the EKS hub. Label the CI/CD arrow "build & deploy" and the GitOps arrow "sync from Git".
+> - RIGHT of center — "Lab 04 · Observability" with an arrow from EKS labeled "metrics, logs, traces", and "Lab 05 · Security Automation" with an arrow into EKS labeled "scan & enforce".
+> - BESIDE the hub — "Lab 07 · Serverless Operations" sitting on the same foundation as EKS (no arrow into EKS; it shares the base).
+> - BOTTOM band — a single wide box spanning the width: "Lab 01 · Terraform Foundations (VPC, network, IAM)" with upward arrows labeled "runs on" feeding both the EKS hub and the Serverless box.
+> EXACT LABEL LIST: DevOps Studio — How It All Connects; Eight labs, one platform; Lab 08 · Platform Engineering (self-service portal); provisions & orchestrates; Lab 02 · Kubernetes Platform (EKS); Delivery; Lab 03 · CI/CD Pipelines; Lab 06 · GitOps Workflows; build & deploy; sync from Git; Lab 04 · Observability; metrics, logs, traces; Lab 05 · Security Automation; scan & enforce; Lab 07 · Serverless Operations; Lab 01 · Terraform Foundations (VPC, network, IAM); runs on.
+
 ## Optional second wave (sequence diagrams)
 
 These teach *dynamic* behavior over time and pair well with the architecture
