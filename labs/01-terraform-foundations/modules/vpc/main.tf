@@ -5,20 +5,20 @@ locals {
   # Calculate subnet CIDRs automatically
   vpc_cidr_bits = split("/", var.vpc_cidr)[1]
   subnet_bits   = 8 - (32 - local.vpc_cidr_bits)
-  
+
   # Create subnet mappings for each AZ
   public_subnets = [
-    for i, az in var.availability_zones : 
+    for i, az in var.availability_zones :
     cidrsubnet(var.vpc_cidr, local.subnet_bits, i)
   ]
-  
+
   private_subnets = [
-    for i, az in var.availability_zones : 
+    for i, az in var.availability_zones :
     cidrsubnet(var.vpc_cidr, local.subnet_bits, i + length(var.availability_zones))
   ]
-  
+
   database_subnets = [
-    for i, az in var.availability_zones : 
+    for i, az in var.availability_zones :
     cidrsubnet(var.vpc_cidr, local.subnet_bits, i + (2 * length(var.availability_zones)))
   ]
 }
@@ -95,7 +95,7 @@ resource "aws_subnet" "database" {
 resource "aws_eip" "nat" {
   count = length(var.availability_zones)
 
-  domain = "vpc"
+  domain     = "vpc"
   depends_on = [aws_internet_gateway.main]
 
   tags = merge(var.tags, {
@@ -382,9 +382,10 @@ resource "aws_network_acl" "database" {
 
 # VPC Endpoints for AWS services (cost optimization)
 resource "aws_vpc_endpoint" "s3" {
+
   vpc_id       = aws_vpc.main.id
   service_name = "com.amazonaws.${data.aws_region.current.name}.s3"
-  
+
   route_table_ids = concat(
     [aws_route_table.public.id],
     aws_route_table.private[*].id,
@@ -398,9 +399,10 @@ resource "aws_vpc_endpoint" "s3" {
 }
 
 resource "aws_vpc_endpoint" "dynamodb" {
+
   vpc_id       = aws_vpc.main.id
   service_name = "com.amazonaws.${data.aws_region.current.name}.dynamodb"
-  
+
   route_table_ids = concat(
     [aws_route_table.public.id],
     aws_route_table.private[*].id

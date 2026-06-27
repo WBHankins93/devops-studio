@@ -89,7 +89,7 @@ resource "aws_db_instance" "main" {
   max_allocated_storage = var.max_allocated_storage
   storage_type          = var.storage_type
   storage_encrypted     = true
-  kms_key_id           = var.kms_key_id
+  kms_key_id            = var.kms_key_id
 
   # Database Configuration
   db_name  = var.db_name
@@ -102,18 +102,18 @@ resource "aws_db_instance" "main" {
   publicly_accessible    = false
 
   # High Availability and Backup
-  multi_az               = var.multi_az
-  backup_retention_period = var.backup_retention_period
-  backup_window          = var.backup_window
-  maintenance_window     = var.maintenance_window
-  copy_tags_to_snapshot  = true
-  skip_final_snapshot    = var.skip_final_snapshot
+  multi_az                  = var.multi_az
+  backup_retention_period   = var.backup_retention_period
+  backup_window             = var.backup_window
+  maintenance_window        = var.maintenance_window
+  copy_tags_to_snapshot     = true
+  skip_final_snapshot       = var.skip_final_snapshot
   final_snapshot_identifier = var.skip_final_snapshot ? null : "${local.name_prefix}-final-snapshot-${formatdate("YYYY-MM-DD-hhmm", timestamp())}"
 
   # Performance and Monitoring
-  performance_insights_enabled = var.performance_insights_enabled
-  monitoring_interval         = var.monitoring_interval
-  monitoring_role_arn        = var.monitoring_interval > 0 ? aws_iam_role.rds_enhanced_monitoring[0].arn : null
+  performance_insights_enabled    = var.performance_insights_enabled
+  monitoring_interval             = var.monitoring_interval
+  monitoring_role_arn             = var.monitoring_interval > 0 ? aws_iam_role.rds_enhanced_monitoring[0].arn : null
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
 
   # Deletion Protection
@@ -142,7 +142,7 @@ resource "aws_cloudwatch_log_group" "database" {
 # IAM Role for Enhanced Monitoring
 resource "aws_iam_role" "rds_enhanced_monitoring" {
   count = var.monitoring_interval > 0 ? 1 : 0
-  
+
   name = "${local.name_prefix}-rds-enhanced-monitoring"
 
   assume_role_policy = jsonencode({
