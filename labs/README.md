@@ -8,6 +8,8 @@ Eight self-contained, production-grade labs. Each includes working code, a detai
 >
 > New here? Read the [Prerequisites](../docs/prerequisites.md) and [Getting Started](../docs/getting-started.md) guides first, then pick a [Learning Path](../docs/learning-paths.md).
 
+**On this page:** [Foundation labs](#foundation-labs-start-here) · [Advanced labs](#advanced-labs) · [Suggested order](#suggested-order)
+
 ## Foundation labs (start here)
 
 | Lab | Focus | Technologies | Time | Difficulty |

@@ -11,6 +11,8 @@ A hands-on DevOps learning platform: eight self-contained labs that build real i
 
 > Full docs are also published as a browsable site (VitePress). See [Documentation site](#documentation-site) to run it locally.
 
+**On this page:** [Labs](#labs) · [Quick start](#quick-start) · [Documentation](#documentation) · [Repository structure](#repository-structure) · [Docs site](#documentation-site) · [Contributing](#contributing)
+
 ## Labs
 
 | Lab | Focus | Technologies | Time | Difficulty |
