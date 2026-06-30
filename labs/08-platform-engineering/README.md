@@ -38,9 +38,23 @@
 
 ### AWS Requirements
 
-- **AWS Account** with appropriate permissions
-- **EKS Cluster** from Lab 02 (or existing cluster)
-- **IAM User/Role** with platform permissions
+> **A real AWS account is required to deploy this lab.** It provisions live AWS resources — there is no LocalStack/mock path. Without an account you can still read the code and run `terraform validate`/`fmt` (and CI does), but `terraform plan`/`apply`, `make apply`, and `scripts/validate.sh` all authenticate to AWS and create resources.
+
+- **AWS account** with credentials configured (`aws configure`) and permissions for S3, DynamoDB, IAM, CloudWatch, SSM (platform), plus whatever the service-catalog templates create.
+- **EKS cluster** from Lab 02 (or an existing cluster) for the portal/Kubernetes pieces.
+- **IAM user/role** able to create the resources above.
+
+#### Cost
+
+The **platform itself is cheap** (S3, DynamoDB, IAM, CloudWatch log group, SSM parameter — pennies, mostly free-tier). Cost comes from the **service-catalog templates** you choose to provision:
+
+| Template | Provisions | Rough cost |
+|----------|------------|-----------|
+| `api-service` | API Gateway + Lambda + DynamoDB | low (mostly serverless / free-tier) |
+| `data-pipeline` | Glue job + EventBridge + CloudWatch | low–moderate (Glue run time) |
+| `web-app` | ALB + RDS + Auto Scaling Group | **highest** — ALB + RDS run hourly |
+
+**Use a throwaway/sandbox account, set an [AWS Budget alert](https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-create.html), provision only the catalog items you want to try (skip `web-app` if cost-sensitive), and run `make destroy` as soon as you're done.**
 
 ### Knowledge Prerequisites
 
