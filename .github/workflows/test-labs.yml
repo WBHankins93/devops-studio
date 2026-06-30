@@ -1,20 +1,23 @@
 name: Tests
 
-# Runs the repo's automated tests. Today that is the Lab 03 sample application's
-# Jest unit + integration suite — the only tests that run without deployed
-# infrastructure. The per-lab validate.sh / test-*.sh scripts are post-deploy
-# smoke tests (they call a live ALB / cluster / AWS), so they are not run here.
+# Runs the repo's automated, infra-free checks:
+#   - Lab 03 sample app: Jest unit + integration suite
+#   - Lab 04 observability: YAML lint + Kubernetes manifest schema validation
+# The per-lab validate.sh / test-*.sh scripts are post-deploy smoke tests
+# (they call a live ALB / cluster / AWS), so they are not run here.
 
 on:
   push:
     branches: [main]
     paths:
       - 'labs/03-cicd-pipelines/app/**'
+      - 'labs/04-observability-stack/**'
       - '.github/workflows/test-labs.yml'
   pull_request:
     branches: [main]
     paths:
       - 'labs/03-cicd-pipelines/app/**'
+      - 'labs/04-observability-stack/**'
       - '.github/workflows/test-labs.yml'
 
 jobs:
@@ -37,3 +40,24 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+  lab04-manifests:
+    name: Lab 04 — observability manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: YAML syntax (yamllint)
+        run: |
+          pipx install yamllint || pip install --user yamllint
+          yamllint -d "{extends: relaxed, rules: {line-length: disable, comments: disable, comments-indentation: disable, document-start: disable, truthy: disable, indentation: disable, trailing-spaces: disable, empty-lines: disable, new-line-at-end-of-file: disable, brackets: disable, braces: disable, key-duplicates: enable}}" labs/04-observability-stack
+
+      - name: Install kubeconform
+        run: |
+          curl -sSL https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz \
+            | sudo tar -xz -C /usr/local/bin kubeconform
+
+      - name: Validate Kubernetes manifests
+        # PrometheusRule and other CRDs have no bundled schema, so they're skipped
+        # (-ignore-missing-schemas); the built-in resources are fully validated.
+        run: kubeconform -ignore-missing-schemas -summary labs/04-observability-stack/opensearch/manifests/
