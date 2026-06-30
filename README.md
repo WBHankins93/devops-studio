@@ -9,6 +9,8 @@ A hands-on DevOps learning platform: eight self-contained labs that build real i
 
 **New here?** Read the [Prerequisites](./docs/prerequisites.md), then pick a [Learning Path](./docs/learning-paths.md) and start with [Lab 01](./labs/01-terraform-foundations/).
 
+> **You'll need an AWS account.** Most labs deploy real AWS resources, so they cost money while running. Use a sandbox account, set a [budget alert](./docs/cost-management.md), and run `make destroy` when you're done — completing a lab and tearing it down is typically a few dollars. You can read the code and run `terraform validate` without an account, but deploying requires one.
+
 > Full docs are also published as a browsable site (VitePress). See [Documentation site](#documentation-site) to run it locally.
 
 **On this page:** [Labs](#labs) · [Quick start](#quick-start) · [Documentation](#documentation) · [Repository structure](#repository-structure) · [Docs site](#documentation-site) · [Contributing](#contributing)
