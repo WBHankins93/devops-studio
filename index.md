@@ -2,42 +2,40 @@
 layout: home
 
 hero:
-  name: Why this exists
-  text: DevOps Studio
-  tagline: Great Solution Architects don't stop at diagrams. They understand what happens after the customer signs, when every architecture eventually becomes infrastructure and every decision eventually becomes code.
+  name: DevOps Studio
+  text: Cloud-native platform labs, built like real systems.
+  tagline: A hands-on studio for Terraform foundations, Kubernetes platforms, CI/CD, observability, security automation, GitOps, serverless operations, and internal developer platforms.
   actions:
     - theme: brand
-      text: Start With the Scenario
+      text: Start with your scenario
       link: /docs/getting-started
     - theme: alt
       text: Browse Labs
       link: /labs/
     - theme: alt
-      text: View Architecture Paths
+      text: Choose a Learning Path
       link: /docs/learning-paths
 
 features:
-  - title: What this demonstrates
-    details: Translating customer requirements into infrastructure; designing production-ready deployment strategies; evaluating architectural tradeoffs; implementation planning; platform modernization; operational readiness; reliability engineering; and customer enablement.
-    link: /docs/learning-paths
-  - title: Customer requirement to architecture decision
-    details: Each lab starts from a customer scenario, then walks through when the pattern should be recommended and what constraints shape the design.
+  - title: Choose by platform layer
+    details: Move through infrastructure foundations, workload platforms, delivery pipelines, observability, security, GitOps, serverless operations, and developer experience.
     link: /labs/
-  - title: Tradeoffs before implementation
-    details: The focus is not the command sequence. It is the reasoning behind managed services, security boundaries, network design, delivery models, cost, resilience, and handoff.
+  - title: Work from real constraints
+    details: Each lab starts with a customer scenario, then names the architecture decisions, tradeoffs, validation steps, and operating model behind the implementation.
     link: /docs/architecture-decisions/001-terraform-structure
-  - title: Production-ready operations
-    details: Validation, monitoring, disaster recovery, reliability, cost controls, and ownership are treated as part of the architecture instead of afterthoughts.
+  - title: Validate what you build
+    details: Setup, execution, testing, cleanup, cost controls, monitoring, and handoff guidance are part of the lab path, not follow-up chores.
     link: /docs/cost-management
+  - title: Build a portfolio platform
+    details: The eight labs compose into one cloud-native reference platform that shows practical DevOps, DevSecOps, and platform engineering depth.
+    link: /docs/learning-paths
 ---
 
-## This is not a DevOps course
+## Choose by the work in front of you
 
-It's a collection of implementation patterns I've used to bridge customer architecture into production-ready systems.
+DevOps Studio is organized around the platform work practitioners actually need to do: establish infrastructure, run containers, ship software, observe systems, automate security, reconcile with GitOps, operate serverless workloads, and expose self-service paths.
 
-These labs document the implementation patterns, deployment strategies, operational tradeoffs, and production considerations that separate a successful design from a failed deployment.
-
-They come directly from enterprise customer work spanning cloud migrations, hybrid environments, regulated industries, and production platform deployments.
+The labs document implementation patterns, deployment strategies, operational tradeoffs, and production considerations that turn architecture into something a team can run.
 
 ## Every Lab Answers Four Questions
 
