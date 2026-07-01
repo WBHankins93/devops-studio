@@ -47,7 +47,16 @@ export default defineConfig({
           { text: 'Troubleshooting', link: '/docs/troubleshooting' }
         ]
       },
-      { text: 'Decisions', link: '/docs/architecture-decisions/001-terraform-structure' }
+      { text: 'Decisions', link: '/docs/architecture-decisions/001-terraform-structure' },
+      {
+        text: 'The Series',
+        items: [
+          { text: 'Solutions Playbook', link: 'https://wbhankins93.github.io/solutions-playbook/' },
+          { text: 'AI Engineering Studio', link: 'https://wbhankins93.github.io/ai-engineering-studio/' },
+          { text: 'DevOps Studio', link: 'https://wbhankins93.github.io/devops-studio/' },
+          { text: 'Implementation Studio', link: 'https://wbhankins93.github.io/implementation-studio/' }
+        ]
+      }
     ],
 
     sidebar: {
