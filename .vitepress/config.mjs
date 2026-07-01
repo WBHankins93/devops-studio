@@ -9,7 +9,7 @@ import { defineConfig } from 'vitepress'
 // internal markdown link is broken. That is our link-check CI.
 export default defineConfig({
   title: 'DevOps Studio',
-  description: 'Production-grade DevOps learning platform — hands-on labs, guides, and architecture decisions.',
+  description: 'Implementation patterns for bridging customer architecture into production-ready systems.',
   lang: 'en-US',
 
   // GitHub Pages project site is served from /devops-studio/.
@@ -104,7 +104,7 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'DevOps Studio — a hands-on platform engineering curriculum.'
+      copyright: 'DevOps Studio - architecture decisions, implementation patterns, and operational readiness.'
     }
   }
 })

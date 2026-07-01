@@ -1,11 +1,26 @@
 # DevOps Studio
 
-[![Terraform](https://img.shields.io/badge/Terraform-1.9+-7B68EE?logo=terraform)](https://terraform.io)
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-1.32+-326CE5?logo=kubernetes)](https://kubernetes.io)
 [![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?logo=amazon-aws)](https://aws.amazon.com)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A hands-on DevOps learning platform: eight self-contained labs that build real infrastructure, automation, and platform-engineering systems using production patterns — deployable on AWS, with setup, validation, cost notes, and cleanup for each.
+Great Solution Architects don't stop at diagrams.
+
+They understand what happens after the customer signs: every architecture eventually becomes infrastructure, and every decision eventually becomes code.
+
+**This is not a DevOps course.** It's a collection of implementation patterns I've used to bridge customer architecture into production-ready systems.
+
+These labs document the implementation patterns, deployment strategies, operational tradeoffs, and production considerations that separate a successful design from a failed deployment. They come directly from enterprise customer work spanning cloud migrations, hybrid environments, regulated industries, and production platform deployments.
+
+## What This Demonstrates
+
+- Translating customer requirements into infrastructure
+- Designing production-ready deployment strategies
+- Evaluating architectural tradeoffs
+- Implementation planning
+- Platform modernization
+- Operational readiness
+- Reliability engineering
+- Customer enablement
 
 **New here?** Read the [Prerequisites](./docs/prerequisites.md), then pick a [Learning Path](./docs/learning-paths.md) and start with [Lab 01](./labs/01-terraform-foundations/).
 
@@ -13,22 +28,40 @@ A hands-on DevOps learning platform: eight self-contained labs that build real i
 
 > Full docs are also published as a browsable site (VitePress). See [Documentation site](#documentation-site) to run it locally.
 
-**On this page:** [Labs](#labs) · [Quick start](#quick-start) · [Documentation](#documentation) · [Repository structure](#repository-structure) · [Docs site](#documentation-site) · [Contributing](#contributing)
+**On this page:** [Labs](#labs) · [How each lab is framed](#how-each-lab-is-framed) · [Quick start](#quick-start) · [Documentation](#documentation) · [Repository structure](#repository-structure) · [Docs site](#documentation-site) · [Contributing](#contributing)
 
 ## Labs
 
-| Lab | Focus | Technologies | Time | Difficulty |
+| Lab | Customer problem | Implementation details | Time | Difficulty |
 |-----|-------|--------------|------|------------|
-| [01 · Terraform Foundations](./labs/01-terraform-foundations/) | Infrastructure as Code | Terraform, AWS VPC, ASG, RDS | 1–2 h | Beginner |
-| [02 · Kubernetes Platform](./labs/02-kubernetes-platform/) | Container orchestration | EKS, Helm, kubectl, Ingress | 2–3 h | Intermediate |
-| [03 · CI/CD Pipelines](./labs/03-cicd-pipelines/) | Automation & delivery | GitHub Actions, GitLab CI, Jenkins | 1–2 h | Beginner |
-| [04 · Observability Stack](./labs/04-observability-stack/) | Monitoring & alerting | Prometheus, Grafana, Jaeger, OpenSearch | 2–3 h | Advanced |
-| [05 · Security Automation](./labs/05-security-automation/) | DevSecOps | Trivy, OPA, Falco, RBAC | 1–2 h | Advanced |
-| [06 · GitOps Workflows](./labs/06-gitops-workflows/) | GitOps & CD | Kustomize, Argo CD, Flux | 1–2 h | Intermediate |
-| [07 · Serverless Operations](./labs/07-serverless-operations/) | Serverless ops | Lambda, API Gateway, Step Functions, DynamoDB | 1–2 h | Intermediate |
-| [08 · Platform Engineering](./labs/08-platform-engineering/) | Internal platforms | Service catalog, platform APIs, automation | 3–4 h | Expert |
+| [01 · Terraform Foundations](./labs/01-terraform-foundations/) | Establish a secure, repeatable AWS foundation for application workloads | Terraform, AWS VPC, ASG, RDS | 1-2 h | Beginner |
+| [02 · Kubernetes Platform](./labs/02-kubernetes-platform/) | Provide a managed container platform while balancing cost, control, and operational burden | EKS, Helm, kubectl, Ingress | 2-3 h | Intermediate |
+| [03 · CI/CD Pipelines](./labs/03-cicd-pipelines/) | Standardize software delivery from commit to deployment with auditable automation | GitHub Actions, GitLab CI, Jenkins | 1-2 h | Beginner |
+| [04 · Observability Stack](./labs/04-observability-stack/) | Give operators enough telemetry to detect, investigate, and respond to production issues | Prometheus, Grafana, Jaeger, OpenSearch | 2-3 h | Advanced |
+| [05 · Security Automation](./labs/05-security-automation/) | Enforce guardrails without slowing delivery teams or relying on manual review alone | Trivy, OPA, Falco, RBAC | 1-2 h | Advanced |
+| [06 · GitOps Workflows](./labs/06-gitops-workflows/) | Make environment changes reviewable, repeatable, and recoverable through declarative delivery | Kustomize, Argo CD, Flux | 1-2 h | Intermediate |
+| [07 · Serverless Operations](./labs/07-serverless-operations/) | Run event-driven workloads with clear ownership, monitoring, and failure handling | Lambda, API Gateway, Step Functions, DynamoDB | 1-2 h | Intermediate |
+| [08 · Platform Engineering](./labs/08-platform-engineering/) | Turn repeatable infrastructure patterns into self-service capabilities for delivery teams | Service catalog, platform APIs, automation | 3-4 h | Expert |
 
 See [labs/](./labs/README.md) for the suggested order, or follow a role-based [Learning Path](./docs/learning-paths.md).
+
+## How Each Lab Is Framed
+
+Each lab starts from a customer scenario, then moves through:
+
+1. Customer requirement
+2. Architecture decision
+3. Tradeoffs
+4. Implementation
+5. Validation
+6. Operations
+
+Every lab should answer four questions:
+
+- Why would a customer need this?
+- When should this be recommended?
+- What tradeoffs exist?
+- What happens in production?
 
 ## Quick start
 
@@ -64,7 +97,7 @@ The [Getting Started guide](./docs/getting-started.md) walks through tool instal
 
 ## How it all connects
 
-The labs compose into one platform — a Terraform foundation beneath everything, EKS at the center, CI/CD and GitOps deploying into it, observability and security around it, serverless alongside, and a self-service platform layer on top.
+The labs compose into one implementation path: infrastructure foundation, workload platform, delivery pipeline, observability, security automation, GitOps, serverless operations, and internal platform enablement.
 
 ![How the eight labs connect into one platform](./assets/diagrams/overview-platform.png)
 
@@ -74,7 +107,7 @@ The labs compose into one platform — a Terraform foundation beneath everything
 devops-studio/
 ├── index.md             # Docs-site home (VitePress)
 ├── .vitepress/          # Docs-site config
-├── labs/                # Eight hands-on labs (each: code, README, Makefile, scripts)
+├── labs/                # Eight customer-scenario labs (each: code, README, Makefile, scripts)
 ├── docs/                # Guides + architecture-decisions/ (ADRs)
 ├── tools/               # bootstrap / setup / validate / cleanup / cost-estimate scripts
 └── .github/workflows/   # CI: terraform validation, lab tests, security scan, docs build

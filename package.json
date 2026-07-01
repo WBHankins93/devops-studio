@@ -1,7 +1,7 @@
 {
   "name": "devops-studio",
   "version": "1.0.0",
-  "description": "Production-grade DevOps learning platform — hands-on labs, guides, and architecture decisions.",
+  "description": "Implementation patterns for bridging customer architecture into production-ready systems.",
   "private": true,
   "type": "module",
   "scripts": {
